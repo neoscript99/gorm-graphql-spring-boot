@@ -1,0 +1,19 @@
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile group: 'com.h2database', name: 'h2', version: '1.4.195'
+    compile project(':gorm-data-initializer')
+    compile project(':gorm-graphql-spring-boot-starter')
+}
+
+springBoot {
+    mainClass = 'neo.script.gorm.general.GormGeneralDomainApp'
+}
+
+bootRun {
+    jvmArgs('-Dspring.output.ansi.enabled=always')
+    systemProperty 'spring.profiles.active', 'dev'
+    systemProperty 'init', 'true'
+    systemProperties System.properties
+}

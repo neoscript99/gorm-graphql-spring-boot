@@ -1,0 +1,3 @@
+# PropertySource Loaders
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  neo.script.gorm.data.initializer.GormDataInitializerAutoConfiguration

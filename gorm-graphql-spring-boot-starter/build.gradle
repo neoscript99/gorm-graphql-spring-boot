@@ -1,0 +1,7 @@
+
+dependencies {
+    compile "org.grails:gorm-graphql:1.0.2"
+    compile 'com.graphql-java:graphiql-spring-boot-starter:3.9.2'
+    compile 'com.graphql-java:graphql-spring-boot-starter:3.9.2'
+    compile(group: 'org.grails', name: 'gorm-hibernate5-spring-boot', version: "${gormVersion}")
+}
