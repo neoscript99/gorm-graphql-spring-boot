@@ -6,6 +6,7 @@ import groovy.transform.ToString
 import groovy.transform.TupleConstructor
 import neo.script.gorm.data.initializer.initialize.InitializeDomian
 import neo.script.util.EncoderUtil
+import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 
 @Entity
 @TupleConstructor
@@ -20,16 +21,20 @@ class User {
 
     String id
     String account
-    String password
+    String password = EncoderUtil.md5('change-it')
     String name
     Boolean editable = true
     Boolean enabled = true
-    Department dept;
+
+    static belongsTo = [dept: Department]
+    
     static mapping = {
         dept fetch: 'join', lazy: false
     }
     static constraints = { account unique: true }
 
     static final initList = [ADMIN, ANONYMOUS]
-    static graphql = true
+    static graphql = GraphQLMapping.build {
+        exclude('password')
+    }
 }

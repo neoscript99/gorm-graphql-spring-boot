@@ -11,7 +11,7 @@ class Talk {
     String title
     int duration
 
-    static graphql = true // <1>
+    static graphql = true
 
     static belongsTo = [speaker: Speaker]
 

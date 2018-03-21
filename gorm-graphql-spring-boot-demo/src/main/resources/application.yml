@@ -5,8 +5,7 @@ spring:
   datasource:
     #pooled: true
     #dbCreate: create-drop
-    name: gorm
-    url: jdbc:h2:mem:gorm
+    name: devDb
     driverClassName: org.h2.Driver
     username: sa
     password:
@@ -26,6 +25,10 @@ logging:
   pattern.file: "%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:%5p} ${PID} --- [%t] %-40.40logger{39} : %m%n    %caller{1}${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
   pattern.level: "%5p"
   level:
-    org.hibernate: INFO
+    org.hibernate: DEBUG
     neo.script: DEBUG
     org.hibernate.engine.transaction: DEBUG
+    org.grails.gorm.graphql: DEBUG
+    graphql: DEBUG
+    com.oembedler: DEBUG
+    org.dataloader: DEBUG

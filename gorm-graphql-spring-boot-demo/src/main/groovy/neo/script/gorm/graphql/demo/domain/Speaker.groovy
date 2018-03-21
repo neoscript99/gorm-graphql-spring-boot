@@ -5,6 +5,7 @@ import neo.script.gorm.data.initializer.initialize.InitializeDomian
 import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 
 import java.time.LocalDate
+import java.time.Period
 
 @Entity
 @InitializeDomian
@@ -12,7 +13,7 @@ class Speaker {
     String id
     String firstName
     String lastName
-    LocalDate birthday
+    LocalDate birthday = LocalDate.of(2000, 1, 1)
     String email
     String bio
     String name
@@ -24,8 +25,6 @@ class Speaker {
         property 'lastName', order: 1 //<1>
         property 'firstName', order: 2
         property 'email', order: 3
-
-        exclude 'birthday' //<2>
 
         property 'name', deprecationReason: 'To be removed August 1st, 2018' //<3>
 
@@ -47,6 +46,7 @@ class Speaker {
     static constraints = {
         email nullable: true, email: true
         bio nullable: true, maxSize: 128
+        birthday nullable: true
     }
 
     static mapping = {
