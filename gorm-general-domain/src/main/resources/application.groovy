@@ -10,3 +10,5 @@ grails.gorm.default.mapping = {
 grails.gorm.default.constraints = {
     '*'(maxSize: 36, blank: false)
 }
+
+//grails.gorm.failOnError = true
