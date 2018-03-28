@@ -2,6 +2,7 @@ package neo.script.gorm.graphql.demo.domain
 
 import grails.gorm.annotation.Entity
 import neo.script.gorm.data.initializer.initialize.InitializeDomian
+import neo.script.gorm.graphql.demo.mapping.SpeakerMapping
 import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 
 import java.time.LocalDate
@@ -20,28 +21,7 @@ class Speaker {
 
     static hasMany = [talks: Talk]
 
-    static graphql = GraphQLMapping.build {
-
-        property 'lastName', order: 1 //<1>
-        property 'firstName', order: 2
-        property 'email', order: 3
-
-        property 'name', deprecationReason: 'To be removed August 1st, 2018' //<3>
-
-        property('bio') { //<4>
-            order 4
-            dataFetcher { Speaker speaker ->
-                speaker.bio ?: "No biography provided"
-            }
-        }
-
-        add('age', Integer) { //<5>
-            dataFetcher { Speaker speaker ->
-                Period.between(speaker.birthday, LocalDate.now()).years
-            }
-            input false
-        }
-    }
+    static graphql = new SpeakerMapping()
 
     static constraints = {
         email nullable: true, email: true
