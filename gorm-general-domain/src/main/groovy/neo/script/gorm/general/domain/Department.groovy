@@ -16,4 +16,7 @@ class Department {
 
     static deptList = [HEAD_OFFICE]
     static graphql = true
+    static constraints = {
+        name unique: true
+    }
 }

@@ -25,7 +25,7 @@ logging:
   pattern.file: "%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:%5p} ${PID} --- [%t] %-40.40logger{39} : %m%n    %caller{1}${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
   pattern.level: "%5p"
   level:
-    org.hibernate: DEBUG
+    org.hibernate: INFO
     neo.script: DEBUG
     org.hibernate.engine.transaction: DEBUG
     org.grails.gorm.graphql: DEBUG
