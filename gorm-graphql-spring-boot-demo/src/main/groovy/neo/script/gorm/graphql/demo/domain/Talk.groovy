@@ -15,6 +15,9 @@ class Talk {
 
     static belongsTo = [speaker: Speaker]
 
+    static mapping = {
+        speaker fetch: 'join', lazy: false
+    }
     static constraints = {
         title nullable: true, maxSize: 128
     }

@@ -11,4 +11,4 @@ grails.gorm.default.constraints = {
     '*'(maxSize: 36, blank: false)
 }
 
-//grails.gorm.failOnError = true
+grails.gorm.failOnError = true

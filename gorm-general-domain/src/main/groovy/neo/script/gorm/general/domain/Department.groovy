@@ -13,6 +13,7 @@ class Department {
     String name;
     Integer seq;
     Boolean enabled = true
+    static hasMany = [users: User]
 
     static deptList = [HEAD_OFFICE]
     static graphql = true

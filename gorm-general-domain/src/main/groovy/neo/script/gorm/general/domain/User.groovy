@@ -18,6 +18,8 @@ class User {
             editable: false, password: EncoderUtil.md5('admin')))
     static final User ANONYMOUS = (new User(account: 'anonymous', name: '匿名帐号', dept: Department.HEAD_OFFICE,
             editable: false, password: EncoderUtil.md5('anonymous')))
+    static final User TEST_USER = (new User(account: 'test.user', name: '测试用户', dept: Department.HEAD_OFFICE,
+            editable: true, password: EncoderUtil.md5('test')))
 
     String id
     String account
@@ -27,13 +29,13 @@ class User {
     Boolean enabled = true
 
     static belongsTo = [dept: Department]
-    
+
     static mapping = {
         dept fetch: 'join', lazy: false
     }
     static constraints = { account unique: true }
 
-    static final initList = [ADMIN, ANONYMOUS]
+    static final initList = [ADMIN, ANONYMOUS, TEST_USER]
     static graphql = GraphQLMapping.build {
         exclude('password')
     }
