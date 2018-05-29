@@ -1,8 +1,9 @@
+apply plugin: 'org.springframework.boot'
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework.boot:spring-boot-starter-actuator")
-    compile group: 'com.h2database', name: 'h2', version: '1.4.195'
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+    compile group: 'com.h2database', name: 'h2', version: h2Version
     compile project(':gorm-data-initializer')
     compile project(':gorm-graphql-spring-boot-starter')
 }

@@ -1,7 +1,6 @@
 
 dependencies {
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.10'
+    compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.16'
-    compile 'com.google.guava:guava:24.0-jre'
-    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile "com.google.guava:guava:$guavaVersion"
 }

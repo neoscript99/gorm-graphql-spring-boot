@@ -8,6 +8,8 @@ import java.time.Period
 
 class SpeakerMapping extends GraphQLMapping {
     SpeakerMapping() {
+        operations.list.paginate(true)
+
         property 'lastName', order: 1 //<1>
         property 'firstName', order: 2
         property 'email', order: 3

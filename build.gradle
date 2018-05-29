@@ -14,7 +14,6 @@ group = PROJECT_GROUP
 
 subprojects {
     apply plugin: 'groovy'
-    apply plugin: 'org.springframework.boot'
 
     repositories {
         maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
@@ -31,7 +30,11 @@ subprojects {
         exclude group: 'org.codehaus.groovy', module: 'groovy'
     }
     dependencies {
-        compile 'org.codehaus.groovy:groovy-all:2.4.13'
+        compile "org.codehaus.groovy:groovy-all:$groovyVersion"
+        compile "org.slf4j:slf4j-api:$slf4jVersion"
+
+        testCompile "org.spockframework:spock-spring:$spockVersion"
+        testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
     }
 
     if (!it.name.endsWith('demo')) {

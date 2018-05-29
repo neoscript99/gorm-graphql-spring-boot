@@ -1,11 +1,10 @@
 
+apply plugin: 'org.springframework.boot'
 dependencies {
     compile project(':gorm-general-domain')
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile group: 'com.h2database', name: 'h2', version: '1.4.195'
-    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
-    testCompile 'org.spockframework:spock-spring:1.1-groovy-2.4'
-    testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+    compile group: 'com.h2database', name: 'h2', version: h2Version
 }
 
 springBoot {
