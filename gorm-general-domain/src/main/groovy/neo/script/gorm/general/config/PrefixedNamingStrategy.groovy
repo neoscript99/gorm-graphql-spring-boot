@@ -3,7 +3,10 @@ package neo.script.gorm.general.config
 import org.hibernate.cfg.ImprovedNamingStrategy;
 
 /**
- * Functions
+ * 前缀命名策略
+ * 暂时无法实现功能，因为传入的className是shortName
+ * @see org.grails.orm.hibernate.cfg.GrailsDomainBinder#getTableName
+ *
  * @since Dec 22, 2010
  * @author wangchu
  */

@@ -1,5 +1,9 @@
 server.port: 8080
+management:
+  endpoints.web.exposure.include: "*"
+  security.enabled: false
 spring:
+  boot.admin.url: "http://localhost:8080"
   h2.console.enabled: true
 
   datasource:
@@ -14,7 +18,8 @@ hibernate:
   hbm2ddl.auto: create-drop
   show_sql: true
   format_sql: true
-  naming_strategy: neo.script.gorm.general.config.PrefixedNamingStrategy
+  #达不到效果
+  #naming_strategy: neo.script.gorm.general.config.PrefixedNamingStrategy
 
 #spring-boot-1.5.4.RELEASE.jar!/org/springframework/boot/logging/logback/base.xml
 #org.springframework.boot.logging.logback.DefaultLogbackConfiguration
