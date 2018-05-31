@@ -1,13 +1,14 @@
-package neo.script.gorm.graphql.demo.mapping
+package neo.script.gorm.graphql.demo.graphql
 
 import neo.script.gorm.graphql.demo.domain.Speaker
+import neo.script.gorm.graphql.fetcher.GeneralQueryDataFetcher
 import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 
 import java.time.LocalDate
 import java.time.Period
 
-class SpeakerMapping extends GraphQLMapping {
-    SpeakerMapping() {
+class SpeakerGraphql extends GraphQLMapping {
+    SpeakerGraphql() {
         operations.list.paginate(true)
 
         property 'lastName', order: 1 //<1>
@@ -28,6 +29,14 @@ class SpeakerMapping extends GraphQLMapping {
                 Period.between(speaker.birthday, LocalDate.now()).years
             }
             input false
+        }
+        speakerQuery();
+    }
+
+    def speakerQuery() {
+        query('speakerQuery', pagedResult(Speaker)) {
+            argument('criteria',String)
+            dataFetcher(new GeneralQueryDataFetcher(Speaker.gormPersistentEntity))
         }
     }
 }
