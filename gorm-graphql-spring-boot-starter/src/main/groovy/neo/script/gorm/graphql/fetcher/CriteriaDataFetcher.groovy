@@ -14,21 +14,20 @@ import org.hibernate.criterion.Projections
 
 @InheritConstructors
 @Slf4j
-class GeneralQueryDataFetcher<T> extends EntityDataFetcher implements PaginatingGormDataFetcher {
+class CriteriaDataFetcher<T> extends EntityDataFetcher implements PaginatingGormDataFetcher {
     GraphQLPaginationResponseHandler responseHandler
 
     @Override
     protected T executeQuery(DataFetchingEnvironment environment, Map queryArgs) {
-        if (!queryArgs.containsKey('max')) {
-            queryArgs.put('max', responseHandler.defaultMax)
-        }
-        if (!queryArgs.containsKey('offset')) {
-            queryArgs.put('offset', responseHandler.defaultOffset)
-        }
+        def criteriaMap = JsonUtil.fromJson(environment.getArgument('criteria'), Map)
+        //传入max，buildCriteria(environment).list才会返回PagedResultList
+        if (!queryArgs.containsKey('max'))
+            queryArgs.put('max', criteriaMap.max ?: responseHandler.defaultMax)
+
         PagedResultList results =
                 (PagedResultList) buildCriteria(environment).list(
                         queryArgs,
-                        GormCriteriaUtil.makeCriteria(JsonUtil.fromJson(environment.getArgument('criteria'), Map))
+                        GormCriteriaUtil.makeCriteria(criteriaMap)
                 )
         (T) responseHandler.createResponse(environment, new PagedResultListPaginationResponse(results))
     }
