@@ -10,7 +10,6 @@ import org.grails.gorm.graphql.fetcher.PaginatingGormDataFetcher
 import org.grails.gorm.graphql.fetcher.impl.EntityDataFetcher
 import org.grails.gorm.graphql.response.pagination.GraphQLPaginationResponseHandler
 import org.grails.gorm.graphql.response.pagination.PagedResultListPaginationResponse
-import org.hibernate.criterion.Projections
 
 @InheritConstructors
 @Slf4j
@@ -19,10 +18,10 @@ class CriteriaDataFetcher<T> extends EntityDataFetcher implements PaginatingGorm
 
     @Override
     protected T executeQuery(DataFetchingEnvironment environment, Map queryArgs) {
-        def criteriaMap = JsonUtil.fromJson(environment.getArgument('criteria'), Map)
+        def criteriaMap = JsonUtil.fromJson(environment.getArgument('criteria'), Map, false)
         //传入max，buildCriteria(environment).list才会返回PagedResultList
         if (!queryArgs.containsKey('max'))
-            queryArgs.put('max', criteriaMap.max ?: responseHandler.defaultMax)
+            queryArgs.put('max', criteriaMap?.max ?: 1000)
 
         PagedResultList results =
                 (PagedResultList) buildCriteria(environment).list(

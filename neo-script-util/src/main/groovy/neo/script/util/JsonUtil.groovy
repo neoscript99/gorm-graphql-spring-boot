@@ -48,12 +48,15 @@ public class JsonUtil {
         }
     }
 
-    public static <T> T fromJson(String content, Class<T> type) {
+    public static <T> T fromJson(String content, Class<T> type, boolean ignoreError = true) {
         try {
             return objectMapper.readValue(content, type);
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            if (ignoreError)
+                return null;
+            else
+                throw e;
         }
     }
 

@@ -35,6 +35,6 @@ logging:
     neo.script: DEBUG
     org.hibernate.engine.transaction: DEBUG
     org.grails.gorm.graphql: DEBUG
-    graphql: DEBUG
+    graphql.GraphQL: DEBUG
     com.oembedler: DEBUG
     org.dataloader: DEBUG

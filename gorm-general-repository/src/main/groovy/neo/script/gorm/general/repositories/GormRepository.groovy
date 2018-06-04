@@ -245,8 +245,4 @@ class GormRepository implements GeneralRepository {
             criteria.list(GormCriteriaUtil.makeCriteria(param))
     }
 
-
-    static getIdName(Class<GormEntity> domain) {
-        (domain.gormPersistentEntity as PersistentEntity).identity.name
-    }
 }

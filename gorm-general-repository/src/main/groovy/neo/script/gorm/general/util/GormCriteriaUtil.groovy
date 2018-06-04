@@ -3,6 +3,7 @@ package neo.script.gorm.general.util
 import grails.gorm.DetachedCriteria
 import groovy.util.logging.Slf4j
 import org.grails.datastore.gorm.GormEntity
+import org.grails.datastore.mapping.model.PersistentEntity
 import org.hibernate.criterion.Projections
 
 @Slf4j
@@ -60,5 +61,10 @@ class GormCriteriaUtil {
             return idList ? detachedCriteria.inList(getIdName(domain), idList) : null
         } else //批量操作必需包含where子句，所以加一个必真的条件
             return detachedCriteria.isNotNull(getIdName(domain))
+    }
+
+
+    static getIdName(Class<GormEntity> domain) {
+        (domain.gormPersistentEntity as PersistentEntity).identity.name
     }
 }
