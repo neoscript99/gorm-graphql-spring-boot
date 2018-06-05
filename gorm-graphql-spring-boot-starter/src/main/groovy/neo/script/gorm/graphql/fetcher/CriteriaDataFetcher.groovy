@@ -18,7 +18,7 @@ class CriteriaDataFetcher<T> extends EntityDataFetcher implements PaginatingGorm
 
     @Override
     protected T executeQuery(DataFetchingEnvironment environment, Map queryArgs) {
-        def criteriaMap = JsonUtil.fromJson(environment.getArgument('criteria'), Map, false)
+        def criteriaMap = environment.getArgument('criteria') ? JsonUtil.fromJson(environment.getArgument('criteria'), Map, false) : null
         //传入max，buildCriteria(environment).list才会返回PagedResultList
         if (!queryArgs.containsKey('max'))
             queryArgs.put('max', criteriaMap?.max ?: 1000)
