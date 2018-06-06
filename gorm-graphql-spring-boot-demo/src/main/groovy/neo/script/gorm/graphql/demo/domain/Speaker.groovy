@@ -3,7 +3,7 @@ package neo.script.gorm.graphql.demo.domain
 import grails.gorm.annotation.Entity
 import neo.script.gorm.data.initializer.initialize.InitializeDomian
 import neo.script.gorm.graphql.helper.MappingHelper
-import neo.script.gorm.graphql.demo.graphql.SpeakerGraphql
+import neo.script.gorm.graphql.demo.graphql.mapping.SpeakerGraphqlMapping
 import org.grails.datastore.gorm.GormEntity
 
 import java.time.LocalDate
@@ -21,7 +21,7 @@ class Speaker implements GormEntity<Speaker> {
 
     static hasMany = [talks: Talk]
 
-    static graphql = MappingHelper.lazy(SpeakerGraphql)
+    static graphql = MappingHelper.lazy(SpeakerGraphqlMapping)
 
     static constraints = {
         email nullable: true, email: true

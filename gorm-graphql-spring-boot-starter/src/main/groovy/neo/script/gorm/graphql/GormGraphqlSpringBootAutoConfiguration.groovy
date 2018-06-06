@@ -1,7 +1,6 @@
 package neo.script.gorm.graphql
 
 import com.oembedler.moon.graphql.boot.GraphQLWebAutoConfiguration
-import graphql.GraphQL
 import graphql.schema.GraphQLSchema
 import neo.script.gorm.graphql.binding.GormGraphQLDataBinder
 import neo.script.gorm.graphql.fetcher.GormGraphQLDataFetcherManager
@@ -24,6 +23,7 @@ import org.springframework.context.annotation.Configuration
 @AutoConfigureBefore(GraphQLWebAutoConfiguration)
 class GormGraphqlSpringBootAutoConfiguration {
 
+
     @Bean
     GraphQLSchema graphQLSchema(HibernateDatastore datastore) {
         datastore.mappingContext.persistentEntities.each { PersistentEntity entity ->
@@ -40,10 +40,5 @@ class GormGraphqlSpringBootAutoConfiguration {
         //listArguments只需criteria，这个需在initialize之后设置
         schema.listArguments = ['criteria': String]
         schema.generate()
-    }
-
-    @Bean
-    GraphQL graphQL(GraphQLSchema graphQLSchema) {
-        new GraphQL(graphQLSchema)
     }
 }

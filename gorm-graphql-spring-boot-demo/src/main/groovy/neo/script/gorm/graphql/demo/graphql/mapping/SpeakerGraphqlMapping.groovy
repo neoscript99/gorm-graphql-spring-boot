@@ -1,4 +1,4 @@
-package neo.script.gorm.graphql.demo.graphql
+package neo.script.gorm.graphql.demo.graphql.mapping
 
 import neo.script.gorm.graphql.demo.domain.Speaker
 import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
@@ -6,8 +6,8 @@ import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 import java.time.LocalDate
 import java.time.Period
 
-class SpeakerGraphql extends GraphQLMapping {
-    SpeakerGraphql() {
+class SpeakerGraphqlMapping extends GraphQLMapping {
+    SpeakerGraphqlMapping() {
         property 'lastName', order: 1 //<1>
         property 'firstName', order: 2
         property 'email', order: 3
