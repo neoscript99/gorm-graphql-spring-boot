@@ -21,7 +21,7 @@ class Speaker implements GormEntity<Speaker> {
 
     static hasMany = [talks: Talk]
 
-    static graphql = MappingHelper.lazy(SpeakerGraphqlMapping)
+    static graphql
 
     static constraints = {
         email nullable: true, email: true

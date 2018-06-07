@@ -1,4 +1,4 @@
-package neo.script.gorm.graphql.demo.graphql
+package neo.script.gorm.graphql.security
 
 import graphql.ExecutionResult
 import graphql.execution.AbortExecutionException
@@ -7,15 +7,11 @@ import graphql.execution.instrumentation.InstrumentationState
 import graphql.execution.instrumentation.NoOpInstrumentation
 import graphql.execution.instrumentation.parameters.InstrumentationExecutionParameters
 import graphql.execution.instrumentation.parameters.InstrumentationFieldFetchParameters
-import graphql.execution.instrumentation.parameters.InstrumentationValidationParameters
 import graphql.schema.DataFetcher
-import graphql.validation.ValidationError
 import groovy.util.logging.Slf4j
-import org.grails.datastore.gorm.GormEntity
-import org.grails.gorm.graphql.GraphQLServiceManager
 import org.grails.gorm.graphql.fetcher.GraphQLDataFetcherType
 import org.grails.gorm.graphql.fetcher.interceptor.InterceptingDataFetcher
-import org.grails.gorm.graphql.fetcher.interceptor.InterceptorInvoker
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 import java.time.Duration
@@ -23,11 +19,16 @@ import java.time.Duration
 /**
  * 系统安全校验介入器
  *
+ * 将自动被GraphQLWebAutoConfiguration引用
+ * @see com.oembedler.moon.graphql.boot.GraphQLWebAutoConfiguration
+ *
  * DataFetcherInterceptor会过滤变量，environment.getArguments()不包含token
  */
 @Component
 @Slf4j
 class SecurityInstrumentation extends NoOpInstrumentation {
+    @Autowired(required = false)
+    DomainAuthorization domainAuthorization
 
     @Override
     InstrumentationState createState() {
@@ -36,34 +37,28 @@ class SecurityInstrumentation extends NoOpInstrumentation {
 
     @Override
     InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters) {
+        if (parameters.operation && parameters.operation != 'IntrospectionQuery' && !parameters.variables.token)
+            throw new AbortExecutionException('无token');
+        //Variables包含token信息
         (parameters.getInstrumentationState() as Map).putAll(parameters.getVariables())
         long startNanos = System.nanoTime();
         return new InstrumentationContext<ExecutionResult>() {
             @Override
             void onEnd(ExecutionResult result, Throwable t) {
                 log.debug("Query '{}' execution duration is {} seconds.",
-                        parameters.getOperation(),
+                        parameters.operation ?: parameters.query.substring(0, parameters.query.indexOf("{")).trim(),
                         Duration.ofNanos(System.nanoTime() - startNanos).seconds)
             }
         };
     }
 
-    /**
-     * 根据token，domain和是否写操作进行签权
-     * @param stateMap
-     * @param domain
-     * @param isMutation
-     * @return
-     */
-    boolean authorization(String token, Class<GormEntity> domain, boolean isMutation) {
-        if (token == 'bb')
-            return true
-        return false
-    }
 
     @Override
     DataFetcher<?> instrumentDataFetcher(DataFetcher<?> dataFetcher, InstrumentationFieldFetchParameters parameters) {
-        if (InterceptingDataFetcher.isAssignableFrom(dataFetcher.class)) {
+        //InterceptingDataFetcher为gorm根据domain类自动生成的DataFetcher
+        //如果要校验其它操作，需优化这里的处理
+        String token = (parameters.getInstrumentationState() as Map).get('token');
+        if (domainAuthorization && InterceptingDataFetcher.isAssignableFrom(dataFetcher.class)) {
             Class clazz;
             GraphQLDataFetcherType fetcherType;
             InterceptingDataFetcher.declaredFields.each {
@@ -79,10 +74,7 @@ class SecurityInstrumentation extends NoOpInstrumentation {
                         break;
                 }
             };
-            if (!authorization((parameters.getInstrumentationState() as Map).get('token'),
-                    clazz,
-                    MUTATION_TYPE_LIST.contains(fetcherType))
-            )
+            if (!domainAuthorization.authorization(token, clazz, MUTATION_TYPE_LIST.contains(fetcherType)))
                 throw new AbortExecutionException('非法token');
         }
         return super.instrumentDataFetcher(dataFetcher, parameters)

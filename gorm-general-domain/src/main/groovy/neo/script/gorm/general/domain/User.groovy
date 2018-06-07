@@ -6,7 +6,6 @@ import groovy.transform.ToString
 import groovy.transform.TupleConstructor
 import neo.script.gorm.data.initializer.initialize.InitializeDomian
 import neo.script.util.EncoderUtil
-import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 
 @Entity
 @TupleConstructor
@@ -36,7 +35,5 @@ class User {
     static constraints = { account unique: true }
 
     static final initList = [ADMIN, ANONYMOUS, TEST_USER]
-    static graphql = GraphQLMapping.build {
-        exclude('password')
-    }
+    static graphql
 }
