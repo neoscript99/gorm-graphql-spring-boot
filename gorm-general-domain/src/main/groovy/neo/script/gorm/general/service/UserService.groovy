@@ -6,6 +6,7 @@ import neo.script.gorm.general.domain.User
 import neo.script.gorm.general.domain.association.UserRole
 import neo.script.util.EncoderUtil
 import org.springframework.stereotype.Service
+import grails.gorm.transactions.Transactional
 
 /**
  * Functions
@@ -40,6 +41,7 @@ class UserService extends AbstractService<User> {
         }
     }
 
+    @Transactional(readOnly = true)
     List getRoleUsers(Long roleId, String account) {
         Map param = [user: [eq: [['editable', true]]], role: [idEq: [roleId]]]
         if (account)
@@ -47,10 +49,12 @@ class UserService extends AbstractService<User> {
         list(param, UserRole)*.user
     }
 
+    @Transactional(readOnly = true)
     List getUserRoles(Long userId) {
         list([user: [idEq: [userId]]], UserRole)*.role
     }
 
+    @Transactional(readOnly = true)
     Map login(String account, String password) {
         def user = findFirst([eq: [['account', account]]])
         String msg;
@@ -70,9 +74,9 @@ class UserService extends AbstractService<User> {
     }
 
     void changePassword(String account, String oriPassword, String newPassword) {
-        def user = User.findByAccountAndPassword(account, EncoderUtil.md5(oriPassword))
+        def user = User.findByAccountAndPassword(account, oriPassword)
         if (user)
-            user.password = EncoderUtil.md5(newPassword)
+            user.password = newPassword
         else
             throw new RuntimeException('原密码错误，无法修改')
     }

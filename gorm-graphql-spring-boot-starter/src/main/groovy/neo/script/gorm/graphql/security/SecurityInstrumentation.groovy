@@ -29,6 +29,8 @@ import java.time.Duration
 class SecurityInstrumentation extends NoOpInstrumentation {
     @Autowired(required = false)
     DomainAuthorization domainAuthorization
+    @Autowired(required = false)
+    ExecutionAuthorization executionAuthorization
 
     @Override
     InstrumentationState createState() {
@@ -37,8 +39,9 @@ class SecurityInstrumentation extends NoOpInstrumentation {
 
     @Override
     InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters) {
-        if (parameters.operation && parameters.operation != 'IntrospectionQuery' && !parameters.variables.token)
+        if (executionAuthorization && !executionAuthorization.isAuthorized(parameters))
             throw new AbortExecutionException('无token');
+
         //Variables包含token信息
         (parameters.getInstrumentationState() as Map).putAll(parameters.getVariables())
         long startNanos = System.nanoTime();
@@ -55,31 +58,14 @@ class SecurityInstrumentation extends NoOpInstrumentation {
 
     @Override
     DataFetcher<?> instrumentDataFetcher(DataFetcher<?> dataFetcher, InstrumentationFieldFetchParameters parameters) {
-        //InterceptingDataFetcher为gorm根据domain类自动生成的DataFetcher
-        //如果要校验其它操作，需优化这里的处理
+
         String token = (parameters.getInstrumentationState() as Map).get('token');
-        if (domainAuthorization && InterceptingDataFetcher.isAssignableFrom(dataFetcher.class)) {
-            Class clazz;
-            GraphQLDataFetcherType fetcherType;
-            InterceptingDataFetcher.declaredFields.each {
-                it.setAccessible(true)
-                switch (it.name) {
-                    case 'clazz':
-                        clazz = it.get(dataFetcher);
-                        break;
-                    case 'fetcherType':
-                        fetcherType = it.get(dataFetcher);
-                        break;
-                    default:
-                        break;
-                }
-            };
-            if (!domainAuthorization.authorization(token, clazz, MUTATION_TYPE_LIST.contains(fetcherType)))
-                throw new AbortExecutionException('非法token');
-        }
+        if (domainAuthorization && !domainAuthorization.isAuthorized(dataFetcher, parameters, token))
+            throw new AbortExecutionException('非法token');
+
         return super.instrumentDataFetcher(dataFetcher, parameters)
     }
 
-    static MUTATION_TYPE_LIST = [GraphQLDataFetcherType.CREATE, GraphQLDataFetcherType.DELETE, GraphQLDataFetcherType.UPDATE]
     static class MapState extends HashMap<String, Object> implements InstrumentationState {}
+
 }

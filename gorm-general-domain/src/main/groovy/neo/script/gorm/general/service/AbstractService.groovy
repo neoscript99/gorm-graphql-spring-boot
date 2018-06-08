@@ -4,7 +4,7 @@ import neo.script.gorm.general.repositories.GeneralRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.transaction.annotation.Transactional
+import grails.gorm.transactions.Transactional
 
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
@@ -47,7 +47,7 @@ abstract class AbstractService<T> {
 
     @Transactional(readOnly = true)
     T findFirst(Map param = null) {
-        generalRepository.findFirst(domain, map)
+        generalRepository.findFirst(domain, param)
     }
 
     @Transactional(readOnly = true)

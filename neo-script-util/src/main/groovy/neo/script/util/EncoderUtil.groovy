@@ -15,4 +15,8 @@ class EncoderUtil {
     static public String md5(String inputString) {
         return Hashing.md5().hashBytes(inputString.getBytes()).toString()
     }
+
+    static public String sha256(String inputString) {
+        return Hashing.sha256().hashBytes(inputString.getBytes()).toString()
+    }
 }
