@@ -20,7 +20,7 @@ class UserGraphqlMapping extends GraphQLMapping {
 
     UserGraphqlMapping() {
         exclude('password')
-        query('login', 'LoginInfo') {
+        mutation('login', 'LoginInfo') {
             description 'Login query, password is MD5 String'
             argument('username', String)
             argument('password', String)
@@ -31,7 +31,7 @@ class UserGraphqlMapping extends GraphQLMapping {
                 field('error', String)
             }
         }
-        query('logout', 'LoginOutInfo') {
+        mutation('logout', 'LoginOutInfo') {
             description 'Logout'
             argument('token', String)
 

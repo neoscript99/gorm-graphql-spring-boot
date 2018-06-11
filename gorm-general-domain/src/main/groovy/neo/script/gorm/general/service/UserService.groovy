@@ -6,7 +6,7 @@ import neo.script.gorm.general.domain.User
 import neo.script.gorm.general.domain.association.UserRole
 import neo.script.util.EncoderUtil
 import org.springframework.stereotype.Service
-import grails.gorm.transactions.Transactional
+import org.springframework.transaction.annotation.Transactional
 
 /**
  * Functions

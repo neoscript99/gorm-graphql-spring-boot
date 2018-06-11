@@ -9,8 +9,6 @@ import graphql.execution.instrumentation.parameters.InstrumentationExecutionPara
 import graphql.execution.instrumentation.parameters.InstrumentationFieldFetchParameters
 import graphql.schema.DataFetcher
 import groovy.util.logging.Slf4j
-import org.grails.gorm.graphql.fetcher.GraphQLDataFetcherType
-import org.grails.gorm.graphql.fetcher.interceptor.InterceptingDataFetcher
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -39,6 +37,7 @@ class SecurityInstrumentation extends NoOpInstrumentation {
 
     @Override
     InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters) {
+        //TODO:错误处理
         if (executionAuthorization && !executionAuthorization.isAuthorized(parameters))
             throw new AbortExecutionException('无token');
 

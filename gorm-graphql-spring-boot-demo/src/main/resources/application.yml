@@ -16,7 +16,7 @@ spring:
 
 hibernate:
   hbm2ddl.auto: create-drop
-  show_sql: true
+  show_sql: false
   format_sql: true
   #达不到效果
   #naming_strategy: neo.script.gorm.general.config.PrefixedNamingStrategy
@@ -31,9 +31,14 @@ logging:
   pattern.file: "%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:%5p} ${PID} --- [%t] %-40.40logger{39} : %m%n    %caller{1}${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
   pattern.level: "%5p"
   level:
-    org.hibernate: INFO
+    # equivalent to hibernate.show_sql=true
+    org.hibernate.SQL: DEBUG
+    # Logs the JDBC parameters passed to a query
+    #org.hibernate.type: TRACE
     neo.script: DEBUG
     org.hibernate.engine.transaction: DEBUG
+    org.springframework.transaction: DEBUG
+    grails.gorm.transactions: DEBUG
     org.grails.gorm.graphql: DEBUG
     graphql.GraphQL: DEBUG
     com.oembedler: DEBUG

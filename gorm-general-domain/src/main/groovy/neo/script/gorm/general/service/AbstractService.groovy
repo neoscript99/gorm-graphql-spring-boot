@@ -4,7 +4,7 @@ import neo.script.gorm.general.repositories.GeneralRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import grails.gorm.transactions.Transactional
+import org.springframework.transaction.annotation.Transactional
 
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
@@ -28,6 +28,7 @@ abstract class AbstractService<T> {
         domain = (Class) params[0];
     }
 
+    @Transactional(readOnly = true)
     public T get(def id) {
         generalRepository.get(domain, id)
     }

@@ -4,20 +4,21 @@ import neo.script.gorm.general.domain.Token
 import neo.script.gorm.general.domain.User
 import org.springframework.stereotype.Service
 
+import java.time.Duration
 import java.time.LocalDateTime
 
 @Service
 class TokenService extends AbstractService<Token> {
+    static final Integer DEFAULT_EXPIRE_MINUTES = 10
 
     Token createToken(User user) {
-        saveEntity(new Token(user))
+        saveEntity(resetExpireTime(new Token(user: user)))
     }
 
     Map destoryToken(String id) {
         def token = get(id)
         if (token) {
             token.destroyed = true
-            token.save()
             [success: true]
         } else
             [success: false, error: "无效token: $id"]
@@ -35,9 +36,25 @@ class TokenService extends AbstractService<Token> {
         else if (token.destroyed || token.expireTime.isBefore(LocalDateTime.now()))
             [success: false, error: "过期token: $id"]
         else {
-            token.resetExpireTime()
-            token.save()
+            resetExpireTime(token)
             [success: true, user: token.user]
         }
+    }
+
+
+    private Token resetExpireTime(Token token) {
+        def now = LocalDateTime.now()
+        //一定间隔后再刷新token，避免HibernateOptimisticLockingFailureException
+        if (!token.expireTime || Duration.between(now, token.expireTime).toMinutes() < DEFAULT_EXPIRE_MINUTES * 4 / 5) {
+            token.expireTime = now.plusMinutes(DEFAULT_EXPIRE_MINUTES)
+            /**
+             * 如果是类内部赋值expireTime
+             * 不会触发org.grails.datastore.mapping.dirty.checking.DirtyCheckable.markDirty
+             * markDirty后事务提交时才会自动保存
+             * 这里没有问题，原先在Token内部调用时有问题
+             */
+            token.markDirty()
+        }
+        return token
     }
 }

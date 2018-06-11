@@ -1,7 +1,7 @@
 package neo.script.gorm.data.initializer
 
 import com.google.common.collect.Sets
-import grails.gorm.transactions.Transactional
+import org.springframework.transaction.annotation.Transactional
 import groovy.util.logging.Slf4j
 import neo.script.gorm.data.initializer.initialize.InitializeDomian
 import neo.script.gorm.data.initializer.initialize.InitializeOrder
