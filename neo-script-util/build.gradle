@@ -3,4 +3,5 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.16'
     compile "com.google.guava:guava:$guavaVersion"
+    compile 'cn.hutool:hutool-crypto:4.0.12'
 }

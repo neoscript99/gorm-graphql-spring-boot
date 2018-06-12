@@ -2,6 +2,9 @@ package neo.script.util
 
 import com.google.common.hash.Hashing
 
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
+
 /**
  * Functions
  * @since Dec 22, 2010
@@ -13,10 +16,10 @@ class EncoderUtil {
      * @return encoded string
      */
     static public String md5(String inputString) {
-        return Hashing.md5().hashBytes(inputString.getBytes()).toString()
+        return Hashing.md5().hashBytes(inputString.getBytes(StandardCharsets.UTF_8)).toString()
     }
 
     static public String sha256(String inputString) {
-        return Hashing.sha256().hashBytes(inputString.getBytes()).toString()
+        return Hashing.sha256().hashBytes(inputString.getBytes(StandardCharsets.UTF_8)).toString()
     }
 }

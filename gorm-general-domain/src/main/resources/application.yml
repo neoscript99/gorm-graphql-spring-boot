@@ -3,19 +3,24 @@ spring:
   h2.console.enabled: true
 
   datasource:
-    #pooled: true
-    #dbCreate: create-drop
+    pooled: true
     name: gorm
     url: jdbc:h2:mem:gorm
     driverClassName: org.h2.Driver
     username: sa
     password:
 
+#org.grails.orm.hibernate.connections.HibernateConnectionSourceSettings
 hibernate:
   hbm2ddl.auto: create-drop
   show_sql: true
   format_sql: true
   naming_strategy: neo.script.gorm.general.config.PrefixedNamingStrategy
+  cache:
+    queries: false
+    use_second_level_cache: true
+    use_query_cache: false
+    region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
 
 
 #spring-boot-1.5.4.RELEASE.jar!/org/springframework/boot/logging/logback/base.xml

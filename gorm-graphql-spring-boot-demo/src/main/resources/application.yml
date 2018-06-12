@@ -7,17 +7,22 @@ spring:
   h2.console.enabled: true
 
   datasource:
-    #pooled: true
-    #dbCreate: create-drop
+    pooled: true
     name: devDb
     driverClassName: org.h2.Driver
     username: sa
     password:
 
+#org.grails.orm.hibernate.connections.HibernateConnectionSourceSettings
 hibernate:
   hbm2ddl.auto: create-drop
   show_sql: false
   format_sql: true
+  cache:
+    queries: true
+    use_second_level_cache: true
+    use_query_cache: true
+    region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
   #达不到效果
   #naming_strategy: neo.script.gorm.general.config.PrefixedNamingStrategy
 
@@ -33,10 +38,12 @@ logging:
   level:
     # equivalent to hibernate.show_sql=true
     org.hibernate.SQL: DEBUG
+    org.hibernate.engine.transaction: DEBUG
+    org.hibernate.cache: DEBUG
+    net.sf.ehcache: DEBUG
     # Logs the JDBC parameters passed to a query
     #org.hibernate.type: TRACE
     neo.script: DEBUG
-    org.hibernate.engine.transaction: DEBUG
     org.springframework.transaction: DEBUG
     grails.gorm.transactions: DEBUG
     org.grails.gorm.graphql: DEBUG

@@ -31,7 +31,7 @@ subprojects {
     }
     dependencies {
         compile "org.codehaus.groovy:groovy-all:$groovyVersion"
-        compile "org.slf4j:slf4j-api:$slf4jVersion"
+        compile "org.springframework.boot:spring-boot-starter-logging:${springBootVersion}"
 
         testCompile "org.spockframework:spock-spring:$spockVersion"
         testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"

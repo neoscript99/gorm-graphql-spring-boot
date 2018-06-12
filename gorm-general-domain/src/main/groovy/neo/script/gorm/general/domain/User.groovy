@@ -22,7 +22,7 @@ class User {
 
     String id
     String account
-    String password
+    String password = EncoderUtil.sha256('change-it')
     String name
     Boolean editable = true
     Boolean enabled = true

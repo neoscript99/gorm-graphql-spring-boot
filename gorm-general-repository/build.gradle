@@ -1,5 +1,4 @@
 dependencies {
     compile project(':neo-script-util')
-    compile group: 'org.hibernate', name: 'hibernate-java8', version: hibernateVersion
     compile(group: 'org.grails', name: 'gorm-hibernate5-spring-boot', version: gormVersion)
 }

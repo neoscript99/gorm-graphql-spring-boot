@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 import java.time.Duration
+import java.time.Instant
+import java.time.LocalDateTime
 
 /**
  * 系统安全校验介入器
@@ -43,13 +45,14 @@ class SecurityInstrumentation extends NoOpInstrumentation {
 
         //Variables包含token信息
         (parameters.getInstrumentationState() as Map).putAll(parameters.getVariables())
-        long startNanos = System.nanoTime();
+        def beginTime = LocalDateTime.now();
         return new InstrumentationContext<ExecutionResult>() {
             @Override
             void onEnd(ExecutionResult result, Throwable t) {
-                log.debug("Query '{}' execution duration is {} seconds.",
+                def duration = Duration.between(beginTime, LocalDateTime.now())
+                log.debug("Query '{}' execution duration is {} seconds plus {} milliseconds.",
                         parameters.operation ?: parameters.query.substring(0, parameters.query.indexOf("{")).trim(),
-                        Duration.ofNanos(System.nanoTime() - startNanos).seconds)
+                        duration.seconds, duration.toMillis() % 1000)
             }
         };
     }
