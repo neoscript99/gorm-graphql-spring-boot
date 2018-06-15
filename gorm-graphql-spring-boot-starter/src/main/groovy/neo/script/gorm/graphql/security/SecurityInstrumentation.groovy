@@ -1,7 +1,6 @@
 package neo.script.gorm.graphql.security
 
 import graphql.ExecutionResult
-import graphql.execution.AbortExecutionException
 import graphql.execution.instrumentation.InstrumentationContext
 import graphql.execution.instrumentation.InstrumentationState
 import graphql.execution.instrumentation.NoOpInstrumentation
@@ -9,11 +8,11 @@ import graphql.execution.instrumentation.parameters.InstrumentationExecutionPara
 import graphql.execution.instrumentation.parameters.InstrumentationFieldFetchParameters
 import graphql.schema.DataFetcher
 import groovy.util.logging.Slf4j
+import neo.script.gorm.graphql.execution.GormAbortExecutionException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 import java.time.Duration
-import java.time.Instant
 import java.time.LocalDateTime
 
 /**
@@ -41,7 +40,7 @@ class SecurityInstrumentation extends NoOpInstrumentation {
     InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters) {
         //TODO:错误处理
         if (executionAuthorization && !executionAuthorization.isAuthorized(parameters))
-            throw new AbortExecutionException('无token');
+            throw new GormAbortExecutionException('无token', 'aa');
 
         //Variables包含token信息
         (parameters.getInstrumentationState() as Map).putAll(parameters.getVariables())
@@ -63,7 +62,7 @@ class SecurityInstrumentation extends NoOpInstrumentation {
 
         String token = (parameters.getInstrumentationState() as Map).get('token');
         if (domainAuthorization && !domainAuthorization.isAuthorized(dataFetcher, parameters, token))
-            throw new AbortExecutionException('非法token');
+            throw new GormAbortExecutionException('非法token', 'bb');
 
         return super.instrumentDataFetcher(dataFetcher, parameters)
     }
