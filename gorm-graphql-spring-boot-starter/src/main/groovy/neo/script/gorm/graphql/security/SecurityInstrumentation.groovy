@@ -40,7 +40,7 @@ class SecurityInstrumentation extends NoOpInstrumentation {
     InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters) {
         //TODO:错误处理
         if (executionAuthorization && !executionAuthorization.isAuthorized(parameters))
-            throw new GormAbortExecutionException('无token', 'aa');
+            throw new GormAbortExecutionException('无token', 'TokenError');
 
         //Variables包含token信息
         (parameters.getInstrumentationState() as Map).putAll(parameters.getVariables())
@@ -62,7 +62,7 @@ class SecurityInstrumentation extends NoOpInstrumentation {
 
         String token = (parameters.getInstrumentationState() as Map).get('token');
         if (domainAuthorization && !domainAuthorization.isAuthorized(dataFetcher, parameters, token))
-            throw new GormAbortExecutionException('非法token', 'bb');
+            throw new GormAbortExecutionException('token无效', 'TokenError');
 
         return super.instrumentDataFetcher(dataFetcher, parameters)
     }

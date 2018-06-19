@@ -18,13 +18,8 @@ hibernate:
   hbm2ddl.auto: create-drop
   show_sql: false
   format_sql: true
-  cache:
-    queries: true
-    use_second_level_cache: true
-    use_query_cache: true
-    region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
   #达不到效果
-  #naming_strategy: neo.script.gorm.general.config.PrefixedNamingStrategy
+  naming_strategy: neo.script.gorm.general.config.PrefixedNamingStrategy
 
 #spring-boot-1.5.4.RELEASE.jar!/org/springframework/boot/logging/logback/base.xml
 #org.springframework.boot.logging.logback.DefaultLogbackConfiguration

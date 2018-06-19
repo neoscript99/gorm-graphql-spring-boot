@@ -11,6 +11,7 @@ class ExecutionAuthorizationImpl implements ExecutionAuthorization {
         (parameters.operation == null
                 || parameters.operation == 'IntrospectionQuery'
                 || parameters.operation == 'login'
+                || parameters.operation == 'logout'
                 || parameters.variables.token)
     }
 }

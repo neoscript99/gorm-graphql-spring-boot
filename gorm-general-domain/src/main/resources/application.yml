@@ -16,12 +16,6 @@ hibernate:
   show_sql: true
   format_sql: true
   naming_strategy: neo.script.gorm.general.config.PrefixedNamingStrategy
-  cache:
-    queries: false
-    use_second_level_cache: true
-    use_query_cache: false
-    region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
-
 
 #spring-boot-1.5.4.RELEASE.jar!/org/springframework/boot/logging/logback/base.xml
 #org.springframework.boot.logging.logback.DefaultLogbackConfiguration
