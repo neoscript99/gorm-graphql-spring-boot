@@ -1,4 +1,4 @@
-package neo.script.gorm.graphql.demo.domain
+package neo.script.gorm.graphql.demo.domain.demo
 
 import grails.gorm.annotation.Entity
 import neo.script.gorm.data.initializer.initialize.InitializeDomian

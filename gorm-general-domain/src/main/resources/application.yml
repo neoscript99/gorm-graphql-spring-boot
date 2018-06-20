@@ -1,11 +1,14 @@
 server.port: 8080
+management:
+  endpoints.web.exposure.include: "*"
+  security.enabled: false
 spring:
+  boot.admin.url: "http://localhost:8080"
   h2.console.enabled: true
 
   datasource:
     pooled: true
-    name: gorm
-    url: jdbc:h2:mem:gorm
+    name: devDb
     driverClassName: org.h2.Driver
     username: sa
     password:
@@ -13,9 +16,10 @@ spring:
 #org.grails.orm.hibernate.connections.HibernateConnectionSourceSettings
 hibernate:
   hbm2ddl.auto: create-drop
-  show_sql: true
+  show_sql: false
   format_sql: true
-  naming_strategy: neo.script.gorm.general.config.PrefixedNamingStrategy
+  #通过application.groovy实现跟细化的控制
+  #naming_strategy: neo.script.gorm.general.config.PrefixedNamingStrategy
 
 #spring-boot-1.5.4.RELEASE.jar!/org/springframework/boot/logging/logback/base.xml
 #org.springframework.boot.logging.logback.DefaultLogbackConfiguration
@@ -27,6 +31,17 @@ logging:
   pattern.file: "%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:%5p} ${PID} --- [%t] %-40.40logger{39} : %m%n    %caller{1}${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
   pattern.level: "%5p"
   level:
-    org.hibernate: INFO
-    neo.script: DEBUG
+    # equivalent to hibernate.show_sql=true
+    org.hibernate.SQL: DEBUG
     org.hibernate.engine.transaction: DEBUG
+    org.hibernate.cache: DEBUG
+    net.sf.ehcache: DEBUG
+    # Logs the JDBC parameters passed to a query
+    #org.hibernate.type: TRACE
+    neo.script: DEBUG
+    org.springframework.transaction: DEBUG
+    grails.gorm.transactions: DEBUG
+    org.grails.gorm.graphql: DEBUG
+    graphql.GraphQL: DEBUG
+    com.oembedler: DEBUG
+    org.dataloader: DEBUG

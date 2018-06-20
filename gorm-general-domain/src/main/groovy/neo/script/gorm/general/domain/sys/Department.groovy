@@ -1,4 +1,4 @@
-package neo.script.gorm.general.domain
+package neo.script.gorm.general.domain.sys
 
 import grails.gorm.annotation.Entity
 import groovy.transform.ToString

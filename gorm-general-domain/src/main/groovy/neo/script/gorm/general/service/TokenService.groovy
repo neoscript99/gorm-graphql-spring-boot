@@ -1,7 +1,7 @@
 package neo.script.gorm.general.service
 
-import neo.script.gorm.general.domain.Token
-import neo.script.gorm.general.domain.User
+import neo.script.gorm.general.domain.sys.Token
+import neo.script.gorm.general.domain.sys.User
 import org.springframework.stereotype.Service
 
 import java.time.Duration

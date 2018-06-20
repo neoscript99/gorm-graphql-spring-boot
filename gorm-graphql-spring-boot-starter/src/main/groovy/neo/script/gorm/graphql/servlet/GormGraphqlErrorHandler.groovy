@@ -4,6 +4,7 @@ import graphql.ExceptionWhileDataFetching
 import graphql.GraphQLError
 import graphql.servlet.DefaultGraphQLErrorHandler
 import graphql.servlet.GenericGraphQLError
+import neo.script.gorm.graphql.execution.ClientGraphQLError
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -15,15 +16,14 @@ class GormGraphqlErrorHandler extends DefaultGraphQLErrorHandler {
     @Override
     public List<GraphQLError> processErrors(List<GraphQLError> errors) {
         errors.collect { error ->
-            if (error instanceof Throwable)
+            if (error instanceof Throwable) {
                 logger.error("Error executing query!", (Throwable) error);
-
-            if (error instanceof ExceptionWhileDataFetching) {
+                return new ClientGraphQLError(error);
+            } else if (error instanceof ExceptionWhileDataFetching) {
                 logger.error("Error executing query ({}): {}", error.getClass().getSimpleName(), error.getMessage());
-                return new GenericGraphQLError(error.message)
+                return new ClientGraphQLError(error);
             }
-
-            return error;
+            return error
         }
     }
 }

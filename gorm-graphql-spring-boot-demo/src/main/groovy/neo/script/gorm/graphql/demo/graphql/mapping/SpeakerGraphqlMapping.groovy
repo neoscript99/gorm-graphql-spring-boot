@@ -1,6 +1,6 @@
 package neo.script.gorm.graphql.demo.graphql.mapping
 
-import neo.script.gorm.graphql.demo.domain.Speaker
+import neo.script.gorm.graphql.demo.domain.demo.Speaker
 import neo.script.gorm.graphql.entity.GraphQLMappingFlag
 import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 import org.springframework.stereotype.Component

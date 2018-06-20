@@ -18,8 +18,8 @@ hibernate:
   hbm2ddl.auto: create-drop
   show_sql: false
   format_sql: true
-  #达不到效果
-  naming_strategy: neo.script.gorm.general.config.PrefixedNamingStrategy
+  #通过application.groovy实现跟细化的控制
+  #naming_strategy: neo.script.gorm.general.config.PrefixedNamingStrategy
 
 #spring-boot-1.5.4.RELEASE.jar!/org/springframework/boot/logging/logback/base.xml
 #org.springframework.boot.logging.logback.DefaultLogbackConfiguration

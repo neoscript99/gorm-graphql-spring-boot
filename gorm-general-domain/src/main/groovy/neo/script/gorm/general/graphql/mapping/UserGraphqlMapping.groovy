@@ -2,7 +2,7 @@ package neo.script.gorm.general.graphql.mapping
 
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
-import neo.script.gorm.general.domain.User
+import neo.script.gorm.general.domain.sys.User
 import neo.script.gorm.general.service.TokenService
 import neo.script.gorm.general.service.UserService
 import neo.script.gorm.graphql.entity.GraphQLMappingFlag

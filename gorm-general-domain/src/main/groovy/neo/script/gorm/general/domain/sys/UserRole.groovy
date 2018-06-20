@@ -1,11 +1,9 @@
-package neo.script.gorm.general.domain.association
+package neo.script.gorm.general.domain.sys
 
 import grails.gorm.annotation.Entity
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import neo.script.gorm.data.initializer.initialize.InitializeDomian
-import neo.script.gorm.general.domain.User
-import neo.script.gorm.general.domain.Role
 
 @Entity
 @InitializeDomian(depends = [User, Role])
