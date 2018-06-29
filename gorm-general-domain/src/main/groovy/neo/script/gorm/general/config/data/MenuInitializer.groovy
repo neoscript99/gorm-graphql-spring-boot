@@ -1,8 +1,8 @@
 package neo.script.gorm.general.config.data
 
 import neo.script.gorm.general.domain.sys.RoleMenu
-import neo.script.gorm.data.initializer.initialize.AbstractDataInitializer
-import neo.script.gorm.data.initializer.initialize.DataInitializer
+import neo.script.gorm.general.initializer.AbstractDataInitializer
+import neo.script.gorm.general.initializer.DataInitializer
 import neo.script.gorm.general.domain.sys.Menu
 import neo.script.gorm.general.domain.sys.Role
 import org.springframework.core.annotation.Order

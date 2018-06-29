@@ -1,5 +1,5 @@
-
 dependencies {
+    compile(group: 'org.grails', name: 'gorm-hibernate5-spring-boot', version: gormVersion)
     compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.16'
     compile "com.google.guava:guava:$guavaVersion"

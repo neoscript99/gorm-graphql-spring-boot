@@ -1,4 +1,0 @@
-dependencies {
-    compile project(':neo-script-util')
-    compile(group: 'org.grails', name: 'gorm-hibernate5-spring-boot', version: gormVersion)
-}

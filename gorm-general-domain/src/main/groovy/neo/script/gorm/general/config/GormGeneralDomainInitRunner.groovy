@@ -1,7 +1,7 @@
 package neo.script.gorm.general.config
 
-import neo.script.gorm.data.initializer.initialize.AbstractDataInitializerRunner
-import neo.script.gorm.data.initializer.initialize.InitializeOrder
+import neo.script.gorm.general.initializer.AbstractDataInitializerRunner
+import neo.script.gorm.general.initializer.InitializeOrder
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 

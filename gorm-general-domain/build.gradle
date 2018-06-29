@@ -1,7 +1,7 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-    compile project(':gorm-data-initializer')
+    compile project(':gorm-general-base')
     compile project(':gorm-graphql-spring-boot-starter')
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-actuator")

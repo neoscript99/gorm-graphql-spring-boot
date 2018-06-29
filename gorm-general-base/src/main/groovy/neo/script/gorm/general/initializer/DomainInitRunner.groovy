@@ -1,10 +1,8 @@
-package neo.script.gorm.data.initializer
+package neo.script.gorm.general.initializer
 
 import com.google.common.collect.Sets
 import org.springframework.transaction.annotation.Transactional
 import groovy.util.logging.Slf4j
-import neo.script.gorm.data.initializer.initialize.InitializeDomian
-import neo.script.gorm.data.initializer.initialize.InitializeOrder
 import neo.script.gorm.general.repositories.GeneralRepository
 import org.grails.datastore.mapping.core.Datastore
 import org.springframework.beans.factory.annotation.Autowired

@@ -1,6 +1,5 @@
 dependencies {
-    compile project(':neo-script-util')
-    compile project(':gorm-general-repository')
+    compile project(':gorm-general-base')
     compile "org.grails:gorm-graphql:1.0.2"
     compile 'com.graphql-java:graphiql-spring-boot-starter:3.9.2'
     compile 'com.graphql-java:graphql-spring-boot-starter:3.9.2'

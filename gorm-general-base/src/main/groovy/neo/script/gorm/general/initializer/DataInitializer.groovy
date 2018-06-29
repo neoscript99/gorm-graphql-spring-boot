@@ -1,4 +1,4 @@
-package neo.script.gorm.data.initializer.initialize
+package neo.script.gorm.general.initializer
 
 import neo.script.gorm.general.repositories.GeneralRepository
 import org.springframework.context.ApplicationContext;

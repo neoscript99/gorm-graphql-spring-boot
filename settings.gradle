@@ -16,9 +16,7 @@ include 'services:webservice'
 */
 
 rootProject.name = 'gorm-graphql-spring-boot'
-include 'gorm-data-initializer',
-        'gorm-general-repository',
+include 'gorm-general-base',
         'gorm-general-domain',
-        'neo-script-util',
         'gorm-graphql-spring-boot-starter',
         'gorm-graphql-spring-boot-demo'

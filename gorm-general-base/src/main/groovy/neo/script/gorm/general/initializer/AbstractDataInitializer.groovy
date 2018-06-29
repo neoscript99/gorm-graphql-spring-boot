@@ -1,4 +1,4 @@
-package neo.script.gorm.data.initializer.initialize
+package neo.script.gorm.general.initializer
 
 import groovy.util.logging.Slf4j
 import neo.script.gorm.general.repositories.GeneralRepository

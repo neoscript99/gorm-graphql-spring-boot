@@ -4,7 +4,7 @@ import grails.gorm.annotation.Entity
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import groovy.transform.TupleConstructor
-import neo.script.gorm.data.initializer.initialize.InitializeDomian
+import neo.script.gorm.general.initializer.InitializeDomian
 
 /**
  * 系统参数类型

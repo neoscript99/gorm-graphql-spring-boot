@@ -1,4 +1,4 @@
-package neo.script.gorm.data.initializer.initialize
+package neo.script.gorm.general.initializer
 
 /**
  * Created by Neo on 2017-09-28.

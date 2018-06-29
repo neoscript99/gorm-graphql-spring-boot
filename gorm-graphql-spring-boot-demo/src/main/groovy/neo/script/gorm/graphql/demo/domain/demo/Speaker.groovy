@@ -1,7 +1,7 @@
 package neo.script.gorm.graphql.demo.domain.demo
 
 import grails.gorm.annotation.Entity
-import neo.script.gorm.data.initializer.initialize.InitializeDomian
+import neo.script.gorm.general.initializer.InitializeDomian
 import org.grails.datastore.gorm.GormEntity
 
 import java.time.LocalDate

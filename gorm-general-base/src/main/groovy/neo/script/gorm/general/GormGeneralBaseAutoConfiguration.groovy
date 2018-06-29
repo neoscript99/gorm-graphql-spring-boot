@@ -1,4 +1,4 @@
-package neo.script.gorm.data.initializer
+package neo.script.gorm.general
 
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -7,5 +7,5 @@ import org.springframework.context.annotation.Configuration
  */
 @Configuration
 @ComponentScan
-class GormDataInitializerAutoConfiguration {
+class GormGeneralBaseAutoConfiguration {
 }
