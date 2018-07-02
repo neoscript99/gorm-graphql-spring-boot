@@ -12,4 +12,9 @@ class Customer {
     String id
     String name
     String cellPhone
+    String email
+    Date dateCreated
+    Date dateUpdated
+
+    static graphql = true
 }

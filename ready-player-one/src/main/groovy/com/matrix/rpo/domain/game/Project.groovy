@@ -2,6 +2,7 @@ package com.matrix.rpo.domain.game
 
 import com.matrix.rpo.domain.crm.Customer
 import grails.gorm.annotation.Entity
+import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 
 /**
  * 游戏项目
@@ -13,5 +14,13 @@ import grails.gorm.annotation.Entity
 class Project {
     String id
     String name
+    String modelId
     Customer customer
+
+    Date dateCreated
+    Date dateUpdated
+
+    static graphql = GraphQLMapping.build {
+        description: "一个游戏项目，对应一个训练模型，包含多个识别场景，可多次发起游戏"
+    }
 }
