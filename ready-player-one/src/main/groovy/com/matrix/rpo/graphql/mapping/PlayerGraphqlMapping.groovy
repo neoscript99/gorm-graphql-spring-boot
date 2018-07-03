@@ -1,7 +1,7 @@
 package com.matrix.rpo.graphql.mapping
 
-import com.matrix.rpo.domain.game.Enroll
-import com.matrix.rpo.service.EnrollService
+import com.matrix.rpo.domain.game.Player
+import com.matrix.rpo.service.PlayerService
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import neo.script.gorm.graphql.entity.GraphQLMappingFlag
@@ -10,13 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-@GraphQLMappingFlag(Enroll)
-class EnrollGraphqlMapping extends GraphQLMapping {
+@GraphQLMappingFlag(Player)
+class PlayerGraphqlMapping extends GraphQLMapping {
     @Autowired
-    EnrollService enrollService
+    PlayerService playerService
 
-    EnrollGraphqlMapping() {
+    PlayerGraphqlMapping() {
         description '游戏的报名信息，需要上传能检测出单个人脸的图片'
+        property('account') {
+            description: "一个帐号能否多次报名后期再考虑"
+        }
         property('faceId') {
             description: "一个player对应一个微信号，但每次报名参与的人脸图片可以换"
         }
@@ -37,7 +40,7 @@ class EnrollGraphqlMapping extends GraphQLMapping {
     class EnrollDataFetcher implements DataFetcher {
         @Override
         Object get(DataFetchingEnvironment environment) {
-            def result = enrollService.enroll(environment.getArgument('gameId'),
+            def result = playerService.enroll(environment.getArgument('gameId'),
                     environment.getArgument('playerId'),
                     environment.getArgument('faceId'));
             if (result.success)

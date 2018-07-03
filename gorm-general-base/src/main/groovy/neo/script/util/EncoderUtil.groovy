@@ -2,7 +2,6 @@ package neo.script.util
 
 import com.google.common.hash.Hashing
 
-import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 
 /**

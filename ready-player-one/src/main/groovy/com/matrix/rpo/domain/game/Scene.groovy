@@ -11,10 +11,11 @@ class Scene {
     String code
     Boolean enabled
     Project project
-    static hasMany = [gameProgresses: GameProgress]
+    static hasMany = [gameProgresses: Progress]
 
     static graphql = GraphQLMapping.build {
-        description "一个游戏项目可以设定多个识别场景，每次游戏可以选取其中多个"
-        code description: '场景代码，和训练模型做对应'
+        description "游戏场景 - Project包含多个Scene，Game发起时可选取enabled=true的多个"
+        code description: '场景代码，需和训练模型做对应'
+        project description: '场景代码，需和训练模型做对应'
     }
 }

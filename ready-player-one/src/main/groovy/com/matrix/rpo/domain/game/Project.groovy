@@ -21,6 +21,8 @@ class Project {
     Date dateUpdated
 
     static graphql = GraphQLMapping.build {
-        description: "一个游戏项目，对应一个训练模型，包含多个识别场景，可多次发起游戏"
+        description "游戏项目 - 对应一个训练模型，可添加多个场景，可发起多个游戏"
+        modelId description: '训练模型，对应到外部系统'
+        customer description: '客户'
     }
 }

@@ -4,12 +4,14 @@ import grails.gorm.annotation.Entity
 import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 
 @Entity
-class GameProgress {
+class Progress {
     String id
-    Enroll enroll
-    Integer scoredNumber
-    Date lastScoreTime
+    Player player
+    Integer markedNumber
+    Boolean complete
+    Date lastMarkTime
     static hasMany = [markedScenes: Scene]
+
     static graphql = GraphQLMapping.build{
         description "游戏进度"
         scoredNumber description:'完成的场景数'
