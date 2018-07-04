@@ -6,7 +6,7 @@ dependencies {
 }
 
 springBoot {
-    mainClass = 'neo.script.gorm.graphql.demo.GormGraphQLApp'
+    mainClass = 'com.matrix.rpo.RpoApp'
 }
 
 bootRun {

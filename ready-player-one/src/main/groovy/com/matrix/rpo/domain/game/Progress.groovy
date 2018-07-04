@@ -14,7 +14,7 @@ class Progress {
 
     static graphql = GraphQLMapping.build{
         description "游戏进度"
-        scoredNumber description:'完成的场景数'
-        lastScoreTime description:'最后一个场景完成的时间'
+        markedNumber description:'完成的场景数'
+        lastMarkTime description:'最后一个场景完成的时间'
     }
 }
