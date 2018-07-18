@@ -2,6 +2,7 @@ package neo.script.gorm.general.service
 
 import neo.script.gorm.general.domain.sys.Token
 import neo.script.gorm.general.domain.sys.User
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
 import java.time.Duration
@@ -9,7 +10,8 @@ import java.time.LocalDateTime
 
 @Service
 class TokenService extends AbstractService<Token> {
-    static final Integer DEFAULT_EXPIRE_MINUTES = 10
+    @Value('${user.login.token.expire.minutes}')
+    Integer expireMinutes
 
     Token createToken(User user) {
         saveEntity(resetExpireTime(new Token(user: user)))
@@ -45,8 +47,8 @@ class TokenService extends AbstractService<Token> {
     private Token resetExpireTime(Token token) {
         def now = LocalDateTime.now()
         //一定间隔后再刷新token，避免HibernateOptimisticLockingFailureException
-        if (!token.expireTime || Duration.between(now, token.expireTime).toMinutes() < DEFAULT_EXPIRE_MINUTES * 4 / 5) {
-            token.expireTime = now.plusMinutes(DEFAULT_EXPIRE_MINUTES)
+        if (!token.expireTime || Duration.between(now, token.expireTime).toMinutes() < expireMinutes * 4 / 5) {
+            token.expireTime = now.plusMinutes(expireMinutes)
             /**
              * 如果是类内部赋值expireTime
              * 不会触发org.grails.datastore.mapping.dirty.checking.DirtyCheckable.markDirty

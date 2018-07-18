@@ -1,3 +1,5 @@
+user.login.token.expire.minutes: 6000
+
 spring:
   datasource:
     pooled: true

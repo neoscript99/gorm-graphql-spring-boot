@@ -3,14 +3,10 @@ package neo.script.gorm.graphql
 import com.oembedler.moon.graphql.boot.GraphQLWebAutoConfiguration
 import graphql.schema.GraphQLSchema
 import neo.script.gorm.graphql.binding.GormGraphQLDataBinder
-import neo.script.gorm.graphql.entity.GraphQLMappingFlag
 import neo.script.gorm.graphql.fetcher.GormGraphQLDataFetcherManager
 import neo.script.gorm.graphql.helper.MappingHelper
-import org.grails.datastore.mapping.model.PersistentEntity
-import org.grails.gorm.graphql.GraphQLEntityHelper
 import org.grails.gorm.graphql.Schema
 import org.grails.gorm.graphql.binding.manager.DefaultGraphQLDataBinderManager
-import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 import org.grails.orm.hibernate.HibernateDatastore
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.AutoConfigureBefore

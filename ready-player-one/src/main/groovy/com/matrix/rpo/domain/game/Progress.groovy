@@ -6,15 +6,20 @@ import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 @Entity
 class Progress {
     String id
-    Player player
     Integer markedNumber
     Boolean complete
     Date lastMarkTime
-    static hasMany = [markedScenes: Scene]
 
-    static graphql = GraphQLMapping.build{
+    static belongsTo = [player: Player]
+    static hasMany = [progressScenes: ProgressScene]
+
+    static mapping = {
+        player fetch: 'join', lazy: false
+    }
+
+    static graphql = GraphQLMapping.build {
         description "游戏进度"
-        markedNumber description:'完成的场景数'
-        lastMarkTime description:'最后一个场景完成的时间'
+        markedNumber description: '完成的场景数'
+        lastMarkTime description: '最后一个场景完成的时间'
     }
 }

@@ -7,8 +7,10 @@ import neo.script.gorm.graphql.security.DomainAuthorization
 import org.grails.gorm.graphql.fetcher.GraphQLDataFetcherType
 import org.grails.gorm.graphql.fetcher.interceptor.InterceptingDataFetcher
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 
+@Profile('test,prod')
 @Component
 class DomainAuthorizationImpl implements DomainAuthorization {
 

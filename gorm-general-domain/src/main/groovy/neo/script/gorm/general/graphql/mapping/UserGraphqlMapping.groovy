@@ -21,7 +21,7 @@ class UserGraphqlMapping extends GraphQLMapping {
     UserGraphqlMapping() {
         exclude('password')
         mutation('login', 'LoginInfo') {
-            description 'Login query, password is MD5 String'
+            description 'Login query, password is sha256 String'
             argument('username', String)
             argument('password', String)
             dataFetcher(new LoginDataFetcher())
