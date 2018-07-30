@@ -39,9 +39,8 @@ class DomainAuthorizationImpl implements DomainAuthorization {
                         break;
                 }
             };
-            if (SKIP_TOKEN_OPERATION.contains(parameters.field.name))
-                return true
-            return (token && tokenService.validateToken(token).success)
+            return SKIP_TOKEN_OPERATION.contains(parameters.field.name) ||
+                    (token && tokenService.validateToken(token).success)
         }
         return true
     }

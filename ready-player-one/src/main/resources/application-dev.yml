@@ -1,4 +1,4 @@
-user.login.token.expire.minutes: 6000
+user.token.expire.minutes: 6000
 
 spring:
   datasource:

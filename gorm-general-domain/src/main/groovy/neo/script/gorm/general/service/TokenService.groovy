@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 
 @Service
 class TokenService extends AbstractService<Token> {
-    @Value('${user.login.token.expire.minutes}')
+    @Value('${user.token.expire.minutes}')
     Integer expireMinutes
 
     Token createToken(User user) {

@@ -1,4 +1,4 @@
-user.login.token.expire.minutes: 10
+user.token.expire.minutes: 10
 
 server.port: 8080
 spring:

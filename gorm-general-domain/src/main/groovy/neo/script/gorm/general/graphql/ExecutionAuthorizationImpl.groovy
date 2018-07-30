@@ -2,8 +2,10 @@ package neo.script.gorm.general.graphql
 
 import graphql.execution.instrumentation.parameters.InstrumentationExecutionParameters
 import neo.script.gorm.graphql.security.ExecutionAuthorization
+import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 
+@Profile('test,prod')
 @Component
 class ExecutionAuthorizationImpl implements ExecutionAuthorization {
     @Override
