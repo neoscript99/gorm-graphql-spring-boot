@@ -1,9 +1,0 @@
-user.token.expire.minutes: 6000
-
-spring:
-  datasource:
-    pooled: true
-    name: devDb
-    driverClassName: org.h2.Driver
-    username: sa
-    password:
