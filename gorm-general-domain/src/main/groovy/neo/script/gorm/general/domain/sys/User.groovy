@@ -34,7 +34,7 @@ class User {
     }
     static constraints = {
         account unique: true
-        password maxSize: 64
+        password maxSize: 80
     }
 
     static final initList = [ADMIN, ANONYMOUS, TEST_USER]

@@ -5,29 +5,25 @@ import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 
 @Entity
-@ToString(includes = 'name')
-@EqualsAndHashCode(includes = 'fileId')
+@ToString(includes = 'name,fileSize')
+@EqualsAndHashCode(includes = 'id')
 class AttachmentInfo {
-    String fileId
+    String id
     String name
     Long fileSize
+    String fileHash
     Date dateCreated
-    String ownerId
+    AttachmentFile file
+
     static mapping = {
-        id name: 'fileId', generator: 'assigned'
-        ownerId index: 'idx_attach_owner'
         dateCreated index: 'idx_attach_date'
+        fileHash index: 'idx_attach_hash'
+        file lazy: true
     }
 
     static constraints = {
-        fileId maxSize: 64
-        ownerId maxSize: 128
         name maxSize: 256
-    }
-
-    @Override
-    public String toString() {
-        return "Attachment - $name";
+        fileHash maxSize: 80
     }
     static graphql = true
 }

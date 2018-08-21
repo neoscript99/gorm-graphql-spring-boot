@@ -19,6 +19,10 @@ class EncoderUtil {
     }
 
     static public String sha256(String inputString) {
-        return Hashing.sha256().hashBytes(inputString.getBytes(StandardCharsets.UTF_8)).toString()
+        return sha256(inputString.getBytes(StandardCharsets.UTF_8))
+    }
+
+    static public String sha256(byte[] bytes) {
+        return Hashing.sha256().hashBytes(bytes).toString()
     }
 }
