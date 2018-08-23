@@ -12,13 +12,12 @@ class AttachmentInfo {
     String name
     Long fileSize
     String fileHash
+    String fileId
     Date dateCreated
-    AttachmentFile file
 
     static mapping = {
         dateCreated index: 'idx_attach_date'
         fileHash index: 'idx_attach_hash'
-        file lazy: true
     }
 
     static constraints = {

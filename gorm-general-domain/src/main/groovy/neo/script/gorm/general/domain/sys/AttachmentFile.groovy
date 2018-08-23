@@ -19,6 +19,4 @@ class AttachmentFile {
     static constraints = {
         data maxSize: 1024 * 1024 * 20
     }
-
-    static graphql = true
 }
