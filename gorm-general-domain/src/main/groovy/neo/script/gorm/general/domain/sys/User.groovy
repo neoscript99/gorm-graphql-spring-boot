@@ -27,7 +27,7 @@ class User {
     Boolean editable = true
     Boolean enabled = true
 
-    static belongsTo = [dept: Department]
+    Department dept
 
     static mapping = {
         dept fetch: 'join', lazy: false
