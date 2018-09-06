@@ -1,11 +1,14 @@
 package neo.script.gorm.graphql.helper
 
+import neo.script.gorm.graphql.entity.GraphQLDataFetcherFlag
 import neo.script.gorm.graphql.entity.GraphQLMappingFlag
-import org.grails.datastore.gorm.GormEntity
 import org.grails.datastore.mapping.model.PersistentEntity
 import org.grails.gorm.graphql.GraphQLEntityHelper
 import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
-import org.grails.gorm.graphql.entity.dsl.LazyGraphQLMapping
+import org.grails.gorm.graphql.fetcher.BindingGormDataFetcher
+import org.grails.gorm.graphql.fetcher.DeletingGormDataFetcher
+import org.grails.gorm.graphql.fetcher.ReadingGormDataFetcher
+import org.grails.gorm.graphql.fetcher.manager.GraphQLDataFetcherManager
 import org.grails.orm.hibernate.HibernateDatastore
 import org.springframework.context.ApplicationContext
 
@@ -34,22 +37,19 @@ class MappingHelper {
                 mapping.operations.list.paginate = true
         }
     }
-}
 
-/**
- *  Because we are accessing the persistent entity,
- *  the GORM mapping context must be created before this code is evaluated
- */
-class LazyMapping extends LazyGraphQLMapping {
-    Class<GormEntity> mappingClass
+    static void dataFetcherPreprocess(ApplicationContext applicationContext, GraphQLDataFetcherManager dataFetcherManager) {
+        applicationContext.getBeansWithAnnotation(GraphQLDataFetcherFlag).each { name, bean ->
+            //注册自定义DataFetcher，注意需实现supports方法
+            //registerXxxDataFetcher中会判断fetcher.supports(GraphQLDataFetcherType)
+            GraphQLDataFetcherFlag flag = bean.class.getAnnotation(GraphQLDataFetcherFlag);
+            if (BindingGormDataFetcher.isAssignableFrom(bean.class))
+                dataFetcherManager.registerBindingDataFetcher(flag.entityClass(), bean);
+            if (ReadingGormDataFetcher.isAssignableFrom(bean.class))
+                dataFetcherManager.registerReadingDataFetcher(flag.entityClass(), bean);
+            if (DeletingGormDataFetcher.isAssignableFrom(bean.class))
+                dataFetcherManager.registerDeletingDataFetcher(flag.entityClass(), bean);
 
-    protected LazyMapping(Class<GraphQLMapping> mappingClass) {
-        super(null)
-        this.mappingClass = mappingClass
-    }
-
-    @Override
-    GraphQLMapping initialize() {
-        mappingClass.newInstance()
+        };
     }
 }

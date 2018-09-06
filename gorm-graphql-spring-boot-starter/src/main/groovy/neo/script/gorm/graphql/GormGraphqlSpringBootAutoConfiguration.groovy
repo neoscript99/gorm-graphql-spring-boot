@@ -7,6 +7,7 @@ import neo.script.gorm.graphql.fetcher.GormGraphQLDataFetcherManager
 import neo.script.gorm.graphql.helper.MappingHelper
 import org.grails.gorm.graphql.Schema
 import org.grails.gorm.graphql.binding.manager.DefaultGraphQLDataBinderManager
+import org.grails.gorm.graphql.fetcher.manager.GraphQLDataFetcherManager
 import org.grails.orm.hibernate.HibernateDatastore
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.AutoConfigureBefore
@@ -28,10 +29,12 @@ class GormGraphqlSpringBootAutoConfiguration {
 
     @Bean
     GraphQLSchema graphQLSchema(HibernateDatastore datastore) {
-        MappingHelper.mappingPreprocess(applicationContext,datastore)
-        def schema = new Schema(datastore.mappingContext)
+        MappingHelper.mappingPreprocess(applicationContext, datastore)
+        GraphQLDataFetcherManager dataFetcherManager = new GormGraphQLDataFetcherManager();
+        MappingHelper.dataFetcherPreprocess(applicationContext, dataFetcherManager);
 
-        schema.dataFetcherManager = new GormGraphQLDataFetcherManager();
+        def schema = new Schema(datastore.mappingContext);
+        schema.dataFetcherManager = dataFetcherManager;
         schema.dataBinderManager = new DefaultGraphQLDataBinderManager(new GormGraphQLDataBinder());
         schema.initialize()
         //listArguments只需criteria，这个需在initialize之后设置
