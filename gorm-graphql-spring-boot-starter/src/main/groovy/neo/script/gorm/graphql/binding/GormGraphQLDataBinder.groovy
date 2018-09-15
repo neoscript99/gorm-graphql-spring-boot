@@ -15,7 +15,7 @@ class GormGraphQLDataBinder implements GraphQLDataBinder {
         //4、只需处理第一层赋值，嵌套属性已通过第2步查询获得
         data.each { k, v ->
             Object value = newObject."$k";
-            object."$k" = GormEntity.isAssignableFrom(value.class) ?
+            object."$k" = (value != null && GormEntity.isAssignableFrom(value.class)) ?
                     value.class.get((value as GormEntity).ident()) : value
         }
     }
