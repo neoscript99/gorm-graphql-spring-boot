@@ -1,6 +1,9 @@
 package neo.script.gorm.general.service
 
+import grails.orm.HibernateCriteriaBuilder
 import neo.script.gorm.general.repositories.GeneralRepository
+import org.grails.datastore.gorm.GormEntity
+import org.grails.datastore.mapping.query.api.Criteria
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -117,5 +120,19 @@ abstract class AbstractService<T> {
 
     List getDefaultOrder() {
         null
+    }
+
+    /**
+     * domain.withCriteria委托给Criteria，没有HibernateCriteriaBuilder强大
+     *
+     * 实际用来生成Criteria的createCriteria方法是
+     * @see org.grails.orm.hibernate.HibernateGormStaticApi#createCriteria()
+     * 不是
+     * @see org.grails.datastore.gorm.GormStaticApi#createCriteria()
+     * @param callable
+     * @return
+     */
+    Object withCriteria(@DelegatesTo(HibernateCriteriaBuilder) Closure callable) {
+        domain.withCriteria(callable)
     }
 }

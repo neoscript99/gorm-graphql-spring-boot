@@ -1,11 +1,7 @@
 user.token.expire.minutes: 10
 
 server.port: 8080
-management:
-  endpoints.web.exposure.include: "*"
-  security.enabled: false
 spring:
-  boot.admin.url: "http://localhost:8080"
   h2.console.enabled: true
 
   datasource:

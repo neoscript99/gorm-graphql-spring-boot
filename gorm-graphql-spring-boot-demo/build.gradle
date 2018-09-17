@@ -3,6 +3,7 @@ apply plugin: 'org.springframework.boot'
 
 dependencies {
     compile project(':gorm-general-domain')
+    compile("org.springframework.boot:spring-boot-starter-actuator")
     compile 'de.codecentric:spring-boot-admin-starter-server:1.5.7'
     compile 'de.codecentric:spring-boot-admin-starter-client:1.5.7'
 }
