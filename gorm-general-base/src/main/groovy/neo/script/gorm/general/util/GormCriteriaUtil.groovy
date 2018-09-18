@@ -1,6 +1,7 @@
 package neo.script.gorm.general.util
 
 import grails.gorm.DetachedCriteria
+import grails.orm.HibernateCriteriaBuilder
 import groovy.util.logging.Slf4j
 import org.grails.datastore.gorm.GormEntity
 import org.grails.datastore.mapping.model.PersistentEntity
@@ -66,5 +67,19 @@ class GormCriteriaUtil {
 
     static getIdName(Class<GormEntity> domain) {
         (domain.gormPersistentEntity as PersistentEntity).identity.name
+    }
+
+    /**
+     * domain.withCriteria委托给Criteria，没有HibernateCriteriaBuilder强大，实际是HibernateCriteriaBuilder
+     *
+     * 实际用来生成Criteria的createCriteria方法是
+     * @see org.grails.orm.hibernate.HibernateGormStaticApi#createCriteria()
+     * 不是
+     * @see org.grails.datastore.gorm.GormStaticApi#createCriteria()
+     * @param callable
+     * @return
+     */
+    static Object withCriteria(Class<GormEntity> domain, @DelegatesTo(HibernateCriteriaBuilder) Closure callable) {
+        domain.withCriteria(callable)
     }
 }
