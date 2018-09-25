@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PopWindow xmlns="ns.flex.controls.*" xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Script>
+		<![CDATA[
+			[Bindable]
+			public var chartData:*;
+		]]>
+	</mx:Script>
+</PopWindow>

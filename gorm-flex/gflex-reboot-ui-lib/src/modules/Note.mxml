@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReportModule xmlns="ns.flex.report.*" xmlns:mx="http://www.adobe.com/2006/mxml"
+              xmlns:controls="ns.flex.controls.*">
+    <mx:Script>
+		<![CDATA[
+        import mx.rpc.events.ResultEvent;
+
+        import ns.flex.common.Constants;
+        import ns.flex.util.DateUtil;
+        import ns.flex.util.DictManager;
+        import ns.flex.util.RemoteUtil;
+
+        [Inspectable(category="General")]
+        [Bindable]
+        public var editable:Boolean = true;
+
+        override protected function cc(e:Event):void
+        {
+            reportService =
+                    RemoteUtil.createRemoteObject('flexNoteService',
+                            [{method: 'save', listener: onSuccess},
+                                {method: 'deleteByIds', listener: onSuccess}]);
+
+            _dgp.addOrder('dateCreated', 'desc');
+            _dgp.resetMenu();
+            super.cc(e);
+        }
+
+        override protected function get domain():String
+        {
+            return null;
+        }
+
+        override protected function get queryParam():Object
+        {
+            var param:Object = {}
+            if (startDate.selectedDate)
+                param.ge = [['dateCreated', startDate.selectedDate]];
+            if (endDate.selectedDate)
+                param.lt =
+                        [['dateCreated', DateUtil.shiftDays(endDate.selectedDate, 1)]];
+            return param;
+        }
+
+        private function onSuccess(e:Event):void
+        {
+            _dgp.closePop();
+            query();
+        }
+
+        override public function set label(label:String):void
+        {
+            super.label = label;
+        }
+        ]]>
+	</mx:Script>
+    <mx:ApplicationControlBar>
+        <mx:Label text="发布日期从"/>
+        <controls:DateFieldPlus id="startDate" defaultDate="none" change="query()"
+                                constraints="{{required:false,editable:true}}"/>
+        <mx:Label text="至"/>
+        <controls:DateFieldPlus id="endDate" defaultDate="none" change="query()"
+                                constraints="{{required:false,editable:true}}"/>
+    </mx:ApplicationControlBar>
+    <controls:DataGridPlus id="_dgp" dataProvider="{reportService.list.lastResult}"
+                           width="100%" height="100%" sortableColumns="false"
+                           saveItem="reportService.save(event.saveItem)"
+                           deleteEnabled="{editable}" showOnlyVisible="false"
+                           deleteItems="reportService.deleteByIds(selectedIds)"
+                           showDetail="{editable?'new-view-edit':'view'}">
+        <controls:columns>
+            <controls:DataGridColumnPlus dataField="title" headerText="标题"
+                                         constraints="{{maxChars:256, required: true, autoTrim: true}}"/>
+            <controls:DataGridColumnPlus dataField="content" headerText="内容"
+                                         visible="false" wordWrap="true"
+                                         constraints="{{maxChars:1024}}"/>
+            <controls:DataGridColumnPlus dataField="attachNum" headerText="附件数"
+                                         editable="false" width="60"/>
+            <controls:DataGridColumnPlus headerText="附件"
+                                         asUploader="{{ownerIdField:'id',destination:'flexNoteService'}}"/>
+            <controls:DataGridColumnPlus headerText="标签"
+                                         asLabelInput="{{dataProvider:DictManager.getList('getLabelList'),percentWidth:100,getSelected:reportService.getLabels,matchType:'word',allowNewValues:true,allowMultipleSelection:true}}"/>
+            <controls:DataGridColumnPlus dataField="lastUser.name" headerText="发布人"
+                                         editable="false" width="80"/>
+            <controls:DataGridColumnPlus dataField="lastUser.dept.name" headerText="部门"
+                                         editable="false" width="100"/>
+            <controls:DataGridColumnPlus dataField="dateCreated" headerText="发布时间"
+                                         asTime="true" editable="false" width="120"/>
+            <controls:DataGridColumnPlus dataField="lastUpdated" headerText="修改时间"
+                                         visible="false" asTime="true" editable="false"
+                                         width="120"/>
+        </controls:columns>
+    </controls:DataGridPlus>
+    <controls:Paging id="_paging" countMethod="{reportService.count}"
+                     changePage="queryPage(event.first)"/>
+</ReportModule>

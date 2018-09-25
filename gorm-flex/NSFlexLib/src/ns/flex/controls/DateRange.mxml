@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="ns.flex.controls.*"
+		direction="horizontal">
+	<mx:Metadata>
+		[Event(name="change")]
+	</mx:Metadata>
+	<mx:Script>
+		<![CDATA[
+			import ns.flex.util.ContainerUtil;
+
+			[Bindable]
+			[Inspectable(enumeration="today,yesterday,last_month_final,last_year_final,none",
+				defaultValue="last_month_final", category="General")]
+			public var defaultEndDate:String='last_month_final';
+
+			[Bindable]
+			[Inspectable(enumeration="today,yesterday,last_month_final,last_year_final,none",
+				defaultValue="last_month_final", category="General")]
+			public var defaultStartDate:String='last_month_final';
+
+			private function onChange(flag:String, force:Boolean=true):void
+			{
+				if (force || sd.text > ed.text)
+					if (flag == 'sd')
+					{
+						ed.selectedDate=sd.selectedDate;
+						ed.text=sd.text;
+					}
+					else if (flag == 'ed')
+					{
+						sd.selectedDate=ed.selectedDate;
+						sd.text=ed.text;
+					}
+				if (ContainerUtil.validate(this))
+					dispatchEvent(new Event('change'))
+			}
+		]]>
+	</mx:Script>
+	<mx:FormItem label="起始日期：">
+		<controls:DateFieldPlus id="sd" editable="true" toolTip="回车查询"
+								constraints="{{required:true}}"
+								defaultDate="{defaultStartDate}"
+								change="onChange('sd',false)"/>
+	</mx:FormItem>
+	<mx:Button label="→" click="onChange('sd')"/>
+	<mx:Button label="←" click="onChange('ed')"/>
+	<mx:FormItem label="结束日期：">
+		<controls:DateFieldPlus id="ed" editable="true" toolTip="回车查询"
+								constraints="{{required:true}}"
+								defaultDate="{defaultEndDate}"
+								change="onChange('ed',false)"/>
+	</mx:FormItem>
+</mx:Box>

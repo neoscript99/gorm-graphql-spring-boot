@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ViewStack xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:modules="modules.*"
+			  change="change()" width="100%" height="100%">
+	<mx:Script>
+		<![CDATA[
+			import ns.flex.module.AbstractModule;
+
+			private function change():void
+			{
+				if (this.selectedChild is AbstractModule)
+					(this.selectedChild as AbstractModule).beforeDisplay();
+			}
+		]]>
+	</mx:Script>
+	<modules:Welcome name="Welcome"/>
+	<modules:Profile name="Profile"/>
+	<modules:Role name="Role"/>
+	<modules:User name="User"/>
+	<modules:Note name="Note"/>
+	<modules:Param name="Param"/>
+	<modules:ComingModule name="ComingModule"/>
+</mx:ViewStack>

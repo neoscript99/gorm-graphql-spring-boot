@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PopWindow xmlns="ns.flex.controls.*" xmlns:mx="http://www.adobe.com/2006/mxml"
+		   title="批量新增（{info}）" width="500" height="350">
+	<mx:Metadata>
+		[Event(name="confirm")]
+	</mx:Metadata>
+	<mx:Script>
+		<![CDATA[
+			[Bindable]
+			public var headerTexts:String;
+
+			private const info:String='必须用逗号或制表符分隔各列，支持从Excel复制粘贴';
+		]]>
+	</mx:Script>
+	<mx:Text text="{headerTexts}" fontWeight="bold" width="100%"/>
+	<mx:TextArea id="tta" width="100%" height="100%" toolTip="{info}"/>
+	<mx:ControlBar horizontalAlign="right">
+		<mx:Button label="确认" click="dispatchEvent(new Event('confirm'))"/>
+		<mx:Button label="清空" click="tta.text=''"/>
+		<mx:Button label="取消" click="this.close()"/>
+	</mx:ControlBar>
+</PopWindow>

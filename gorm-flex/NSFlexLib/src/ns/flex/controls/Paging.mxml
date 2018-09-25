@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PagerBase xmlns:mx="http://www.adobe.com/2006/mxml" horizontalAlign="right" width="100%"
+		   paddingTop="5" paddingBottom="5" xmlns="ns.flex.controls.*">
+	<mx:Style>		
+		Button.nopadding
+		{
+			padding-bottom:0;
+			padding-top:0;
+			padding-left:0;
+			padding-right:0;
+		}
+	</mx:Style>
+	<mx:Script>
+		<![CDATA[
+			import mx.events.ItemClickEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.rpc.remoting.mxml.Operation;
+			import ns.flex.event.PageChangeEvent;
+
+			public var pageArrayNumber:int=5;
+
+			[Bindable]
+			private var _totalNumber:int;
+			[Bindable]
+			private var pageArray:Array;
+			[Bindable]
+			private var totalPage:int;
+
+			public function set countMethod(method:Operation):void
+			{
+				method.addEventListener(ResultEvent.RESULT, function(e:ResultEvent):void
+				{
+					_totalNumber=int(e.result);
+					updateDispaly();
+				})
+			}
+
+			/*
+			 *跳转到某页，触发换页事件
+			 */
+			override public function gotoPage(pageIndex:int):void
+			{
+				curPage=
+					(pageIndex > totalPage) ? totalPage : ((pageIndex < 1) ? 1 : pageIndex)
+				dispatchEvent(new PageChangeEvent((curPage - 1) * offset.value));
+			}
+
+			/*
+			 *生成页面选择列表
+			 */
+			private function generatePageArray():void
+			{
+				pageArray=getNumberArray(curPage, totalPage, pageArrayNumber);
+
+				if (pageArray.length == 0)
+					return;
+
+				if (pageArray[0] == 2)
+					pageArray.unshift(1);
+				else if (pageArray[0] > 2)
+					pageArray.unshift(1, {label: '..', value: pageArray[0] - 1});
+				var length:int=pageArray.length;
+
+				if (pageArray[length - 1] == totalPage - 1)
+					pageArray.push(totalPage);
+				else if (pageArray[length - 1] < totalPage - 1)
+					pageArray.push({label: '..', value: pageArray[length - 1] + 1},
+						totalPage);
+
+				for (var i:int=0; i < pageArray.length; i++)
+					if (pageArray[i] == curPage)
+						pageLink.selectedIndex=i;
+			}
+
+			/*
+			 *取以iCursor为中心的 num个数字数组
+			 */
+			private function getNumberArray(iCursor:int, iTotal:int, num:int):Array
+			{
+				var array:Array=new Array();
+
+				if (iTotal == 0)
+					return array;
+				array.push(iCursor);
+				var count:int=num - 1;
+				var left:int=iCursor - 1;
+				var right:int=iCursor + 1;
+
+				while (count > 0 && (left > 0 || right <= iTotal))
+				{
+					if (left > 0)
+					{
+						array.unshift(left--);
+						count--;
+					}
+
+					if (right <= iTotal)
+					{
+						array.push(right++);
+						count--;
+					}
+				}
+				return array;
+			}
+
+			/*
+			 *在页码列表中选择页码
+			 */
+			private function selectPage(e:ItemClickEvent):void
+			{
+				if (e.label == '..')
+					gotoPage(parseInt(e.item.value));
+				else
+					gotoPage(parseInt(e.label));
+			}
+
+			/*
+			 *新查询返回总数结果后，也就是totalPage已得到，必须调用本方法
+			 */
+			private function updateDispaly():void
+			{
+				if (curPage > totalPage)
+					curPage=totalPage
+				generatePageArray();
+			}
+		]]>
+	</mx:Script>
+	<mx:Binding destination="totalPage" source="{(_totalNumber-1)/offset.value+1}"/>
+	<mx:Label text="每页："/>
+	<mx:NumericStepper id="offset" minimum="5" maximum="95" stepSize="5"
+					   value="{_offsetValue}" width="50"
+					   change="changeStepper(event.value)"/>
+	<mx:Label text="{curPage+'/'+totalPage+' ('+_totalNumber+')'}"/>
+	<mx:LinkBar id="pageLink" dataProvider="{pageArray}" itemClick="selectPage(event)"/>
+	<mx:Button click="go(-1)" enabled="{curPage>1}" label="&lt;"
+			   toolTip="{curPage>1?'上一页':''}" styleName="nopadding"/>
+	<mx:Button click="go(1)" enabled="{totalPage>curPage}" label="&gt;"
+			   styleName="nopadding" toolTip="{totalPage>curPage?'下一页':''}"/>
+</PagerBase>

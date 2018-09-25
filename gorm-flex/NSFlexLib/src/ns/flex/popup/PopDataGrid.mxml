@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PopWindow xmlns="ns.flex.controls.*" xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Script>
+		<![CDATA[
+			import ns.flex.util.ObjectUtils;
+			import ns.flex.controls.DataGridColumnPlus;
+			[Bindable]
+			public var dataGridData:*;
+			public var columnInfos:Array;
+			
+			private function initColumns():void
+			{
+				var columns:Array=[];
+				
+				for each (var col:Object in columnInfos)
+				{
+					var dgColumn:DataGridColumnPlus=new DataGridColumnPlus;
+					ObjectUtils.copyProperties(dgColumn, col);
+					columns.push(dgColumn);
+				}
+				dataGrid.columns=columns;
+			}
+		]]>
+	</mx:Script>
+	<DataGridPlus id="dataGrid" dataProvider="{dataGridData}"
+				  preinitialize="initColumns()"/>
+</PopWindow>

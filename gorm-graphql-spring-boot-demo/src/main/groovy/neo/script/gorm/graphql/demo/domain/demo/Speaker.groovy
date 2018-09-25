@@ -17,8 +17,6 @@ class Speaker implements GormEntity<Speaker> {
     String bio
     String name
 
-    static hasMany = [talks: Talk]
-
     static graphql
 
     static constraints = {
@@ -30,7 +28,6 @@ class Speaker implements GormEntity<Speaker> {
     static mapping = {
         bio type: 'text'
         name formula: 'concat(FIRST_NAME,\' \',LAST_NAME)'
-        talks sort: 'id'
     }
 
     static Speaker JEFF = new Speaker(firstName: 'Jeff', lastName: 'Brown', birthday: LocalDate.of(1975, 11, 15), email: 'brownj@objectcomputing.com', bio: 'Jeff Brown is an author and tech lead at OCI')

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PopChart xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="ns.flex.popup.*">
+	<mx:Script>
+		<![CDATA[
+			import ns.flex.util.LabelUtil;
+			[Bindable]
+			public var field:String='value';
+			[Bindable]
+			public var nameField:String='name';
+		]]>
+	</mx:Script>
+	<mx:HBox horizontalAlign="center" width="100%" height="100%">
+		<mx:PieChart id="pieChart" dataProvider="{chartData}" showDataTips="true"
+					 height="100%" width="{pieChart.height}">
+			<mx:series>
+				<mx:PieSeries field="{field}" nameField="{nameField}"
+							  labelFunction="LabelUtil.getPieSeriesLabel"
+							  labelPosition="inside"/>
+			</mx:series>
+		</mx:PieChart>
+		<LegendBox chart="{pieChart}" fileName="{title}"/>
+	</mx:HBox>
+</PopChart>

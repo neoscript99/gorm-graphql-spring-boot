@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ApplicationControlBar xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.controls.DataGrid;
+			import mx.controls.dataGridClasses.DataGridColumn;
+			import mx.utils.ObjectProxy;
+			import ns.flex.util.ArrayCollectionPlus;
+
+			private var dgp:DataGridPlus;
+
+			//DataGridColumnPlus,has type,and visible
+			private var targetColumns:Array=[];
+			[Bindable]
+			private var typeList:ArrayCollectionPlus=new ArrayCollectionPlus;
+
+			public function set dataProvider(dataProvider:DataGridPlus):void
+			{
+				dgp=dataProvider;
+				typeList.removeAll();
+				for each (var col:DataGridColumn in dgp.columns)
+				{
+					if (col is DataGridColumnPlus)
+					{
+						var colp:DataGridColumnPlus=col as DataGridColumnPlus;
+						if (colp.visible && colp.type)
+						{
+							targetColumns.push(colp);
+							var type:Object=typeList.findByField('label', colp.type);
+							if (type)
+								type.count++;
+							else
+							{
+								type=
+									new ObjectProxy({label: colp.type, selected: true,
+										count: 1});
+								typeList.addItem(type);
+							}
+							BindingUtils.bindProperty(colp, 'visible', type, 'selected')
+						}
+					}
+				}
+				rp.dataProvider=typeList
+			}
+
+			public function selectByLabel(label:String):void
+			{
+				dgp.popView=null;
+				showAll.selected=true;
+				for each (var type:Object in typeList)
+				{
+					type.selected=(String(type.label).indexOf(label) > -1);
+					if (type.selected == false)
+						showAll.selected=false;
+				}
+			}
+
+			private function select(item:Object):void
+			{
+				dgp.popView=null;
+				item.selected=!item.selected;
+				showAll.selected=item.selected;
+				if (item.selected)
+					for each (var type:Object in typeList)
+						if (!type.selected)
+						{
+							showAll.selected=false;
+							break;
+						}
+			}
+
+			private function selectAll():void
+			{
+				dgp.popView=null;
+				for each (var type:Object in typeList)
+				{
+					type.selected=showAll.selected;
+				}
+			}
+		]]>
+	</mx:Script>
+	<mx:Label text="显示列："/>
+	<mx:CheckBox id="showAll" label="全部" selected="true" color="green" click="selectAll()"/>
+	<mx:Repeater id="rp">
+		<mx:CheckBox label="{rp.currentItem.label}({rp.currentItem.count})"
+					 selected="{rp.currentItem.selected}"
+					 click="select(event.currentTarget.getRepeaterItem())"/>
+	</mx:Repeater>
+</mx:ApplicationControlBar>

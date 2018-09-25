@@ -14,11 +14,12 @@ import java.time.LocalDateTime
 class Token {
 
     String id
+    LocalDateTime expireTime
+    User user
+    Boolean destroyed = false
+
     Date dateCreated
     Date lastUpdated
-    LocalDateTime expireTime
-    Boolean destroyed = false
-    static belongsTo = [user: User];
 
     static mapping = {
         id generator: 'uuid2'

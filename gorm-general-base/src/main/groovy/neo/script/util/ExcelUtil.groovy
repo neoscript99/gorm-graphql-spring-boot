@@ -5,6 +5,8 @@ import org.apache.poi.ss.usermodel.*
 import org.apache.poi.ss.util.WorkbookUtil
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
+import javax.validation.constraints.NotNull;
+
 class ExcelUtil {
 
     static List<Map<String, Object>> excelToMapList(byte[] excelFile) {
@@ -45,7 +47,7 @@ class ExcelUtil {
      * @return
      */
     static byte[] mapListToExcel(
-            Map<String, String> titleMap,
+            @NotNull Map<String, String> titleMap,
             List<Map<String, Object>> mapList,
             String sheetName = 'sheet1') {
         Workbook wb = new XSSFWorkbook();

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PopChart xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="ns.flex.popup.*" width="680"
+		  height="400" xmlns:controls="ns.flex.controls.*">
+	<mx:Script>
+		<![CDATA[
+			import mx.charts.series.ColumnSeries;
+			import ns.flex.controls.DataGridColumnPlus;
+			import ns.flex.util.LabelUtil;
+
+			[Bindable]
+			public var categoryField:String;
+			[Bindable]
+			public var categoryName:String;
+			[Bindable]
+			public var colSeries:Array;
+			[Bindable]
+			public var showData:Boolean=true;
+			[Bindable]
+			private var dgpColumns:Array;
+
+			public function set seriesInfos(ss:Array):void
+			{
+				colSeries=[]
+				dgpColumns=[]
+
+				var dgc:DataGridColumnPlus=new DataGridColumnPlus
+				dgc.dataField=categoryField
+				dgc.headerText=categoryName
+				dgpColumns.push(dgc)
+
+				for each (var s:Object in ss)
+				{
+					var cs:ColumnSeries=new ColumnSeries()
+					cs.xField=s.xField;
+					cs.yField=s.yField;
+					cs.displayName=s.displayName;
+					cs.labelFunction=LabelUtil.getColumnSeriesLabel;
+					cs.setStyle('labelPosition', 'inside');
+					colSeries.push(cs);
+
+					dgc=new DataGridColumnPlus
+					dgc.dataField=s.yField
+					dgc.headerText=s.displayName
+					dgpColumns.push(dgc)
+				}
+			}
+		]]>
+	</mx:Script>
+	<mx:TabNavigator id="tn" width="100%" height="100%" paddingLeft="5" paddingBottom="5">
+		<mx:HBox horizontalAlign="center" width="100%" height="100%" label="图形">
+			<mx:ColumnChart id="columnChart" dataProvider="{chartData}"
+							showDataTips="true" height="100%" width="100%"
+							series="{colSeries}">
+				<mx:horizontalAxis>
+					<mx:CategoryAxis id="columnAxis" dataProvider="{chartData}"
+									 categoryField="{categoryField}"
+									 displayName="{categoryName}"/>
+				</mx:horizontalAxis>
+			</mx:ColumnChart>
+			<LegendBox chart="{columnChart}" fileName="{title}"/>
+		</mx:HBox>
+		<mx:HBox id="dataBox" label="数据" enabled="{showData}" height="100%">
+			<controls:DataGridPlus dataProvider="{chartData}" height="100%"
+								   columns="{dgpColumns}"/>
+		</mx:HBox>
+	</mx:TabNavigator>
+</PopChart>

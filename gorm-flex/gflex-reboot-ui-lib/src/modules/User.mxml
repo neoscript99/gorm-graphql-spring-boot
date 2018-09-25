@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbstractModule xmlns="ns.flex.module.*" xmlns:mx="http://www.adobe.com/2006/mxml"
+				xmlns:controls="ns.flex.controls.*" creationComplete="cc()">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.TextInput;
+			import mx.events.CloseEvent;
+			import ns.flex.event.ShowItemEvent;
+			import ns.flex.util.ArrayCollectionPlus;
+			import ns.flex.util.ConstraintCommon;
+			import ns.flex.util.ContainerUtil;
+			import ns.flex.util.DictManager;
+			import ns.flex.util.MessageUtil;
+
+			public static function menuCheck(menu:ContextMenuItem, item:Object):Boolean
+			{
+				return item.editable;
+			}
+
+			override public function beforeDisplay():void
+			{
+				rs.listEnabled();
+			}
+
+			private function addUserRole():void
+			{
+				if (userSelected())
+					for each (var item:Object in userGrid.selectedItems)
+						if (item.editable)
+							us.addUserRole(item.id, allRoleGrid.selectedItem.id);
+			}
+
+			private function cc():void
+			{
+				rs.listEnabled();
+				query();
+			}
+
+			private function deleteItems():void
+			{
+				var delIds:Array=[];
+				for each (var item:Object in userGrid.selectedItems)
+					if (item.editable)
+						delIds.push(item.id);
+				us.deleteByIds(delIds);
+			}
+
+			private function deleteUserAllRoles():void
+			{
+				if (userSelected())
+					for each (var item:Object in userGrid.selectedItems)
+						if (item.editable)
+							us.deleteUserRoles(item.id, userRoleGrid.dataProvider);
+			}
+
+			private function deleteUserRoles():void
+			{
+				if (userSelected())
+					for each (var item:Object in userGrid.selectedItems)
+						if (item.editable)
+							us.deleteUserRoles(item.id, userRoleGrid.selectedItems);
+			}
+
+			private function getUserRoles():void
+			{
+				us.getUserRoles(userGrid.selectedItem.id)
+			}
+
+			private function query(e:Event=null):void
+			{
+				var eqs:Array=[];
+				var param:Object={eq: eqs};
+				if (deptSelect.selectedItem.id)
+					eqs.push(['dept.id', deptSelect.selectedItem.id]);
+				if (accountInput.text)
+					param.like=[['account', "%" + accountInput.text + "%"]]
+				if (roleSelect.selectedItem.id)
+					param.sqlRestriction=
+						['EXISTS (SELECT 1 FROM t_user_role r WHERE r.user_id = {alias}.id AND r.role_id = ' + roleSelect.selectedItem.id + ')']
+
+				us.list(param);
+				us.getOperation('getUserRoles').clearResult();
+			}
+
+			private function showItem(e:ShowItemEvent):void
+			{
+				var passwordInput:TextInputPlus=
+					ContainerUtil.findContainerChild(userGrid.popEditing, TextInput,
+					'name', '密码') as TextInputPlus;
+				if (e.showItem)
+				{
+					passwordInput.text='';
+					passwordInput.constraints={required: false}
+				}
+				else
+					passwordInput.constraints={required: true}
+				passwordInput.invalidateDisplayList();
+			}
+
+			private function userSelected():Boolean
+			{
+				if (userGrid.selectedItem)
+					return true;
+				else
+				{
+					MessageUtil.showMessage('请先选择用户，支持多选');
+					return false
+				}
+			}
+		]]>
+	</mx:Script>
+	<mx:RemoteObject id="rs" destination="flexRoleService"
+					 fault="MessageUtil.showError(event)"/>
+	<mx:RemoteObject id="us" destination="flexUserService"
+					 fault="userGrid.closeProgress();MessageUtil.showError(event)">
+		<mx:method name="save"
+				   result="userGrid.closeProgress();userGrid.closePop();query()"/>
+		<mx:method name="deleteByIds" result="query()"
+				   fault="MessageUtil.showMessage('所选用户可能存在关联的角色，请首先解除关联关系。');"/>
+		<mx:method name="addUserRole" result="getUserRoles()"/>
+		<mx:method name="deleteUserRoles" result="getUserRoles()"/>
+	</mx:RemoteObject>
+	<mx:ApplicationControlBar>
+		<mx:Label text="部门："/>
+		<controls:ComboBoxPlus id="deptSelect" labelField="name" change="query()"
+							   dataProvider="{DictManager.getListWithAll('getDepartmentList','name')}"/>
+		<mx:Label text="角色："/>
+		<mx:ComboBox id="roleSelect"
+					 dataProvider="{ ArrayCollectionPlus.withFirst(rs.listEnabled.lastResult,{roleName:'全部'})}"
+					 labelField="roleName" change="query()"/>
+		<mx:Label text="帐号："/>
+		<controls:TextInputPlus id="accountInput" doubleClickEnabled="true"
+								doubleClick="accountInput.text=''"/>
+		<mx:Button label="查询" click="query()"/>
+	</mx:ApplicationControlBar>
+	<mx:HBox height="100%">
+		<mx:Panel title="用户列表" height="100%">
+			<controls:DataGridPlus id="userGrid" dataProvider="{us.list.lastResult}"
+								   height="100%" deleteEnabled="true"
+								   showOnlyVisible="false" showDetail="new-edit"
+								   saveItem="us.save(event.saveItem)"
+								   menuEnableChecker="{menuCheck}"
+								   showItem="showItem(event)" deleteItems="deleteItems()"
+								   itemClick="getUserRoles()">
+				<controls:columns>
+					<controls:DataGridColumnPlus dataField="account" headerText="帐号"
+												 constraints="{ConstraintCommon.account}"/>
+					<controls:DataGridColumnPlus dataField="password" headerText="密码"
+												 constraints="{ConstraintCommon.password}"
+												 visible="false" editable="true"/>
+					<controls:DataGridColumnPlus dataField="name" complexSort="true"
+												 headerText="姓名"
+												 constraints="{ConstraintCommon.justRequired}"/>
+					<controls:DataGridColumnPlus dataField="dept.name" headerText="部门"
+												 asComboBox="{{dataProvider:DictManager.getListWithAskToChoose('getDepartmentList','name'),
+										 labelField:'name',valueField:'id'}}"/>
+					<controls:DataGridColumnPlus dataField="enabled" headerText="启用"
+												 asControl="CheckBox"/>
+					<controls:DataGridColumnPlus dataField="editable" headerText="可编辑"
+												 editable="false"/>
+				</controls:columns>
+			</controls:DataGridPlus>
+		</mx:Panel>
+		<mx:Panel title="用户角色列表(双击删除)" height="100%"
+				  enabled="{userGrid.selectedItem.editable}">
+			<controls:DataGridPlus id="userRoleGrid"
+								   dataProvider="{us.getUserRoles.lastResult}"
+								   height="100%" deleteAllEnabled="true"
+								   deleteEnabled="true"
+								   itemDoubleClick="deleteUserRoles()"
+								   deleteItems="deleteUserRoles()"
+								   deleteAll="deleteUserAllRoles()"
+								   doubleClickEnabled="true">
+				<controls:columns>
+					<controls:DataGridColumnPlus dataField="roleName" complexSort="true"
+												 headerText="角色名"/>
+					<controls:DataGridColumnPlus dataField="roleCode" headerText="角色代码"/>
+				</controls:columns>
+			</controls:DataGridPlus>
+		</mx:Panel>
+		<mx:Panel title="角色列表(双击增加)" height="100%"
+				  enabled="{userGrid.selectedItem.editable}">
+			<controls:DataGridPlus id="allRoleGrid" showDetail="none"
+								   dataProvider="{rs.listEnabled.lastResult}"
+								   height="100%" itemDoubleClick="addUserRole()"
+								   doubleClickEnabled="true">
+				<controls:columns>
+					<controls:DataGridColumnPlus dataField="roleName" complexSort="true"
+												 headerText="角色名"/>
+					<controls:DataGridColumnPlus dataField="roleCode" headerText="角色代码"/>
+				</controls:columns>
+			</controls:DataGridPlus>
+		</mx:Panel>
+	</mx:HBox>
+</AbstractModule>

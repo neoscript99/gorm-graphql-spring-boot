@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services-config>
+    <services>
+        <service id="remoting-service"
+                 class="flex.messaging.services.RemotingService">
+            <adapters>
+                <adapter-definition id="java-object"
+                                    class="flex.messaging.services.remoting.adapters.JavaAdapter"
+                                    default="true"/>
+            </adapters>
+        </service>
+        <default-channels>
+            <channel ref="blazeds-amf"/>
+        </default-channels>
+    </services>
+    <channels>
+        <channel-definition id="blazeds-amf" class="mx.messaging.channels.AMFChannel">
+            <endpoint
+                    url="http://{server.name}:{server.port}/{context.root}/messagebroker/amf"
+                    class="flex.messaging.endpoints.AMFEndpoint"/>
+        </channel-definition>
+    </channels>
+    <!--
+    Apache Flex BlazeDS 4.7.3 enable the ClassDeserializationValidator per default to only allow
+    deserialization of whitelisted classes.
+    http://www.apache.org/dist/flex/BlazeDS/4.7.3/RELEASE_NOTES
+    -->
+    <validators>
+        <validator class="flex.messaging.validators.ClassDeserializationValidator">
+            <properties>
+                <allow-classes>
+                    <class name=".*"/>
+                </allow-classes>
+            </properties>
+        </validator>
+    </validators>
+    <logging>
+        <target class="ns.gflex.util.FlexLog" level="Debug">
+            <properties>
+                <prefix>[BlazeDS]</prefix>
+                <includeDate>false</includeDate>
+                <includeTime>false</includeTime>
+                <includeLevel>true</includeLevel>
+                <includeCategory>true</includeCategory>
+            </properties>
+        </target>
+    </logging>
+</services-config>

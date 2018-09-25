@@ -1,0 +1,13 @@
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+    compile project(':gorm-general-domain')
+    compile group: 'org.apache.flex.blazeds', name: 'blazeds-spring-boot-starter', version: "${blazedsVersion}"
+}
+
+
+/*可在 .idea/modules.xml 中手工添加如下flex模块
+<module fileurl="file://$PROJECT_DIR$/gorm-flex/NSFlexLib/NSFlexLib.iml" filepath="$PROJECT_DIR$/gorm-flex/NSFlexLib/NSFlexLib.iml" />
+<module fileurl="file://$PROJECT_DIR$/gorm-flex/gflex-reboot-ui/gflex-reboot-ui.iml" filepath="$PROJECT_DIR$/gorm-flex/gflex-reboot-ui/gflex-reboot-ui.iml" />
+<module fileurl="file://$PROJECT_DIR$/gorm-flex/gflex-reboot-ui-lib/gflex-reboot-ui-lib.iml" filepath="$PROJECT_DIR$/gorm-flex/gflex-reboot-ui-lib/gflex-reboot-ui-lib.iml" />
+*/

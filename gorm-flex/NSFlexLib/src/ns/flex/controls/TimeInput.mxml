@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="ns.flex.controls.*">
+	<mx:Metadata>
+		[Event(name="change")]
+	</mx:Metadata>
+	<mx:Script>
+		<![CDATA[
+			import ns.flex.util.DateUtil;
+
+			public function set constraints(value:Object):void
+			{
+				dateField.constraints=value;
+			}
+
+			[Bindable("change")]
+			public function get date():Date
+			{
+				var sd:Date=dateField.selectedDate;
+				if (sd)
+				{
+					sd.hours=hourField.value;
+					sd.minutes=minuteField.value;
+				}
+				return sd;
+			}
+
+			public function set date(value:Date):void
+			{
+				dateField.selectedDate=value;
+				hourField.value=value.hours
+				minuteField.value=value.minutes
+			}
+
+			public function set editable(value:Boolean):void
+			{
+				dateField.editable=value;
+			}
+
+			[Bindable("change")]
+			public function get text():String
+			{
+				return date ? DateUtil.getTimeLabel(date) : null;
+			}
+
+			public function set text(value:String):void
+			{
+				date=DateUtil.stringToTime(value);
+			}
+
+			[Bindable("change")]
+			[Bindable("valueCommit")]
+			public function get validated():Boolean
+			{
+				return dateField.validated;
+			}
+
+			private function fireChange():void
+			{
+				dispatchEvent(new Event("change"));
+			}
+		]]>
+	</mx:Script>
+	<controls:DateFieldPlus id="dateField" formatString="YYYY-MM-DD" change="fireChange()"/>
+	<mx:NumericStepper id="hourField" minimum="0" maximum="23" stepSize="1" value="0"
+					   width="40" change="fireChange()"/>
+	<mx:Label text="："/>
+	<mx:NumericStepper id="minuteField" minimum="0" maximum="59" stepSize="1" value="0"
+					   width="40" change="fireChange()"/>
+</mx:HBox>

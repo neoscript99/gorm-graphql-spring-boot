@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PopWindow xmlns="ns.flex.controls.*" xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:radarchart="fr.kapit.radarchart.*" xmlns:radar="ns.flex.controls.radar.*" width="630"
+           height="660" title="雷达图" paddingBottom="10">
+    <mx:Script>
+		<![CDATA[
+        //可修改字体大小为12
+        private static const tf:TextFormat = new TextFormat();
+        [Bindable]
+        public var seriesField:String;
+        [Bindable]
+        public var axes:Array;
+        [Bindable]
+        public var dataProvider:Object;
+        ]]>
+	</mx:Script>
+    <radarchart:RadarChart id="radar" seriesField="{seriesField}" axes="{axes}" dataProvider="{dataProvider}"
+                           width="100%" height="100%" lineType="linear">
+    </radarchart:RadarChart>
+    <radar:DataGridRadarLegend width="100%" radarChart="{radar}" legendTextFormat="{tf}" />
+</PopWindow>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbstractModule xmlns="ns.flex.module.*" xmlns:mx="http://www.adobe.com/2006/mxml"
+				xmlns:controls="ns.flex.controls.*" horizontalAlign="center">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import ns.flex.util.ConstraintCommon;
+			import ns.flex.util.ContainerUtil;
+			import ns.flex.util.MessageUtil;
+			import ns.flex.util.Session;
+
+			override public function beforeDisplay():void
+			{
+				ContainerUtil.clearInput(form);
+			}
+
+			private function submit():void
+			{
+				if (ContainerUtil.validate(form) && new1.text == new2.text)
+					us.changePassword(Session['LoginUser'].account, ori.text, new1.text);
+				else
+					twp.playShake();
+			}
+		]]>
+	</mx:Script>
+	<mx:RemoteObject id="us" destination="flexUserService"
+					 fault="MessageUtil.showError(event)"
+					 result="MessageUtil.showMessage('密码修改成功')"/>
+	<controls:TitleWindowPlus id='twp' title="修改密码" enterKeyDown="submit()">
+		<mx:Form id="form">
+			<mx:FormItem label="原密码：">
+				<controls:TextInputPlus id="ori" displayAsPassword="true"
+										constraints="{ConstraintCommon.password}"/>
+			</mx:FormItem>
+			<mx:FormItem label="新密码：">
+				<controls:TextInputPlus id="new1" displayAsPassword="true"
+										constraints="{ConstraintCommon.password}"/>
+			</mx:FormItem>
+			<mx:FormItem label="新密码确认：">
+				<mx:HBox>
+					<controls:TextInputPlus id="new2" displayAsPassword="true"
+											constraints="{ConstraintCommon.password}"/>
+					<mx:CheckBox 
+								 selected="{new2.validated &amp;&amp; new1.text == new2.text}"
+								 enabled="false"/>
+				</mx:HBox>
+			</mx:FormItem>
+			<mx:FormItem>
+				<mx:Button label="提交" click="submit()" toolTip="两次输入的新密码必须相同"/>
+			</mx:FormItem>
+		</mx:Form>
+	</controls:TitleWindowPlus>
+</AbstractModule>

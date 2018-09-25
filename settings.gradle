@@ -19,4 +19,5 @@ rootProject.name = 'gorm-graphql-spring-boot'
 include 'gorm-general-base',
         'gorm-general-domain',
         'gorm-graphql-spring-boot-starter',
+        'gorm-flex',
         'gorm-graphql-spring-boot-demo'

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbstractModule xmlns="ns.flex.module.*" xmlns:mx="http://www.adobe.com/2006/mxml"
+				xmlns:controls="ns.flex.controls.*" creationComplete="cc()"
+				horizontalAlign="left">
+	<mx:Script>
+		<![CDATA[
+			import mx.events.CloseEvent;
+			import ns.flex.util.ArrayCollectionPlus;
+			import ns.flex.util.ConstraintCommon;
+			import ns.flex.util.MessageUtil;
+			import ns.flex.util.MessageUtil;
+			import ns.flex.util.RemoteUtil;
+
+			[Bindable]
+			private var menus:XML;
+			[Bindable]
+			private var ms:RemoteObject;
+			[Bindable]
+			private var roleMenus:XML;
+
+			public static function menuCheck(menu:ContextMenuItem, item:Object):Boolean
+			{
+				return item.editable;
+			}
+
+			private function addRoleMenus():void
+			{
+				managerRoleMenus('add')
+			}
+
+			private function cc():void
+			{
+				ms=
+					RemoteUtil.createRemoteObject('flexMenuService',
+					[{method: 'getRoleTree', listener: getRoleTreeResult},
+					{method: 'getFullTree', listener: getFullTreeResult}],
+					MessageUtil.showError);
+				ms.getFullTree();
+				query();
+			}
+
+			private function deleteItems(items:Array):void
+			{
+				var delIds:Array=[];
+				for each (var item:Object in items)
+					if (item.editable)
+						delIds.push(item.id);
+				rs.deleteByIds(delIds);
+			}
+
+			private function deleteRoleMenus():void
+			{
+				managerRoleMenus('delete')
+			}
+
+			private function expandTree(e:Event):void
+			{
+				var tree:Tree=e.target as Tree;
+
+				if (tree.dataProvider.length > 0)
+				{
+					tree.expandItem(tree.dataProvider[0], true);
+					tree.expandChildrenOf(tree.dataProvider[0], true);
+				}
+			}
+
+			private function getFullTreeResult(e:Event):void
+			{
+				menus=new XML(ms.getFullTree.lastResult);
+			}
+
+			private function getMenuArray(menu:XML):Array
+			{
+				var array:Array=[];
+				array.push(Number(menu.@id));
+
+				for each (var child:XML in menu.children())
+					array=array.concat(getMenuArray(child));
+				return array;
+			}
+
+			private function getRoleTreeResult(e:Event):void
+			{
+				roleMenus=new XML(ms.getRoleTree.lastResult);
+			}
+
+			private function managerRoleMenus(op:String):void
+			{
+				if (dgp.selectedItem)
+					if (op == 'delete')
+						rs.deleteRoleMenus(dgp.selectedItem.id,
+							getMenuArray(roleTree.selectedItem as XML));
+					else
+						rs.addRoleMenus(dgp.selectedItem.id,
+							getMenuArray(fullTree.selectedItem as XML));
+				else
+					MessageUtil.showMessage('请先选择角色');
+			}
+
+			private function query():void
+			{
+				rs.list();
+			}
+		]]>
+	</mx:Script>
+	<mx:RemoteObject id="rs" destination="flexRoleService"
+					 fault="MessageUtil.showError(event);dgp.closeProgress();">
+		<mx:method name="deleteByIds" result="query()"
+				   fault="MessageUtil.showMessage('所选角色可能存在关联的菜单或用户，请首先解除关联关系。');"/>
+		<mx:method name="addRoleMenus"
+				   result="roleMenus=new XML(rs.addRoleMenus.lastResult)"/>
+		<mx:method name="deleteRoleMenus"
+				   result="roleMenus=new XML(rs.deleteRoleMenus.lastResult)"/>
+		<mx:method name="save" result="dgp.closePop();query()"/>
+	</mx:RemoteObject>
+	<mx:HBox height="100%" width="100%">
+		<controls:DataGridPlus id="dgp" dataProvider="{rs.list.lastResult}" height="100%"
+							   saveItem="rs.save(event.saveItem, true)"
+							   menuEnableChecker="{menuCheck}" deleteEnabled="true"
+							   deleteItems="deleteItems(dgp.selectedItems)"
+							   deleteAllEnabled="true"
+							   deleteAll="deleteItems(dgp.dataProvider.toArray())"
+							   showDetail="new-edit"
+							   itemClick="ms.getRoleTree(dgp.selectedItem.id)"
+							   width="100%">
+			<controls:columns>
+				<controls:DataGridColumnPlus dataField="roleName" complexSort="true"
+											 width="1" headerText="角色名"
+											 constraints="{ConstraintCommon.justRequired}"/>
+				<controls:DataGridColumnPlus dataField="roleCode" width="1"
+											 headerText="角色代码(unique)"
+											 constraints="{ConstraintCommon.forLength(4)}"/>
+				<controls:DataGridColumnPlus dataField="enabled" width="1"
+											 asControl="CheckBox" headerText="启用"/>
+				<controls:DataGridColumnPlus dataField="editable" width="2"
+											 headerText="可编辑" editable="false"/>
+				<controls:DataGridColumnPlus dataField="description" width="3"
+											 wordWrap="true" complexSort="true"
+											 headerText="描述"/>
+			</controls:columns>
+		</controls:DataGridPlus>
+		<mx:Panel title="角色当前菜单(双击删除)" width="230" height="100%"
+				  enabled="{dgp.selectedItem.editable}">
+			<mx:Tree id="roleTree" width="100%" height="100%" wordWrap="false"
+					 showRoot="true" doubleClickEnabled="true"
+					 valueCommit="expandTree(event)" doubleClick="deleteRoleMenus()"
+					 dataProvider="{roleMenus.node}" labelField="@label"/>
+		</mx:Panel>
+		<mx:Panel title="系统完整菜单(双击增加)" width="230" height="100%"
+				  enabled="{dgp.selectedItem.editable}">
+			<mx:Tree id="fullTree" width="100%" height="100%" wordWrap="false"
+					 showRoot="true" doubleClickEnabled="true"
+					 valueCommit="expandTree(event)" doubleClick="addRoleMenus()"
+					 dataProvider="{menus.node}" labelField="@label"/>
+		</mx:Panel>
+	</mx:HBox>
+</AbstractModule>

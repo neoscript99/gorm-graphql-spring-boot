@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TitleWindowPlus xmlns:mx="http://www.adobe.com/2006/mxml" title="登录"
+                 creationComplete="cc()" enterKeyDown="login()" xmlns="ns.flex.controls.*">
+    <mx:Metadata>
+        [Event(name="loginSuccess")]
+    </mx:Metadata>
+    <mx:Script>
+		<![CDATA[
+        import mx.managers.PopUpManager;
+        import mx.rpc.events.ResultEvent;
+        import mx.rpc.remoting.mxml.RemoteObject;
+
+        import ns.flex.util.ConstraintCommon;
+        import ns.flex.util.RemoteUtil;
+        import ns.flex.util.Session;
+
+        private var sharedObject:SharedObject = SharedObject.getLocal('LoginInfo', '/');
+        private var us:RemoteObject = RemoteUtil.createRemoteObject('flexUserService', [{
+            method: 'login',
+            listener: loginSuccess
+        }]);
+
+        public function clear():void {
+            account.text = '';
+            password.text = '';
+            isAutoLogin.selected = false;
+            asGuest.selected = false;
+        }
+
+        private function asGuestCheck():void {
+            if (asGuest.selected)
+                account.text = password.text = 'anonymous'
+            else
+                account.text = password.text = ''
+        }
+
+        private function cc():void {
+            if (this.isPopUp)
+                PopUpManager.centerPopUp(this);
+
+            asGuest.visible = (Session['ParamMap'].AllowAnonymousLogin == 'true');
+            var soUser:Object = sharedObject.data.user;
+
+            if (soUser) {
+                account.text = soUser.account;
+                password.text = soUser.password;
+                isAutoLogin.selected = soUser.isAutoLogin;
+                asGuest.selected = soUser.asGuest;
+            }
+
+            if (isAutoLogin.selected)
+                login();
+        }
+
+        private function login():void {
+            sharedObject.data.user = null;
+
+            if (password.validated && account.validated)
+                us.login(account.text, password.text);
+            else
+                this.playShake();
+        }
+
+        private function loginFailed(e:ResultEvent):void {
+            playShake();
+            RemoteUtil.messageHandler(e);
+        }
+
+        private function loginSuccess(e:ResultEvent):void {
+            if (us.login.lastResult.hasMessage) {
+                loginFailed(e)
+                return;
+            }
+            Session['LoginUser'] = us.login.lastResult;
+            sharedObject.data.user =
+                    isAutoLogin.selected ? {
+                        account: account.text,
+                        password: password.text, isAutoLogin: isAutoLogin.selected,
+                        asGuest: asGuest.selected
+                    } : null;
+            sharedObject.flush();
+            this.dispatchEvent(new Event('loginSuccess'));
+
+            if (this.isPopUp)
+                PopUpManager.removePopUp(this);
+        }
+        ]]>
+	</mx:Script>
+    <mx:Form>
+        <mx:FormItem label="帐号: ">
+            <TextInputPlus id="account" constraints="{ConstraintCommon.account}"
+                           enabled="{!(asGuest.visible &#38;&#38; asGuest.selected)}"/>
+        </mx:FormItem>
+        <mx:FormItem label="密码: ">
+            <TextInputPlus id="password" constraints="{ConstraintCommon.password}"
+                           enabled="{!(asGuest.visible &#38;&#38; asGuest.selected)}"/>
+        </mx:FormItem>
+        <mx:FormItem>
+            <mx:HBox>
+                <mx:CheckBox label="自动登录" id="isAutoLogin"/>
+                <mx:CheckBox label="匿名登录" id="asGuest" change="asGuestCheck()"
+                             visible="false"/>
+            </mx:HBox>
+        </mx:FormItem>
+        <mx:FormItem>
+            <mx:Button label="登录" tabEnabled="false" click="login()"/>
+        </mx:FormItem>
+    </mx:Form>
+</TitleWindowPlus>

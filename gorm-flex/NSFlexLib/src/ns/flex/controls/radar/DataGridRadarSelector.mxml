@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PopWindow xmlns="ns.flex.controls.*" title="雷达图分析对象选择" width="600" height="300"
+           xmlns:mx="http://www.adobe.com/2006/mxml" alpha=".9" borderAlpha=".92">
+    <mx:Metadata>
+        [Event(name="showRadar")]
+    </mx:Metadata>
+    <mx:Script>
+		<![CDATA[
+        import mx.controls.CheckBox;
+
+        import ns.flex.util.ArrayCollectionPlus;
+
+        [Bindable]
+        public var labelFunction:Function;
+        private const itemList:ArrayCollectionPlus = new ArrayCollectionPlus();
+
+        public function addItemArray(items:Array):void
+        {
+            for each(var item:Object in items)
+                if (!itemList.contains(item))
+                {
+                    itemList.addItem(item);
+                    addCheckBox(item);
+                }
+        }
+
+        private function addCheckBox(item:Object):void
+        {
+            if (tile)
+            {
+                var checkBox:CheckBox = new CheckBox;
+                checkBox.data = item;
+                checkBox.label = labelFunction(item)
+                checkBox.selected = true;
+                tile.addChild(checkBox)
+            }
+            else
+                callLater(addCheckBox, [item])
+        }
+
+        public function getSelectedItems():Array
+        {
+            var items:Array = [];
+            for each(var child:CheckBox in tile.getChildren())
+                if (child.selected)
+                    items.push(child.data)
+            return items;
+        }
+
+        public function selectNone():void
+        {
+            for each(var child:CheckBox in tile.getChildren())
+                child.selected = false;
+        }
+
+        public function selectAll():void
+        {
+            for each(var child:CheckBox in tile.getChildren())
+                child.selected = true;
+        }
+        public function clear():void{
+            itemList.removeAll();
+            tile.removeAllChildren();
+        }
+        ]]>
+	</mx:Script>
+    <mx:Tile id="tile" direction="horizontal" width="100%" height="100%"
+             horizontalGap="10" verticalGap="15" paddingLeft="10" paddingTop="10" paddingBottom="10"
+             paddingRight="10">
+    </mx:Tile>
+    <mx:ControlBar horizontalAlign="right">
+        <mx:Button label="全选" click="selectAll()"/>
+        <mx:Button label="全不选" click="selectNone()"/>
+        <mx:Button label="清空" click="clear()"/>
+        <mx:Button label="开始分析" click="dispatchEvent(new Event('showRadar'))"/>
+    </mx:ControlBar>
+</PopWindow>

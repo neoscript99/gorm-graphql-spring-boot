@@ -10,10 +10,8 @@ class Talk {
     String id
     String title
     int duration
-
+    Speaker speaker
     static graphql = true
-
-    static belongsTo = [speaker: Speaker]
 
     static mapping = {
         speaker fetch: 'join', lazy: false

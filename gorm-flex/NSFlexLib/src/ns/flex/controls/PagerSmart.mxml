@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PagerBase xmlns:mx="http://www.adobe.com/2006/mxml" horizontalAlign="right" width="100%"
+		   paddingTop="5" paddingBottom="5" xmlns="ns.flex.controls.*">
+	<mx:Style>		
+		Button.nopadding
+		{
+			padding-bottom:0;
+			padding-top:0;
+			padding-left:0;
+			padding-right:0;
+		}
+	</mx:Style>
+	<mx:Script>
+		<![CDATA[
+			[Bindable]
+			public var hasMore:Boolean=true;
+		]]>
+	</mx:Script>
+	<mx:Label text="当前页："/>
+	<mx:Label text="{curPage}"/>
+	<mx:Label text="每页："/>
+	<mx:NumericStepper id="offset" minimum="5" maximum="95" stepSize="5"
+					   value="{_offsetValue}" width="50"
+					   change="changeStepper(event.value)"/>
+	<mx:Button click="gotoPage(1)" enabled="{curPage>1}" label="&lt;&lt;"
+			   toolTip="{curPage>1?'首页':''}" styleName="nopadding"/>
+	<mx:Button click="go(-1)" enabled="{curPage>1}" label="&lt;"
+			   toolTip="{curPage>1?'上一页':''}" styleName="nopadding"/>
+	<mx:Button click="go(1)" enabled="{hasMore}" label="&gt;" styleName="nopadding"
+			   toolTip="{hasMore?'下一页':''}"/>
+</PagerBase>

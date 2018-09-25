@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbstractModule xmlns="ns.flex.module.*" xmlns:mx="http://www.adobe.com/2006/mxml"
+				horizontalAlign="center" xmlns:modules="modules.*">
+	<mx:TabNavigator width="100%" height="100%">
+		<modules:Note label="系统通知" editable="false"/>
+		<mx:VBox label="帮助">
+			<mx:Text text="1.双击标题放大窗口"/>
+			<mx:Text text="2.数据列表可多选，点右键可以复制到或保存为Excel"/>
+			<mx:Text text="3.输入框红色代表校验不通过，提示信息会包含正则表达式"/>
+			<mx:Text text="4.数据表格支持多列排序"/>
+		</mx:VBox>
+	</mx:TabNavigator>
+</AbstractModule>

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<flex-config>
+	<compiler>
+		<show-unused-type-selector-warnings>false</show-unused-type-selector-warnings>
+		<!-- Possible missing parentheses. 判断函数是否为null，很正常 -->
+		<warn-unlikely-function-value>false</warn-unlikely-function-value>
+	</compiler>
+</flex-config>

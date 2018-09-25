@@ -1,0 +1,25 @@
+/* global style sheet */
+Application
+{
+	paddingBottom:5;
+	paddingTop:5;
+	paddingLeft:10;
+	paddingRight:10;
+}
+PopWindow
+{
+	borderAlpha:.9;	
+}			
+global
+{
+	fontFamily: "Times New Roman";
+	fontSize: 12;	
+}
+ToolTip
+{
+ fontSize: 12;
+}
+.errorTip
+{
+ fontSize: 12;
+}

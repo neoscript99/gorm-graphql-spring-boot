@@ -1,0 +1,4 @@
+AutoComplete如果不用swc lib无法取得资源文件，显示样式会有问题。可能是获取资源时域设置的问题。
+可能所有swc都有类似问题
+
+所有工程都要包括AutoComplete-1.2-Fx3.swc

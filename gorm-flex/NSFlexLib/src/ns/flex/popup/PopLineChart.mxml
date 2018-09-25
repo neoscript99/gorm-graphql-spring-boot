@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PopChart xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="ns.flex.popup.*" width="680"
+		  height="400" xmlns:controls="ns.flex.controls.*">
+	<mx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.charts.series.LineSeries;
+			import ns.flex.controls.DataGridColumnPlus;
+			import ns.flex.util.LabelUtil;
+
+			[Bindable]
+			public var categoryField:String='';
+			[Bindable]
+			public var categoryName:String='';
+			[Bindable]
+			public var lineSeries:Array;
+			[Bindable]
+			public var showData:Boolean=true;
+			[Bindable]
+			private var dgpColumns:Array;
+
+			public function set seriesInfos(ss:Array):void
+			{
+				var lineSeriesTemp:Array=[]
+				var dgpColumnsTemp:Array=[]
+
+				var dgc:DataGridColumnPlus=new DataGridColumnPlus
+				BindingUtils.bindProperty(dgc, 'dataField', this, 'categoryField');
+				BindingUtils.bindProperty(dgc, 'headerText', this, 'categoryName');
+				dgpColumnsTemp.push(dgc)
+
+				for each (var s:Object in ss)
+				{
+					var ls:LineSeries=new LineSeries();
+					ls.yField=s.yField;
+					ls.displayName=s.displayName;
+					//忽略miss数据，曲线连续
+					ls.interpolateValues=true;
+					ls.setStyle('form', 'curve');
+					lineSeriesTemp.push(ls);
+
+					dgc=new DataGridColumnPlus
+					dgc.dataField=s.yField
+					dgc.headerText=s.displayName
+					dgc.precision=2
+					dgpColumnsTemp.push(dgc)
+				}
+				lineSeries=lineSeriesTemp
+				dgpColumns=dgpColumnsTemp
+			}
+		]]>
+	</mx:Script>
+	<mx:TabNavigator id="tn" width="100%" height="100%" paddingLeft="5" paddingBottom="5">
+		<mx:HBox horizontalAlign="center" width="100%" height="100%" label="图形">
+			<mx:LineChart id="lineChart" dataProvider="{chartData}" showDataTips="true"
+						  height="100%" width="100%" series="{lineSeries}">
+				<mx:horizontalAxis>
+					<mx:CategoryAxis id="lineAxis" dataProvider="{chartData}"
+									 categoryField="{categoryField}"
+									 displayName="{categoryName}"
+									 ticksBetweenLabels="false"/>
+				</mx:horizontalAxis>
+				<mx:horizontalAxisRenderers>
+					<mx:AxisRenderer axis="{lineAxis}" canDropLabels="true"/>
+				</mx:horizontalAxisRenderers>
+			</mx:LineChart>
+			<LegendBox chart="{lineChart}" fileName="{title}"/>
+		</mx:HBox>
+		<mx:VBox label="数据" enabled="{showData}" height="100%">
+			<controls:DataGridPlus dataProvider="{chartData}" height="100%"
+								   columns="{dgpColumns}"/>
+		</mx:VBox>
+	</mx:TabNavigator>
+</PopChart>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" height="100%" horizontalAlign="right">
+	<mx:Script>
+		<![CDATA[
+			import mx.charts.LegendItem;
+			import mx.charts.chartClasses.ChartBase;
+			import mx.graphics.ImageSnapshot;
+			[Bindable]
+			public var chart:ChartBase;
+			[Bindable]
+			public var chartName:String='';
+			[Bindable]
+			public var fileName:String;
+
+			private function snapshot():void
+			{
+				link.visible=false;
+				new FileReference().save(ImageSnapshot.captureImage(chart.parent).data,
+					fileName + '.png');
+				link.visible=true;
+			}
+		]]>
+	</mx:Script>
+	<mx:HBox height="100%">
+		<mx:Legend dataProvider="{chart}"/>
+	</mx:HBox>
+	<mx:LinkButton id="link" label="保存" click="snapshot()"/>
+</mx:VBox>

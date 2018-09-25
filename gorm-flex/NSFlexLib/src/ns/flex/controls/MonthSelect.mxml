@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Module xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal"
+		   initialize="init()" xmlns:controls="ns.flex.controls.*">
+	<mx:Metadata>
+		[Event(name="change")]
+	</mx:Metadata>
+	<mx:Script>
+		<![CDATA[
+			private static var lastSelectedMonth:int;
+			private static var lastSelectedYear:int;
+
+			public var minYear:int=2010;
+			public var monthShift:int=-1;
+
+			[Bindable("change")]
+			public function get month():String
+			{
+				return String(yearSelect.selectedItem).concat(monthSelect.selectedItem);
+			}
+
+			[Bindable("change")]
+			public function get monthLabel():String
+			{
+				return yearSelect ? String(yearSelect.selectedItem).concat('年',
+					monthSelect.selectedItem, '月') : '';
+			}
+
+			private function init():void
+			{
+				var now:Date=new Date();
+				//默认上月
+				var showDate:Date=new Date(now.fullYear, now.month + monthShift);
+
+				var year:int=showDate.fullYear;
+				var yearArray:Array=[];
+				while (year >= minYear)
+				{
+					yearArray.push(year--);
+				}
+				yearSelect.dataProvider=yearArray;
+				if (!lastSelectedYear)
+				{
+					lastSelectedYear=year;
+					lastSelectedMonth=showDate.month + 1;
+				}
+				yearSelect.defaultLabel=String(lastSelectedYear);
+				monthSelect.defaultLabel=String(lastSelectedMonth);
+			}
+
+			private function onChange(event:Event):void
+			{
+				lastSelectedYear=int(yearSelect.selectedItem);
+				lastSelectedMonth=int(monthSelect.selectedItem);
+				dispatchEvent(event)
+			}
+		]]>
+	</mx:Script>
+	<mx:FormItem label="年：">
+		<controls:ComboBoxPlus id="yearSelect" rowCount="15" repeatable="false"
+							   change="onChange(event)"/>
+	</mx:FormItem>
+	<mx:FormItem label="月：" id="monthFormItem">
+		<controls:ComboBoxPlus id="monthSelect" levelDown="yearSelect.selectedIndex++"
+							   levelUp="yearSelect.selectedIndex--"
+							   change="onChange(event)">
+			<mx:ArrayCollection>
+				<mx:String>01</mx:String>
+				<mx:String>02</mx:String>
+				<mx:String>03</mx:String>
+				<mx:String>04</mx:String>
+				<mx:String>05</mx:String>
+				<mx:String>06</mx:String>
+				<mx:String>07</mx:String>
+				<mx:String>08</mx:String>
+				<mx:String>09</mx:String>
+				<mx:String>10</mx:String>
+				<mx:String>11</mx:String>
+				<mx:String>12</mx:String>
+			</mx:ArrayCollection>
+		</controls:ComboBoxPlus>
+	</mx:FormItem>
+</mx:Module>
