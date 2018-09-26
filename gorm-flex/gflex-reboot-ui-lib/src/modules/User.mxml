@@ -76,7 +76,7 @@
 					param.like=[['account', "%" + accountInput.text + "%"]]
 				if (roleSelect.selectedItem.id)
 					param.sqlRestriction=
-						['EXISTS (SELECT 1 FROM t_user_role r WHERE r.user_id = {alias}.id AND r.role_id = ' + roleSelect.selectedItem.id + ')']
+						["EXISTS (SELECT 1 FROM sys_user_role r WHERE r.user_id = {alias}.id AND r.role_id = '" + roleSelect.selectedItem.id + "')"]
 
 				us.list(param);
 				us.getOperation('getUserRoles').clearResult();

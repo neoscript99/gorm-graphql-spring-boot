@@ -15,13 +15,10 @@ class Log {
     String ipAddress;
     String account
     Date dateCreated
-    static mapping = {
-        id generator: 'increment'
-    }
 
     static constraints = {
         message maxSize: 1024
-        ownerId nullable: true
+        ownerId nullable: true, maxSize: 80
         account nullable: true
     }
 }

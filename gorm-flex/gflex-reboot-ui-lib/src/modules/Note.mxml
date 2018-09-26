@@ -3,9 +3,6 @@
               xmlns:controls="ns.flex.controls.*">
     <mx:Script>
 		<![CDATA[
-        import mx.rpc.events.ResultEvent;
-
-        import ns.flex.common.Constants;
         import ns.flex.util.DateUtil;
         import ns.flex.util.DictManager;
         import ns.flex.util.RemoteUtil;
@@ -14,8 +11,7 @@
         [Bindable]
         public var editable:Boolean = true;
 
-        override protected function cc(e:Event):void
-        {
+        override protected function cc(e:Event):void {
             reportService =
                     RemoteUtil.createRemoteObject('flexNoteService',
                             [{method: 'save', listener: onSuccess},
@@ -26,13 +22,11 @@
             super.cc(e);
         }
 
-        override protected function get domain():String
-        {
+        override protected function get domain():String {
             return null;
         }
 
-        override protected function get queryParam():Object
-        {
+        override protected function get queryParam():Object {
             var param:Object = {}
             if (startDate.selectedDate)
                 param.ge = [['dateCreated', startDate.selectedDate]];
@@ -42,14 +36,12 @@
             return param;
         }
 
-        private function onSuccess(e:Event):void
-        {
+        private function onSuccess(e:Event):void {
             _dgp.closePop();
             query();
         }
 
-        override public function set label(label:String):void
-        {
+        override public function set label(label:String):void {
             super.label = label;
         }
         ]]>

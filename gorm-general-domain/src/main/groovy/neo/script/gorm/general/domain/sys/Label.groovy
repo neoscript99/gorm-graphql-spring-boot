@@ -13,12 +13,11 @@ class Label {
     String label
 
     static mapping = {
-        id generator: 'increment'
         ownerId index: "idx_label_owner"
     }
 
     static constraints = {
-        ownerId(unique: 'label')
+        ownerId(unique: 'label', maxSize: 80)
         label empty: false
     }
     static graphql = true

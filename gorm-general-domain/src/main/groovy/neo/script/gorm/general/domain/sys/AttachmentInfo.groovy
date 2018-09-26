@@ -14,13 +14,15 @@ class AttachmentInfo {
     String fileHash
     String fileId
     Date dateCreated
-
+    String ownerId
     static mapping = {
+        ownerId index: 'idx_attach_owner'
         dateCreated index: 'idx_attach_date'
         fileHash index: 'idx_attach_hash'
     }
 
     static constraints = {
+        ownerId maxSize: 80
         name maxSize: 256
         fileHash maxSize: 80
     }

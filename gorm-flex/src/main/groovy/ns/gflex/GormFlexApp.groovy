@@ -6,9 +6,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableTransactionManagement
-class GflexBootApplication {
+class GormFlexApp {
 
     static void main(String[] args) {
-        SpringApplication.run(GflexBootApplication.class, args);
+        SpringApplication.run(GormFlexApp.class, args);
     }
 }

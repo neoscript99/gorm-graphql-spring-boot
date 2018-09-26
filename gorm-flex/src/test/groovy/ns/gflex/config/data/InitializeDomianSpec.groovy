@@ -1,7 +1,7 @@
 package ns.gflex.config.data
 
-import ns.gflex.config.initialize.InitializeDomian
-import ns.gflex.domain.Department
+import neo.script.gorm.general.domain.sys.Department
+import neo.script.gorm.general.initializer.InitializeDomian
 import spock.lang.Specification
 
 import java.lang.reflect.Field

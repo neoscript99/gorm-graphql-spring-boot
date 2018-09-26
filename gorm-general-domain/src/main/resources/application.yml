@@ -38,6 +38,7 @@ logging:
     # Logs the JDBC parameters passed to a query
     #org.hibernate.type: TRACE
     neo.script: DEBUG
+    ns.gflex: DEBUG
     org.springframework.transaction: DEBUG
     grails.gorm.transactions: DEBUG
     org.grails.gorm.graphql: DEBUG

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 class FlexParamService extends GFlexService{
 
-	def saveValue(Long id,String value){
+	def saveValue(def id,String value){
 		Param p=Param.get(id)
 		logHost("save Param $p to $value")
 		logHost("$sessionUser")

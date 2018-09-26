@@ -30,7 +30,7 @@ class FlexMenuService extends GFlexService{
 		return generateXML(dispalyMenus)
 	}
 	
-	String getRoleTree(Long roleId){
+	String getRoleTree(def roleId){
 		Set dispalyMenus=new HashSet()
 		list([role:[idEq:[roleId]]],RoleMenu).each {roleMenu->
 			dispalyMenus+=getGenealogy(roleMenu.menu)

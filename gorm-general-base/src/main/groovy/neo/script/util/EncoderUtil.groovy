@@ -14,6 +14,7 @@ class EncoderUtil {
      * @param inputString
      * @return encoded string
      */
+    @Deprecated
     static public String md5(String inputString) {
         return Hashing.md5().hashBytes(inputString.getBytes(StandardCharsets.UTF_8)).toString()
     }

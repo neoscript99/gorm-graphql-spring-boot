@@ -1,8 +1,10 @@
 package ns.gflex.domain
 
-import ns.gflex.GflexBootApplication
-import ns.gflex.repositories.GeneralRepository
-import ns.gflex.util.EncoderUtil
+import neo.script.gorm.general.domain.sys.*
+import neo.script.gorm.general.repositories.GeneralRepository
+import neo.script.util.EncoderUtil
+import neo.script.util.JsonUtil
+import ns.gflex.GormFlexApp
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.ApplicationArguments
@@ -15,7 +17,7 @@ import spock.lang.Stepwise
 /**
  * Created by Neo on 2017-09-29.
  */
-@SpringBootTest(classes = GflexBootApplication.class)
+@SpringBootTest(classes = GormFlexApp.class)
 @Transactional
 @Commit
 @Stepwise
@@ -76,9 +78,9 @@ class GormSpec extends Specification {
         def dept = new Department(name: '测试', seq: 1)
         generalRepository.saveEntity(dept)
         generalRepository.saveEntity((new User(account: 'test1', name: '测试1', dept: dept,
-                editable: false, password: EncoderUtil.md5('admin'))))
+                editable: false, password: EncoderUtil.sha256('admin'))))
         generalRepository.saveEntity((new User(account: 'test2', name: '测试2', dept: dept,
-                editable: false, password: EncoderUtil.md5('admin'))))
+                editable: false, password: EncoderUtil.sha256('admin'))))
         expect:
         generalRepository.updateMatch(User, [dept: [eq: [['id', dept.id]]]], [editable: true]) == 2
         generalRepository.updateMatch(User, null, [editable: true]) == 2

@@ -1,6 +1,7 @@
 package ns.gflex.config.data
 
-import ns.gflex.repositories.GeneralRepository
+import neo.script.gorm.general.config.data.MenuInitializer
+import neo.script.gorm.general.repositories.GeneralRepository
 import spock.lang.Shared
 import spock.lang.Specification
 

@@ -2,6 +2,8 @@ package ns.gflex.services.base
 
 import neo.script.gorm.general.domain.sys.AttachmentFile
 import neo.script.gorm.general.domain.sys.AttachmentInfo
+import neo.script.gorm.general.service.AttachmentService
+import org.springframework.beans.factory.annotation.Autowired
 
 
 /**
@@ -11,8 +13,12 @@ import neo.script.gorm.general.domain.sys.AttachmentInfo
  *
  */
 abstract class GFlexAttachService extends GFlexLabelService {
+
     static public String ATTACH_INFO_FIELD = 'gflexAttachInfo';
     static public String ATTACH_TEMP_ID_PREFIX = 'gflexTempAttach_';
+
+    @Autowired
+    AttachmentService attachmentService;
 
     def save(Map map, boolean isMerge = false, Object domain = null) {
         log.info("GFlexAttachService.save")
@@ -36,11 +42,10 @@ abstract class GFlexAttachService extends GFlexLabelService {
     /**
      * @param fileName 文件名
      * @param data 文件原始数据
-     * @return sequence 标志上传完毕
+     * @return fileId 标志上传完毕
      */
     def upload(String fileName, byte[] data, String fileId, def ownerId) {
-        saving(new AttachmentFile(fileId: fileId, data: data))
-        saving(new AttachmentInfo(name: fileName, fileId: fileId, fileSize: data.length, ownerId: withPrefix(ownerId)))
+        attachmentService.saveWithByte(fileName, withPrefix(ownerId), data, fileId)
         return fileId
     }
 

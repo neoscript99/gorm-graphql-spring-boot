@@ -3,6 +3,7 @@ apply plugin: 'org.springframework.boot'
 dependencies {
     compile project(':gorm-general-domain')
     compile group: 'org.apache.flex.blazeds', name: 'blazeds-spring-boot-starter', version: "${blazedsVersion}"
+    testCompile group: 'commons-cli', name: 'commons-cli', version: '1.4'
 }
 
 

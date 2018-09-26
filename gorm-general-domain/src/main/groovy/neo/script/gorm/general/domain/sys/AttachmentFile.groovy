@@ -10,13 +10,17 @@ import groovy.transform.ToString
  *
  */
 @Entity
-@ToString(includes = 'id')
-@EqualsAndHashCode(includes = 'id')
+@ToString(includes = 'fileId')
+@EqualsAndHashCode(includes = 'fileId')
 class AttachmentFile {
-    String id
+    String fileId
     byte[] data;
+    static mapping = {
+        id name: 'fileId', generator: 'assigned'
+    }
 
     static constraints = {
+        fileId maxSize: 64
         data maxSize: 1024 * 1024 * 20
     }
 }

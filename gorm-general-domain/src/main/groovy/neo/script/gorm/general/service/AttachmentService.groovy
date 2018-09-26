@@ -12,15 +12,18 @@ class AttachmentService extends AbstractService<AttachmentInfo> {
         if (!file.isFile())
             throw new RuntimeException("$file.path,该文件不存在")
 
-        def bytes = file.getBytes();
-        def fileHash = EncoderUtil.sha256(bytes);
+        return saveWithByte(file.name, file.length(), file.getBytes());
+    }
+
+    AttachmentInfo saveWithByte(String name, String ownerId, byte[] data, String fileId = null) {
+        def fileHash = EncoderUtil.sha256(data);
 
         def existInfo = findByHash(fileHash)
         if (existInfo)
             return existInfo;
 
-        AttachmentFile attachFile = generalRepository.saveEntity(new AttachmentFile(data: file.bytes));
-        def attInfo = new AttachmentInfo(name: file.name, fileId: attachFile.id, fileSize: file.length(), fileHash: fileHash);
+        AttachmentFile attachFile = generalRepository.saveEntity(new AttachmentFile(fileId: fileId ?: fileHash, data: data));
+        def attInfo = new AttachmentInfo(name: name, fileId: attachFile.fileId, ownerId: ownerId, fileSize: data.length, fileHash: fileHash);
         return saveEntity(attInfo)
     }
 
