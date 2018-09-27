@@ -1,128 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*"
-				preinitialize="preInit()" xmlns:controls="ns.flex.controls.*">
-	<mx:Style>					
-		LegendItem
-		{
-		 fontSize: 12;
-		}			
-		AxisRenderer 
-		{
-		 fontSize: 12;
-		}		
-		PieSeries 
-		{
-		 fontSize: 11;
-		}		
-		ColumnSeries 
-		{
-		 fontSize: 11;
-		}					
-	</mx:Style>
-	<mx:Script>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*">
+    <mx:Style>
+        LegendItem {
+            fontSize: 12;
+        }
+
+        AxisRenderer {
+            fontSize: 12;
+        }
+
+        PieSeries {
+            fontSize: 11;
+        }
+
+        ColumnSeries {
+            fontSize: 11;
+        }
+    </mx:Style>
+    <mx:Script>
 		<![CDATA[
-			import mx.controls.Alert;
-			import mx.events.CloseEvent;
-			import mx.managers.HistoryManager;
-			import mx.managers.PopUpManager;
-			import ns.flex.util.DictManager;
-			import ns.flex.util.MessageUtil;
-			import ns.flex.util.RemoteUtil;
-			import ns.flex.util.Session;
-			import popup.Login;
+        import modules.Views;
 
-			private var _historyManager:HistoryManager;
-			private var holdHeartBeat:Boolean=false;
-			[Bindable]
-			private var menus:XML;
-			private var popLogin:Login=new Login();
-			private var spareMintues:int;
-			private var timer:Timer;
-			[Bindable]
-			private var views:Views=new Views();
+        import mx.managers.HistoryManager;
 
-			public function logout(evt:CloseEvent=null):void
-			{
-				mainFrame.removeTimer();
-				PopUpManager.addPopUp(popLogin, this, true);
-				popLogin.clear();
-			}
 
-			private function initComplete():void
-			{
-				if (!DictManager.initCompleted)
-				{
-					trace('initComplete', new Date());
-					callLater(initComplete);
-					return;
-				}
-
-				var params:Object={};
-				DictManager.getList('getParamList').each(function(item:Object):void
-				{
-					params[item.code]=item.value;
-				});
-				Session['ParamMap']=params;
-				mainFrame.menuPanel.title='功能菜单';
-				holdHeartBeat=(Session['ParamMap'].HoldHeartBeat == 'true');
-				spareMintues=int(Session['ParamMap'].SpareMintues);
-
-				//检查是否已登录
-				Session['LoginUser']=DictManager.getResult('getSessionUser');
-				if (Session['LoginUser'])
-					loginSuccess();
-				else
-					PopUpManager.addPopUp(popLogin, this, true);
-			}
-
-			private function loginSuccess(e:Event=null):void
-			{
-				//用户角色登录成功后才能去取
-				DictManager.dictionaryService.getUserRoles(Session['LoginUser'].account)
-				views.selectedIndex=0;
-				mainFrame.initTimer(spareMintues);
-				ms.getUserTree();
-				mainFrame.appTitle=
-					String('(').concat(MessageUtil.getMessage(' {1},欢迎您!',
-					[Session['LoginUser'].name]), ')');
-			}
-
-			private function preInit():void
-			{
-				popLogin.addEventListener("loginSuccess", loginSuccess);
-				var ds:RemoteObject=RemoteUtil.createRemoteObject('flexDictionaryService');
-				//Session['LoginUser']切换用户后会更新，下面方法在不刷新页面的情况下不更新
-				//重新打开页面时，如果session还在，不需再次登录，但未刷新时，需以Session['LoginUser']为准
-				ds.getSessionUser()
-				ds.getAllUserList()
-				ds.getAllRoleList()
-				ds.getParamList()
-				ds.getParamTypeList()
-				ds.getDepartmentList()
-				ds.getLabelList()
-				ds.getHotLabelList()
-				DictManager.init(ds, 8, this);
-				initComplete();
-			}
-
-			private function timerComplete():void
-			{
-				if (holdHeartBeat)
-				{
-					ms.heartBeat();
-					mainFrame.resetTimer();
-				}
-				else
-					Alert.show(MessageUtil.getMessage('由于安全原因，系统在空闲{1}分钟以后自动退出。',
-						[spareMintues]), null, Alert.OK, this, logout);
-			}
-		]]>
+        private var _historyManager:HistoryManager;
+        ]]>
 	</mx:Script>
-	<mx:RemoteObject id="ms" destination="flexMenuService"
-					 fault="MessageUtil.showError(event)">
-		<mx:method name="getUserTree"
-				   result="mainFrame.menus=new XML(ms.getUserTree.lastResult)"/>
-	</mx:RemoteObject>
-	<controls:MainFrame id="mainFrame" views="{views}" windowClose="logout()"
-						timerComplete="timerComplete()"/>
+    <local:MainFrame id="mainFrame"/>
 </mx:Application>

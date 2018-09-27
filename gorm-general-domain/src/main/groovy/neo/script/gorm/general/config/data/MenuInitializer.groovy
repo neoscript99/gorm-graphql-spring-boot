@@ -58,8 +58,10 @@ class MenuInitializer extends AbstractDataInitializer implements DataInitializer
     }
 
     private List initPublicMenu(def rootId) {
+        //这个不带通知，默认不显示
+        save(new Menu(label: '欢迎页面', app: 'About', seq: 11, parentId: rootId))
         [
-                new Menu(label: '欢迎页面', app: 'Welcome', seq: 10, parentId: rootId)
+                new Menu(label: '首页', app: 'Welcome', seq: 10, parentId: rootId)
         ]
     }
 }

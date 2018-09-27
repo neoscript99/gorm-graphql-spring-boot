@@ -2,10 +2,14 @@ apply plugin: 'org.springframework.boot'
 
 dependencies {
     compile project(':gorm-general-domain')
-    compile group: 'org.apache.flex.blazeds', name: 'blazeds-spring-boot-starter', version: "${blazedsVersion}"
+    compile("org.apache.flex.blazeds:blazeds-spring-boot-starter:${blazedsVersion}") {
+        //use tomcat, spring boot依赖由gorm-general-domain设置
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-jetty'
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
+        exclude group: 'org.springframework.boot', module: 'spring-boot-autoconfigure'
+    }
     testCompile group: 'commons-cli', name: 'commons-cli', version: '1.4'
 }
-
 
 /*可在 .idea/modules.xml 中手工添加如下flex模块
 <module fileurl="file://$PROJECT_DIR$/gorm-flex/NSFlexLib/NSFlexLib.iml" filepath="$PROJECT_DIR$/gorm-flex/NSFlexLib/NSFlexLib.iml" />

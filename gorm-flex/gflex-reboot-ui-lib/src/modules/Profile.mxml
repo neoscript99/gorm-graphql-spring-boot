@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbstractModule xmlns="ns.flex.module.*" xmlns:mx="http://www.adobe.com/2006/mxml"
+<AbstractModule xmlns="ns.flex.module.*" xmlns:mx="http://www.adobe.com/2006/mxml" name="Profile"
 				xmlns:controls="ns.flex.controls.*" horizontalAlign="center">
 	<mx:Script>
 		<![CDATA[

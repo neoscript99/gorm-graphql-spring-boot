@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AbstractModule xmlns="ns.flex.module.*" xmlns:mx="http://www.adobe.com/2006/mxml"
-                xmlns:controls="ns.flex.controls.*" creationComplete="cc()"
+                xmlns:controls="ns.flex.controls.*" creationComplete="cc()" name="Role"
                 horizontalAlign="left">
     <mx:Script>
 		<![CDATA[

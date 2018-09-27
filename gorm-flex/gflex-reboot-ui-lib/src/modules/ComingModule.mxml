@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns="ns.flex.module.*" xmlns:mx="http://www.adobe.com/2006/mxml"
-         horizontalAlign="center" verticalAlign="middle">
+         horizontalAlign="center" verticalAlign="middle" name="ComingModule">
     <mx:Text>
         <mx:htmlText>
             <![CDATA[<b>本功能还在开发中，尽请期待！</b>]]>

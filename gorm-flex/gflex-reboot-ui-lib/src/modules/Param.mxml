@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReportModule xmlns="ns.flex.report.*" xmlns:mx="http://www.adobe.com/2006/mxml"
+<ReportModule xmlns="ns.flex.report.*" xmlns:mx="http://www.adobe.com/2006/mxml" name="Param"
 			  xmlns:controls="ns.flex.controls.*" destination="flexParamService">
 	<mx:Script>
 		<![CDATA[

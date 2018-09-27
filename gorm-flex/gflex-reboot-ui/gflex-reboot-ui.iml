@@ -2,7 +2,7 @@
 <module type="Flex" version="4">
   <component name="FlexBuildConfigurationManager" active="Main">
     <configurations>
-      <configuration name="Main" main-class="Main" output-file="index.swf" output-folder="$MODULE_DIR$/../build/resources/main/static/swf" use-html-wrapper="true" wrapper-template-path="$MODULE_DIR$/../gflex-reboot-ui-lib/html-template">
+      <configuration name="Main" main-class="Main" output-file="index.swf" output-folder="$MODULE_DIR$/../build/resources/main/static/dev" use-html-wrapper="true" wrapper-template-path="$MODULE_DIR$/../gflex-reboot-ui-lib/html-template">
         <dependencies target-player="10">
           <entries>
             <entry library-id="457a31a1-31b7-49d8-9cb1-de667ae5a322">

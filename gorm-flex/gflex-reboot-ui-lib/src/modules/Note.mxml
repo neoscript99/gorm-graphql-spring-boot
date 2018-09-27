@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ReportModule xmlns="ns.flex.report.*" xmlns:mx="http://www.adobe.com/2006/mxml"
-              xmlns:controls="ns.flex.controls.*">
+              xmlns:controls="ns.flex.controls.*" name="Note">
     <mx:Script>
 		<![CDATA[
         import ns.flex.util.DateUtil;

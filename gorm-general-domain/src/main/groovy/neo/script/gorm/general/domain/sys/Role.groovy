@@ -38,7 +38,7 @@ class Role {
     static mapping = {
     }
     static constraints = {
-        description nullable: true, maxSize: 128
+        description nullable: true, blank: true, maxSize: 128
         roleCode unique: true
     }
 
