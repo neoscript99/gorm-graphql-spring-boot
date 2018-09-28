@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:HDividedBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:modules="modules.*" width="100%" height="100%"
+<mx:HDividedBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%"
                 xmlns:controls="ns.flex.controls.*"
-                addedToStage="stage.addEventListener(MouseEvent.CLICK, onStageClick)"
-                preinitialize="preInit()">
+                addedToStage="stage.addEventListener(MouseEvent.CLICK, onStageClick)">
     <mx:Script>
 		<![CDATA[
+        import modules.Views;
+
         import mx.controls.Alert;
-        import mx.core.Container;
         import mx.managers.PopUpManager;
 
         import ns.flex.support.MenuSupport;
+        import ns.flex.util.ArrayCollectionPlus;
         import ns.flex.util.DictManager;
         import ns.flex.util.MessageUtil;
         import ns.flex.util.RemoteUtil;
         import ns.flex.util.Session;
+
+        import mx.rpc.remoting.mxml.RemoteObject;
 
         import popup.Login;
 
@@ -28,8 +31,11 @@
         private var timer:Timer;
         private var popLogin:Login = new Login();
         private var holdHeartBeat:Boolean = false;
+        private var views:Views = new Views();
+        public var showWelcomeFirst:Boolean = true;
 
-        public function initTimer(mintues:int):void {
+
+        private function initTimer(mintues:int):void {
             removeTimer()
             if (mintues > 0) {
                 spareMintues = mintues;
@@ -39,14 +45,14 @@
             }
         }
 
-        public function removeTimer():void {
+        private function removeTimer():void {
             if (timer) {
                 timer.removeEventListener(TimerEvent.TIMER_COMPLETE, timerComplete);
                 timer.stop();
             }
         }
 
-        public function resetTimer():void {
+        private function resetTimer():void {
             if (timer) {
                 timer.reset();
                 timer.start();
@@ -106,21 +112,37 @@
                         [spareMintues]), null, Alert.OK, this, logout);
         }
 
-        private function preInit():void {
+        /**
+         * 初始化数据字典，系统启动主界面必须调用
+         * @param dictServiceDest 字典初始化的service
+         * @param moreDictMethods 附加的字典初始化方法列表
+         */
+        public function initDictionary(dictServiceDest:String = 'flexDictionaryService', moreDictMethods:Array = null):void {
             popLogin.addEventListener("loginSuccess", loginSuccess);
-            var ds:RemoteObject = RemoteUtil.createRemoteObject('flexDictionaryService');
+            var ds:RemoteObject = RemoteUtil.createRemoteObject(dictServiceDest);
             //Session['LoginUser']切换用户后会更新，下面方法在不刷新页面的情况下不更新
             //重新打开页面时，如果session还在，不需再次登录，但未刷新时，需以Session['LoginUser']为准
-            ds.getSessionUser()
-            ds.getAllUserList()
-            ds.getAllRoleList()
-            ds.getParamList()
-            ds.getParamTypeList()
-            ds.getDepartmentList()
-            ds.getLabelList()
-            ds.getHotLabelList()
-            DictManager.init(ds, 8, this);
+            var methodList:ArrayCollectionPlus = new ArrayCollectionPlus(
+                    ['getSessionUser', 'getAllUserList',
+                        'getAllRoleList', 'getParamList',
+                        'getParamTypeList', 'getDepartmentList',
+                        'getLabelList', 'getHotLabelList']);
+            methodList.addItemArray(moreDictMethods)
+            for each(var method:String in methodList)
+                ds.getOperation(method).send()
+            DictManager.init(ds, methodList.length, this);
             initComplete();
+        }
+
+        /**
+         * 初始功能模块，系统启动主界面必须调用
+         * @param moreModules 附加的功能菜单
+         * @param showWelcome 首页显示webcome还是about，about隐藏了通知功能
+         */
+        public function initViews(moreModules:Array = null, showWelcomeFirst:Boolean = true):void {
+            this.showWelcomeFirst = showWelcomeFirst;
+            views.initModules(moreModules)
+            appWindow.addChild(views);
         }
 
         private function initComplete():void {
@@ -151,7 +173,7 @@
         private function loginSuccess(e:Event = null):void {
             //用户角色登录成功后才能去取
             DictManager.dictionaryService.getUserRoles(Session['LoginUser'].account)
-            views.selectedIndex = 0;
+            views.selectedIndex = showWelcomeFirst ? 0 : 1;
             initTimer(spareMintues);
             ms.getUserTree();
             appTitle =
@@ -161,7 +183,7 @@
             initMenus();
         }
 
-        public function logout():void {
+        private function logout():void {
             removeTimer();
             PopUpManager.addPopUp(popLogin, this, true);
             popLogin.clear();
@@ -183,7 +205,6 @@
                                   showCloseButton="true" title="{appTitle}"
                                   close="logout()"
                                   titleDoubleClick="switchMenu()">
-            <modules:Views id="views" width="100%" height="100%"/>
         </controls:TitleWindowPlus>
     </mx:HDividedBox>
 </mx:HDividedBox>

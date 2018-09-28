@@ -25,7 +25,12 @@
 
 
         private var _historyManager:HistoryManager;
+
+        private function mainFrameInit():void {
+            mainFrame.initDictionary();
+            mainFrame.initViews();
+        }
         ]]>
 	</mx:Script>
-    <local:MainFrame id="mainFrame"/>
+    <local:MainFrame id="mainFrame" initialize="mainFrameInit()"/>
 </mx:Application>

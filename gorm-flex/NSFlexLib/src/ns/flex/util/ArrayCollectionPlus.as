@@ -1,5 +1,4 @@
-package ns.flex.util
-{
+package ns.flex.util {
 import mx.collections.ArrayCollection;
 import mx.collections.ArrayList;
 
@@ -9,25 +8,21 @@ import ns.flex.common.Messages;
  * 集合类
  * @author wangchu
  */
-public class ArrayCollectionPlus extends ArrayCollection
-{
+public class ArrayCollectionPlus extends ArrayCollection {
     public static const EMPTY:ArrayCollectionPlus = new ArrayCollectionPlus();
 
-    public function ArrayCollectionPlus(source:Object = null)
-    {
+    public function ArrayCollectionPlus(source:Object = null) {
         super(ArrayUtil.toArray(source));
     }
 
     public static function withAll(source:Object,
-                                   labelField:String):ArrayCollectionPlus
-    {
+                                   labelField:String):ArrayCollectionPlus {
         var all:Object = {}
         all[labelField] = Messages.ALL;
         return withFirst(source, all);
     }
 
-    public static function withFirst(source:Object, first:Object):ArrayCollectionPlus
-    {
+    public static function withFirst(source:Object, first:Object):ArrayCollectionPlus {
         return new ArrayCollectionPlus(source).addFirst(first);
     }
 
@@ -36,14 +31,12 @@ public class ArrayCollectionPlus extends ArrayCollection
      * @param item 增加的项
      * @return 集合本身
      */
-    public function addFirst(item:Object):ArrayCollectionPlus
-    {
+    public function addFirst(item:Object):ArrayCollectionPlus {
         addItemAt(item, 0);
         return this;
     }
 
-    public function each(f:Function):void
-    {
+    public function each(f:Function):void {
         for (var i:int = 0; i < this.length; i++)
             f(getItemAt(i))
     }
@@ -53,10 +46,8 @@ public class ArrayCollectionPlus extends ArrayCollection
      * @param f 函数f(item)，返回true代表符合查询条件
      * @return 查找到的项或null
      */
-    public function find(f:Function):Object
-    {
-        for (var i:int = 0; i < this.length; i++)
-        {
+    public function find(f:Function):Object {
+        for (var i:int = 0; i < this.length; i++) {
             var item:Object = this.getItemAt(i);
 
             if (f(item))
@@ -65,8 +56,7 @@ public class ArrayCollectionPlus extends ArrayCollection
         return null;
     }
 
-    public function findAllByField(field:String, value:*):ArrayCollectionPlus
-    {
+    public function findAllByField(field:String, value:*):ArrayCollectionPlus {
         var acp:ArrayCollectionPlus = new ArrayCollectionPlus();
         for each (var item:* in this)
             if (ObjectUtils.getValue(item, field) == value)
@@ -75,8 +65,7 @@ public class ArrayCollectionPlus extends ArrayCollection
     }
 
 
-    public function countByField(field:String, value:*):int
-    {
+    public function countByField(field:String, value:*):int {
         var num:int = 0;
         for each (var item:* in this)
             if (ObjectUtils.getValue(item, field) == value)
@@ -91,19 +80,16 @@ public class ArrayCollectionPlus extends ArrayCollection
      * @param value 值
      * @return  找到的集合项或null
      */
-    public function findByField(field:String, value:*):Object
-    {
+    public function findByField(field:String, value:*):Object {
         for each (var item:* in this)
             if (ObjectUtils.getValue(item, field) == value)
                 return item;
         return null;
     }
 
-    public function getFieldArray(field:String):Array
-    {
+    public function getFieldArray(field:String):Array {
         var fieldArray:Array = [];
-        for (var i:int = 0; i < length; i++)
-        {
+        for (var i:int = 0; i < length; i++) {
             fieldArray.push(ObjectUtils.getValue(getItemAt(i), field));
         }
         return fieldArray;
@@ -114,12 +100,10 @@ public class ArrayCollectionPlus extends ArrayCollection
      * @param f 函数，f(item)为true代表符合条件
      * @return  新集合
      */
-    public function grep(f:Function):ArrayCollectionPlus
-    {
+    public function grep(f:Function):ArrayCollectionPlus {
         var acp:ArrayCollectionPlus = new ArrayCollectionPlus();
 
-        for (var i:int = 0; i < this.length; i++)
-        {
+        for (var i:int = 0; i < this.length; i++) {
             var item:Object = this.getItemAt(i);
 
             if (f(item))
@@ -132,10 +116,8 @@ public class ArrayCollectionPlus extends ArrayCollection
      * 删除符合条件的所有集合项
      * @param f 函数f(item)为true时代表符合条件
      */
-    public function remove(f:Function):ArrayCollectionPlus
-    {
-        for (var i:int = this.length - 1; i >= 0; i--)
-        {
+    public function remove(f:Function):ArrayCollectionPlus {
+        for (var i:int = this.length - 1; i >= 0; i--) {
             var item:Object = this.getItemAt(i);
 
             if (f(item))
@@ -147,8 +129,7 @@ public class ArrayCollectionPlus extends ArrayCollection
     /**
      * 删除某一对象
      */
-    public function removeItem(item:Object):ArrayCollectionPlus
-    {
+    public function removeItem(item:Object):ArrayCollectionPlus {
         var index:int = getItemIndex(item);
         if (index > -1)
             this.removeItemAt(index);
@@ -160,15 +141,13 @@ public class ArrayCollectionPlus extends ArrayCollection
      * @param f 函数f(item)为计算结果
      * @return 总和
      */
-    public function sum(f:Function):Object
-    {
+    public function sum(f:Function):Object {
         var value:Object;
 
         if (this.length > 0)
             value = f(this.getItemAt(0));
 
-        for (var i:int = 1; i < this.length; i++)
-        {
+        for (var i:int = 1; i < this.length; i++) {
             value += f(this.getItemAt(i));
         }
         return value;
@@ -179,11 +158,9 @@ public class ArrayCollectionPlus extends ArrayCollection
      * @param fields 包含字段，如为空，包含所有字段
      * @return
      */
-    public function toBiArray(...fields):Array
-    {
+    public function toBiArray(...fields):Array {
         var array:Array = [];
-        toArray().forEach(function (item:*, index:int, ar:Array):void
-        {
+        toArray().forEach(function (item:*, index:int, ar:Array):void {
             var innerArray:Array = [];
 
             if (fields.length > 0)
@@ -197,14 +174,13 @@ public class ArrayCollectionPlus extends ArrayCollection
         return array;
     }
 
-    public function addItems(...items):void
-    {
+    public function addItems(...items):void {
         addAll(new ArrayList(items))
     }
 
-    public function addItemArray(items:Array):void
-    {
-        addAll(new ArrayList(items))
+    public function addItemArray(items:Array):void {
+        if (items)
+            addAll(new ArrayList(items))
     }
 }
 }

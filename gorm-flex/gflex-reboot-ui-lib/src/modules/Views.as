@@ -1,9 +1,11 @@
 package modules {
 import flash.display.DisplayObject;
-import flash.display.DisplayObject;
+import flash.events.Event;
 
 import mx.containers.ViewStack;
 import mx.core.Container;
+
+import ns.flex.module.AbstractModule;
 
 import ns.flex.util.ArrayCollectionPlus;
 
@@ -19,9 +21,15 @@ public class Views extends ViewStack {
     private const comingModule:ComingModule = new ComingModule();
 
     public function Views() {
+        percentWidth = percentHeight = 100;
+        addEventListener(Event.CHANGE, onChange)
+    }
+
+    public function initModules(moreModules:Array):void {
         addChild(new Welcome());
         addChild(new About());
         addChild(comingModule);
+        moduleList.addItemArray(moreModules);
     }
 
     public function displayModule(name:String):void {
@@ -41,12 +49,9 @@ public class Views extends ViewStack {
         }
     }
 
-    public function addModule(module:DisplayObject):void {
-        moduleList.addItem(module)
-    }
-
-    public function addModules(modules:Array):void {
-        moduleList.addItemArray(modules);
+    private function onChange(e:Event):void {
+        if (this.selectedChild is AbstractModule)
+            (this.selectedChild as AbstractModule).beforeDisplay();
     }
 }
 }
