@@ -10,6 +10,7 @@ import groovy.transform.ToString
 class Label {
     String id
     String ownerId
+    String ownerName
     String label
 
     static mapping = {

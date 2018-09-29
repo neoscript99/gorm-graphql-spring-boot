@@ -11,6 +11,7 @@
         import mx.rpc.remoting.mxml.RemoteObject;
 
         import ns.flex.util.ConstraintCommon;
+        import ns.flex.util.MessageUtil;
         import ns.flex.util.RemoteUtil;
         import ns.flex.util.Session;
 
@@ -19,6 +20,7 @@
             method: 'login',
             listener: loginSuccess
         }]);
+        public var doAutoLogin:Boolean = true;
 
         public function clear():void {
             account.text = '';
@@ -39,6 +41,13 @@
                 PopUpManager.centerPopUp(this);
 
             asGuest.visible = (Session['ParamMap'].AllowAnonymousLogin == 'true');
+
+            //如果初始登录是通过后台session的，第一次打开这个对话框就是一定要登录了，不再做自动登录
+            if (doAutoLogin)
+                autoLogin();
+        }
+
+        private function autoLogin():void {
             var soUser:Object = sharedObject.data.user;
 
             if (soUser) {

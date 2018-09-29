@@ -1,10 +1,8 @@
 package ns.gflex.services.base
 
-import neo.script.gorm.general.domain.sys.AttachmentFile
 import neo.script.gorm.general.domain.sys.AttachmentInfo
 import neo.script.gorm.general.service.AttachmentService
 import org.springframework.beans.factory.annotation.Autowired
-
 
 /**
  * 附件服务类
@@ -30,13 +28,30 @@ abstract class GFlexAttachService extends GFlexLabelService {
         return entity;
     }
 
+    /**
+     * 上传附件时为临时ID，owner保存后需进行更新
+     * @param oldId
+     * @param newId
+     */
+    void updateAttachOwner(String oldId, def newId) {
+        generalRepository.updateMatch(AttachmentInfo,
+                [eq: [['ownerId', oldId]]],
+                ['ownerId': newId])
+        //定时删除一些没有所属对象的附件，正式环境删除一天前的
+        //def deleteUntil = Date.from(Instant.now().minusSeconds(600));
+        attachmentService.deleteInfoByOwners(list([like: [['ownerId', "${ATTACH_TEMP_ID_PREFIX}%".toString()]],
+                                                   lt  : [['dateCreated', new Date()-1]]],
+                AttachmentInfo)*.ownerId)
+    }
+
+    @Override
     void deleteByIds(List idList, Object domain = null) {
-        removeAttachByOwners(idList)
+        attachmentService.deleteInfoByOwners(idList)
         super.deleteByIds(idList, domain)
     }
 
     List queryAttachByOwner(def ownerId) {
-        list([eq: [['ownerId', withPrefix(ownerId)]]], AttachmentInfo);
+        attachmentService.queryByOwner(ownerId)
     }
 
     /**
@@ -44,53 +59,21 @@ abstract class GFlexAttachService extends GFlexLabelService {
      * @param data 文件原始数据
      * @return fileId 标志上传完毕
      */
-    def upload(String fileName, byte[] data, String fileId, def ownerId) {
-        attachmentService.saveWithByte(fileName, withPrefix(ownerId), data, fileId)
-        return fileId
+    def upload(String fileName, byte[] data, String ownerId) {
+        def info = attachmentService.saveWithByte(fileName, ownerId, ownerName, data)
+        //后台实际fileId可能和前台传入的不同，返回前台传入的fileId，告知本附件已完成上传
+        return info
     }
 
-    def download(String fileId) {
-        log.info "download file $fileId"
-        def af = AttachmentFile.findByFileId(fileId)
-        def ai = AttachmentInfo.findByFileId(fileId)
-        [data: af.data, name: ai.name, fileId: af.fileId]
+    def download(String ownerId, String fileId) {
+        return attachmentService.getInfoAndFile(ownerId, fileId)
     }
 
-    def removeAttach(String fileId) {
-        log.info "remove file $fileId"
-        removeAttachByIds([fileId])
-    }
-
-    def removeAttachByIds(List ids) {
-        log.info "removeByIds $ids"
-        if (ids) {
-            generalRepository.deleteMatch(AttachmentInfo, ['in': [['fileId', ids]]])
-            generalRepository.deleteMatch(AttachmentFile, ['in': [['fileId', ids]]])
-        }
+    def removeAttach(String ownerId, String fileId) {
+        attachmentService.deleteInfoByOwnerAndFileId(ownerId, fileId);
     }
 
     def removeAttachByOwner(def ownerId) {
-        log.info "removeByOwner $ownerId"
-        removeAttachByIds(queryAttachByOwner(ownerId)*.fileId)
-    }
-
-    def removeAttachByOwners(List owners) {
-        log.info "removeByOwners $owners"
-        def ownersList = []
-        owners.each {
-            ownersList << (withPrefix(it))
-        }
-        removeAttachByIds(list(['in': [['ownerId', ownersList]]], AttachmentInfo)*.fileId)
-    }
-
-    void updateAttachOwner(String oldId, def newId) {
-        generalRepository.updateMatch(AttachmentInfo,
-                [eq: [['ownerId', withPrefix(oldId)]]],
-                ['ownerId': withPrefix(newId)])
-
-        //删除一些没有所属对象的附件
-        removeAttachByIds(list([like: [['ownerId', "${withPrefix(ATTACH_TEMP_ID_PREFIX)}%".toString()]],
-                                lt  : [['dateCreated', new Date() - 1]]],
-                AttachmentInfo)*.fileId)
+        attachmentService.deleteInfoByOwners([ownerId])
     }
 }

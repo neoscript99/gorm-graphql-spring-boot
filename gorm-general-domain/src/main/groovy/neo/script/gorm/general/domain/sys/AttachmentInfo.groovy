@@ -12,8 +12,11 @@ class AttachmentInfo {
     String name
     Long fileSize
     String fileId
-    Date dateCreated
     String ownerId
+    String ownerName
+
+    Date dateCreated
+
     static mapping = {
         ownerId index: 'idx_attach_owner'
         fileId index: 'idx_attach_file_id'

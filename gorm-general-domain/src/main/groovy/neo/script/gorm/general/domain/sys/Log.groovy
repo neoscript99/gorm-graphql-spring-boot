@@ -11,6 +11,7 @@ import groovy.transform.ToString
 class Log {
     String id
     String ownerId;
+    String ownerName
     String message;
     String ipAddress;
     String account

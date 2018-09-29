@@ -23,12 +23,12 @@ public class Views extends ViewStack {
     public function Views() {
         percentWidth = percentHeight = 100;
         addEventListener(Event.CHANGE, onChange)
-    }
-
-    public function initModules(moreModules:Array):void {
         addChild(new Welcome());
         addChild(new About());
         addChild(comingModule);
+    }
+
+    public function addModules(moreModules:Array):void {
         moduleList.addItemArray(moreModules);
     }
 

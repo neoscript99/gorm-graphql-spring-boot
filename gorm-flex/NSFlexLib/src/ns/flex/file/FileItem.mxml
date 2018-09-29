@@ -1,144 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:net="flash.net.*"
-		 xmlns:utils="flash.utils.*" creationComplete="cc()" removedFromStage="destory()">
-	<mx:Script>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
+         creationComplete="cc()" removedFromStage="destory()">
+    <mx:Script>
 		<![CDATA[
-			import mx.controls.Alert;
-			import mx.rpc.events.FaultEvent;
-			import mx.rpc.events.ResultEvent;
-			import mx.rpc.remoting.mxml.RemoteObject;
-			import ns.flex.controls.ProgressBox;
-			import ns.flex.util.DateUtil;
-			import ns.flex.util.IOUtil;
-			import ns.flex.util.MessageUtil;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+        import mx.rpc.remoting.mxml.RemoteObject;
 
-			private static var progressBox:ProgressBox=new ProgressBox;
-			private static var progressCount:int=0;
+        import ns.flex.controls.ProgressBox;
+        import ns.flex.util.DateUtil;
+        import ns.flex.util.IOUtil;
+        import ns.flex.util.MessageUtil;
+        import ns.flex.util.RemoteUtil;
 
-			[Bindable]
-			public var _file:FileReference;
-			[Bindable]
-			public var dateCreated:Date;
+        private static var progressBox:ProgressBox = new ProgressBox;
+        private static var progressCount:int = 0;
 
-			[Bindable]
-			public var deletable:Boolean=true;
-			[Bindable]
-			public var fileId:String;
-			[Bindable]
-			public var fileName:String;
-			[Bindable]
-			public var fileSize:Number;
-			[Bindable]
-			public var ownerId:String;
-			public var status:String='init';
+        [Bindable]
+        public var _file:FileReference;
+        [Bindable]
+        public var dateCreated:Date;
 
-			/*
-			 * must has these methods:
-			 *     upload(String fileName,byte[] data,String uid)
-			 *     download(String uid)
-			 *     removeAttach(String uid)
-			 */
-			private var _service:RemoteObject;
+        [Bindable]
+        public var deletable:Boolean = true;
+        [Bindable]
+        public var fileId:String;
+        [Bindable]
+        public var fileName:String;
+        [Bindable]
+        public var fileSize:Number;
+        [Bindable]
+        public var ownerId:String;
+        public var status:String = 'init';
 
-			public function set file(f:FileReference):void
-			{
-				_file=f;
-				_file.addEventListener(Event.COMPLETE, function(e:Event):void
-				{
-					upload();
-				});
-			}
+        /*
+         * must has these methods:
+         *     upload(String fileName,byte[] data,String ownerId)
+         *     download(String ownerId, String fileId)
+         *     removeAttach(String ownerId, String fileId)
+         */
+        private var _service:RemoteObject;
 
-			public function remove(deleteFile:Boolean=true):void
-			{
-				if (deleteFile)
-				{
-					if (status == 'uploadStart')
-						_service.getOperation('upload').cancel();
-					status='deleted';
-					_service.removeAttach(fileId);
-				}
-				parent.removeChild(this);
-			}
+        public function set file(f:FileReference):void {
+            _file = f;
+            _file.addEventListener(Event.COMPLETE, function (e:Event):void {
+                upload();
+            });
+        }
 
-			public function set service(s:RemoteObject):void
-			{
-				_service=s;
-				_service.getOperation('upload').addEventListener(ResultEvent.RESULT,
-					afterUpload);
-				_service.getOperation('download').addEventListener(ResultEvent.RESULT,
-					afterDownload);
-				_service.addEventListener(FaultEvent.FAULT, onFault)
-			}
+        public function remove(deleteFile:Boolean = true):void {
+            if (deleteFile) {
+                if (status == 'uploadStart')
+                    _service.getOperation('upload').cancel();
+                status = 'deleted';
+                _service.removeAttach(ownerId, fileId);
+            }
+            parent.removeChild(this);
+        }
 
-			private function afterDownload(e:ResultEvent):void
-			{
-				if (e.result.fileId == fileId)
-				{
-					progressBox.close();
-					IOUtil.saveFileWithAlert(e.result.data, e.result.name, Sprite(parent));
-				}
-			}
+        public function set destination(destination:String):void {
+            //每个FileItem一个独立service
+            _service = RemoteUtil.createRemoteObject(destination)
+            _service.getOperation('upload').addEventListener(ResultEvent.RESULT,
+                    afterUpload);
+            _service.getOperation('download').addEventListener(ResultEvent.RESULT,
+                    afterDownload);
+            _service.addEventListener(FaultEvent.FAULT, onFault)
+        }
 
-			private function afterUpload(e:ResultEvent):void
-			{
-				if (e.result == fileId)
-				{
-					progressCount--;
-					if (progressCount <= 0)
-						progressBox.close();
-					status='uploadComplete';
-					labelBox.setStyle('backgroundColor', 0xB8F88D);
-				}
-			}
+        private function afterDownload(e:ResultEvent):void {
+            progressBox.close();
+            IOUtil.saveFileWithAlert(e.result.file.data, e.result.info.name, Sprite(parent));
+        }
 
-			private function cc():void
-			{
-				if (!deletable)
-				{
-					labelBox.removeChild(checkBox);
-					removeChild(deleteLink);
-				}
-			}
+        private function afterUpload(e:ResultEvent):void {
+            progressCount--;
+            if (progressCount <= 0)
+                progressBox.close();
+            status = 'uploadComplete';
+            labelBox.setStyle('backgroundColor', 0xB8F88D);
+            fileId = e.result.fileId;
+        }
 
-			private function destory():void
-			{
-				_service.getOperation('upload').removeEventListener(ResultEvent.RESULT,
-					afterUpload);
-				_service.getOperation('download').removeEventListener(ResultEvent.RESULT,
-					afterDownload);
-				_service.removeEventListener(FaultEvent.FAULT, onFault)
-			}
+        private function cc():void {
+            if (!deletable) {
+                labelBox.removeChild(checkBox);
+                removeChild(deleteLink);
+            }
+        }
 
-			private function download():void
-			{
-				progressBox.show(parent);
-				_service.download(fileId);
-			}
+        private function destory():void {
+            _service.getOperation('upload').removeEventListener(ResultEvent.RESULT,
+                    afterUpload);
+            _service.getOperation('download').removeEventListener(ResultEvent.RESULT,
+                    afterDownload);
+            _service.removeEventListener(FaultEvent.FAULT, onFault)
+        }
 
-			private function onFault(e:FaultEvent):void
-			{
-				progressBox.close();
-			}
+        private function download():void {
+            progressBox.show(parent);
+            _service.download(ownerId, fileId);
+        }
 
-			private function upload():void
-			{
-				if (status == 'init')
-				{
-					progressCount++;
-					progressBox.show(parent);
-					status='uploadStart';
-					_service.upload(fileName, _file.data, fileId, ownerId);
-				}
-			}
-		]]>
+        private function onFault(e:FaultEvent):void {
+            progressBox.close();
+        }
+
+        private function upload():void {
+            if (status == 'init') {
+                progressCount++;
+                progressBox.show(parent);
+                status = 'uploadStart';
+                _service.upload(fileName, _file.data, ownerId);
+            }
+        }
+        ]]>
 	</mx:Script>
-	<mx:HBox id="labelBox">
-		<mx:CheckBox id="checkBox" selected="true"/>
-		<mx:Label click="checkBox.selected=!checkBox.selected"
-				  text="{fileName}[{IOUtil.getFileSize(fileSize)}]({DateUtil.getTimeLabel(dateCreated)})"/>
-	</mx:HBox>
-	<mx:LinkButton id="deleteLink" label="删除"
-				   click="MessageUtil.actionYes('确认删除？',remove)"/>
-	<mx:LinkButton label="下载" click="download()" visible="{!_file}"/>
+    <mx:HBox id="labelBox">
+        <mx:CheckBox id="checkBox" selected="true"/>
+        <mx:Label click="checkBox.selected=!checkBox.selected"
+                  text="{fileName}[{IOUtil.getFileSize(fileSize)}]({DateUtil.getTimeLabel(dateCreated)})"/>
+    </mx:HBox>
+    <mx:LinkButton id="deleteLink" label="删除"
+                   click="MessageUtil.actionYes('确认删除？',remove)"/>
+    <mx:LinkButton label="下载" click="download()" visible="{!_file}"/>
 </mx:HBox>

@@ -141,7 +141,7 @@
          */
         public function initViews(moreModules:Array = null, showWelcomeFirst:Boolean = true):void {
             this.showWelcomeFirst = showWelcomeFirst;
-            views.initModules(moreModules)
+            views.addModules(moreModules)
             appWindow.addChild(views);
         }
 
@@ -163,8 +163,10 @@
 
             //检查是否已登录
             Session['LoginUser'] = DictManager.getResult('getSessionUser');
-            if (Session['LoginUser'])
+            if (Session['LoginUser']) {
+                popLogin.doAutoLogin=false;
                 loginSuccess();
+            }
             else
                 PopUpManager.addPopUp(popLogin, this, true);
         }

@@ -1,204 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Accordion xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:file="ns.flex.file.*"
-			  resizeToContent="true">
-	<mx:Metadata>
-		[Event(name="change")]
-	</mx:Metadata>
-	<mx:Script>
+              resizeToContent="true">
+    <mx:Metadata>
+        [Event(name="change")]
+    </mx:Metadata>
+    <mx:Script>
 		<![CDATA[
-			import mx.collections.ArrayCollection;
-			import mx.rpc.remoting.mxml.RemoteObject;
-			import mx.utils.UIDUtil;
-			import ns.flex.common.Constants;
-			import ns.flex.util.ContainerUtil;
-			import ns.flex.util.IOUtil;
-			import ns.flex.util.MessageUtil;
-			import ns.flex.util.RemoteUtil;
+        import mx.rpc.remoting.mxml.RemoteObject;
+        import mx.utils.UIDUtil;
 
-			//临时id，前缀防止重复
-			public const TEMP_ID:String=
-				Constants.ATTACH_TEMP_ID_PREFIX + UIDUtil.createUID();
+        import ns.flex.common.Constants;
+        import ns.flex.util.ContainerUtil;
+        import ns.flex.util.IOUtil;
+        import ns.flex.util.MessageUtil;
+        import ns.flex.util.RemoteUtil;
 
-			//ex:[new FileFilter("Images", "*.jpg;*.gif;*.png"),new FileFilter("Documents", "*.pdf;*.doc;*.txt")]
-			public var fileTypeFilter:Array;
-			[Bindable]
-			public var maxFileNumber:uint=5;
-			[Bindable]
-			public var maxFileSize:uint=1024 * 1024 * 10;
-			[Bindable]
-			public var maxNameLength:uint=128;
-			[Bindable]
-			private var _ownerId:String;
-			[Bindable]
-			private var selectValue:Boolean;
+        //临时id，前缀用于定时清理未关联owner的临时附件
+        public const TEMP_ID:String =
+                Constants.ATTACH_TEMP_ID_PREFIX + UIDUtil.createUID();
 
-			[Bindable]
-			private var service:RemoteObject;
+        //ex:[new FileFilter("Images", "*.jpg;*.gif;*.png"),new FileFilter("Documents", "*.pdf;*.doc;*.txt")]
+        public var fileTypeFilter:Array;
+        [Bindable]
+        public var maxFileNumber:uint = 5;
+        [Bindable]
+        public var maxFileSize:uint = 1024 * 1024 * 10;
+        [Bindable]
+        public var maxNameLength:uint = 128;
+        [Bindable]
+        private var _ownerId:String;
+        [Bindable]
+        private var selectValue:Boolean;
 
-			public function set dataProdiver(list:*):void
-			{
-				downloader.dataProdiver=list;
-			}
+        [Bindable]
+        private var service:RemoteObject;
+        [Bindable]
+        private var _destination:String;
 
-			public function set destination(destination:String):void
-			{
-				service=
-					RemoteUtil.createRemoteObject(destination,
-					[{method: 'queryAttachByOwner', listener: fireChange}], null, true);
-				if (_ownerId)
-					service.queryAttachByOwner(_ownerId);
-			}
+        public function set destination(destination:String):void {
+            _destination = destination;
+            service = RemoteUtil.createRemoteObject(destination)
+        }
 
-			public function get fileNumber():uint
-			{
-				var nums:uint=0;
+        public function get fileNumber():uint {
+            var nums:uint = 0;
 
-				eachFileItem(function(item:FileItem):void
-				{
-					nums++;
-				});
-				return nums;
-			}
+            eachFileItem(function (item:FileItem):void {
+                nums++;
+            });
+            return nums;
+        }
 
-			public function get info():Object
-			{
-				return {fileNumber: fileNumber, ownerId: _ownerId};
-			}
+        public function get info():Object {
+            return {fileNumber: fileNumber, ownerId: _ownerId};
+        }
 
-			public function get ownerId():String
-			{
-				return _ownerId;
-			}
+        public function get ownerId():String {
+            return _ownerId;
+        }
 
-			public function set ownerId(ownerId:String):void
-			{
-				eachFileItem(function(item:FileItem):void
-				{
-					item.remove(false);
-				}, false);
-				//所属对象id未生成时，没有ownerId,先用临时id，生成后再替换
-				_ownerId=ownerId ? ownerId : TEMP_ID; //用一个客户端可以识别的id
-				if (service)
-					service.queryAttachByOwner(_ownerId);
-			}
+        public function set ownerId(ownerId:String):void {
+            eachFileItem(function (item:FileItem):void {
+                item.remove(false);
+            }, false);
+            //所属对象id未生成时，没有ownerId,先用临时id，生成后再替换
+            if (ownerId)
+                _ownerId = ownerId
+            else {
+                //用一个客户端可以识别的id
+                _ownerId = TEMP_ID;
+                //如果两次都传入TEMP_ID，需要手工触发ownerId变化
+                if (downloader)
+                    downloader.ownerId = TEMP_ID
+            }
+        }
 
-			private function deleteSelected():void
-			{
-				eachFileItem(removeItem)
-			}
+        private function deleteSelected():void {
+            eachFileItem(removeItem)
+        }
 
-			private function eachFileItem(fun:Function, includeDown:Boolean=true):void
-			{
-				if (fileBox)
-					ContainerUtil.eachChild(fileBox, function(item:DisplayObject):void
-					{
-						if (item is FileItem)
-							fun(item)
-					})
-				if (downloader && includeDown)
-					ContainerUtil.eachChild(downloader, function(item:DisplayObject):void
-					{
-						if (item is FileItem)
-							fun(item)
-					})
-			}
+        private function eachFileItem(fun:Function, includeDown:Boolean = true):void {
+            if (fileBox)
+                ContainerUtil.eachChild(fileBox, function (item:DisplayObject):void {
+                    if (item is FileItem)
+                        fun(item)
+                })
+            if (downloader && includeDown)
+                ContainerUtil.eachChild(downloader, function (item:DisplayObject):void {
+                    if (item is FileItem)
+                        fun(item)
+                })
+        }
 
-			private function fireChange(e:Event=null):void
-			{
-				trace('uploader change')
-				dispatchEvent(new Event('change'));
-			}
+        private function fireChange(e:Event = null):void {
+            trace('uploader change')
+            dispatchEvent(new Event('change'));
+        }
 
-			private function removeItem(item:FileItem):void
-			{
-				if (item.checkBox.selected)
-				{
-					trace('removeItem - ', item.fileName)
-					item.remove();
-				}
-			}
+        private function removeItem(item:FileItem):void {
+            if (item.checkBox.selected) {
+                trace('removeItem - ', item.fileName)
+                item.remove();
+            }
+        }
 
-			private function selectFiles():void
-			{
-				var frl:FileReferenceList=new FileReferenceList;
-				frl.browse(fileTypeFilter);
-				frl.addEventListener(Event.SELECT, function(e:Event):void
-				{
-					var str:String='';
-					var nums:uint=fileNumber;
-					for each (var file:FileReference in frl.fileList)
-					{
-						if (nums >= maxFileNumber)
-						{
-							str=str.concat('文件数不能多于', maxFileNumber, '个\n');
-							break;
-						}
-						try
-						{
-							if (file.size > maxFileSize)
-							{
-								str=
-									str.concat(file.name, ' 大于',
-									IOUtil.getFileSize(maxFileSize), '\n');
-								continue;
-							}
-							if (file.size == 0)
-							{
-								str=str.concat(file.name, ' 为空文件\n');
-								continue;
-							}
-							if (file.name.length > maxNameLength)
-							{
-								str=str.concat(file.name, ' 名字长度大于', maxNameLength, '\n');
-								continue;
-							}
-							var fileItem:FileItem=new FileItem;
-							fileItem.service=service;
-							fileItem.fileId=UIDUtil.createUID();
-							fileItem.ownerId=_ownerId;
-							fileItem.fileName=file.name;
-							fileItem.fileSize=file.size;
-							fileItem.dateCreated=new Date();
-							fileItem.file=file;
-							fileBox.addChild(fileItem);
-							nums++;
-							//load完成会触发Event.COMPLETE事件，这时可以获取文件内容ByteArray
-							file.load();
-						}
-						catch (e:Error)
-						{
-							trace(e.getStackTrace());
-							str=str.concat(file.name, ' ', e.toString());
-						}
-					}
-					if (str.length > 0)
-						MessageUtil.showMessage(str, '上传错误信息');
-				});
-			}
+        private function selectFiles():void {
+            var frl:FileReferenceList = new FileReferenceList;
+            frl.browse(fileTypeFilter);
+            frl.addEventListener(Event.SELECT, function (e:Event):void {
+                var str:String = '';
+                var nums:uint = fileNumber;
+                for each (var file:FileReference in frl.fileList) {
+                    if (nums >= maxFileNumber) {
+                        str = str.concat('文件数不能多于', maxFileNumber, '个\n');
+                        break;
+                    }
+                    try {
+                        if (file.size > maxFileSize) {
+                            str =
+                                    str.concat(file.name, ' 大于',
+                                            IOUtil.getFileSize(maxFileSize), '\n');
+                            continue;
+                        }
+                        if (file.size == 0) {
+                            str = str.concat(file.name, ' 为空文件\n');
+                            continue;
+                        }
+                        if (file.name.length > maxNameLength) {
+                            str = str.concat(file.name, ' 名字长度大于', maxNameLength, '\n');
+                            continue;
+                        }
+                        var fileItem:FileItem = new FileItem;
+                        fileItem.destination = _destination;
+                        fileItem.ownerId = _ownerId;
+                        fileItem.fileName = file.name;
+                        fileItem.fileSize = file.size;
+                        fileItem.dateCreated = new Date();
+                        fileItem.file = file;
+                        fileBox.addChild(fileItem);
+                        nums++;
+                        //load完成会触发Event.COMPLETE事件，这时可以获取文件内容ByteArray
+                        file.load();
+                    }
+                    catch (e:Error) {
+                        trace(e.getStackTrace());
+                        str = str.concat(file.name, ' ', e.toString());
+                    }
+                }
+                if (str.length > 0)
+                    MessageUtil.showMessage(str, '上传错误信息');
+            });
+        }
 
-			private function setSelectValue(item:FileItem):void
-			{
-				item.checkBox.selected=selectValue;
-			}
-		]]>
+        private function setSelectValue(item:FileItem):void {
+            item.checkBox.selected = selectValue;
+        }
+        ]]>
 	</mx:Script>
-	<mx:VBox label="文件上传/下载[{maxFileNumber}×{IOUtil.getFileSize(maxFileSize)}]"
-			 paddingLeft="5">
-		<file:Downloader id="downloader" service="{service}"
-						 dataProdiver="{service.queryAttachByOwner.lastResult}"
-						 deletable="true" resize="fireChange()"/>
-		<mx:VBox id="fileBox" resize="fireChange()"/>
-		<mx:HBox width="100%">
-			<mx:LinkButton label="全选"
-						   click="selectValue=true;eachFileItem(setSelectValue)"/>
-			<mx:LinkButton label="全不选"
-						   click="selectValue=false;eachFileItem(setSelectValue)"/>
-			<mx:LinkButton label="删除选择项"
-						   click="MessageUtil.actionYes('确认删除？',deleteSelected)"/>
-			<mx:HBox width="100%" horizontalAlign="right">
-				<mx:LinkButton label="添加文件" click="selectFiles()"
-							   enabled="{_ownerId!=null}"/>
-			</mx:HBox>
-		</mx:HBox>
-	</mx:VBox>
+    <mx:VBox label="文件上传/下载[{maxFileNumber}×{IOUtil.getFileSize(maxFileSize)}]"
+             paddingLeft="5">
+        <file:Downloader id="downloader" destination="{_destination}" ownerId="{_ownerId}"
+                         deletable="true" resize="fireChange()"/>
+        <mx:VBox id="fileBox" resize="fireChange()"/>
+        <mx:HBox width="100%">
+            <mx:LinkButton label="全选"
+                           click="selectValue=true;eachFileItem(setSelectValue)"/>
+            <mx:LinkButton label="全不选"
+                           click="selectValue=false;eachFileItem(setSelectValue)"/>
+            <mx:LinkButton label="删除选择项"
+                           click="MessageUtil.actionYes('确认删除？',deleteSelected)"/>
+            <mx:HBox width="100%" horizontalAlign="right">
+                <mx:LinkButton label="添加文件" click="selectFiles()"
+                               enabled="{_ownerId!=null}"/>
+            </mx:HBox>
+        </mx:HBox>
+    </mx:VBox>
 </mx:Accordion>

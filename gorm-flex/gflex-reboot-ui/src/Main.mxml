@@ -19,11 +19,7 @@
     </mx:Style>
     <mx:Script>
 		<![CDATA[
-        import modules.Views;
-
         import mx.managers.HistoryManager;
-
-
         private var _historyManager:HistoryManager;
 
         private function mainFrameInit():void {
