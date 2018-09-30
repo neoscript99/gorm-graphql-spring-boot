@@ -63,6 +63,11 @@ public class ConstraintCommon
                 noSpace: true, expression: '^[a-zA-Z]+://.*$', maxChars: 256, autoTrim: true,
                 errorTip: '请输入正确的网址'
             };
+    public static const time:Object =
+            {
+                noSpace: true, expression: '^[0-2]{0,1}[0-9]:[0-5]{0,1}[0-9]$', required: true, autoTrim: true,
+                errorTip: '请输入正确的24小时格式时间'
+            };
 
     /**
      * 限制输入字符最少数量

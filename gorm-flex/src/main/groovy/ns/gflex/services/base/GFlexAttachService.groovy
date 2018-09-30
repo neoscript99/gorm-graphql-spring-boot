@@ -1,6 +1,5 @@
 package ns.gflex.services.base
 
-import neo.script.gorm.general.domain.sys.AttachmentInfo
 import neo.script.gorm.general.service.AttachmentService
 import org.springframework.beans.factory.annotation.Autowired
 
@@ -34,14 +33,7 @@ abstract class GFlexAttachService extends GFlexLabelService {
      * @param newId
      */
     void updateAttachOwner(String oldId, def newId) {
-        generalRepository.updateMatch(AttachmentInfo,
-                [eq: [['ownerId', oldId]]],
-                ['ownerId': newId])
-        //定时删除一些没有所属对象的附件，正式环境删除一天前的
-        //def deleteUntil = Date.from(Instant.now().minusSeconds(600));
-        attachmentService.deleteInfoByOwners(list([like: [['ownerId', "${ATTACH_TEMP_ID_PREFIX}%".toString()]],
-                                                   lt  : [['dateCreated', new Date()-1]]],
-                AttachmentInfo)*.ownerId)
+        attachmentService.updateMatch([eq: [['ownerId', oldId]]], ['ownerId': newId])
     }
 
     @Override
@@ -59,10 +51,10 @@ abstract class GFlexAttachService extends GFlexLabelService {
      * @param data 文件原始数据
      * @return fileId 标志上传完毕
      */
-    def upload(String fileName, byte[] data, String ownerId) {
+    def upload(String fileName, byte[] data, String ownerId, String uploadId) {
         def info = attachmentService.saveWithByte(fileName, ownerId, ownerName, data)
         //后台实际fileId可能和前台传入的不同，返回前台传入的fileId，告知本附件已完成上传
-        return info
+        return [fileId: info.fileId, uploadId: uploadId]
     }
 
     def download(String ownerId, String fileId) {

@@ -69,7 +69,7 @@
             <controls:DataGridColumnPlus dataField="attachNum" headerText="附件数"
                                          editable="false" width="60"/>
             <controls:DataGridColumnPlus headerText="附件"
-                                         asUploader="{{ownerIdField:'id',destination:'flexNoteService'}}"/>
+                                         asUploader="{{ownerIdField:'id',service:reportService}}"/>
             <controls:DataGridColumnPlus headerText="标签"
                                          asLabelInput="{{dataProvider:DictManager.getList('getLabelList'),percentWidth:100,getSelected:reportService.getLabels,matchType:'word',allowNewValues:true,allowMultipleSelection:true}}"/>
             <controls:DataGridColumnPlus dataField="lastUser.name" headerText="发布人"

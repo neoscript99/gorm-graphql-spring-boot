@@ -46,9 +46,10 @@ class AttachmentService extends AbstractService<AttachmentInfo> {
 
     void deleteInfoByOwners(List ownerList) {
         log.info "deleteInfoByOwners $ownerList"
-        list(['in': [['ownerId', ownerList]]]).each { info ->
-            deleteInfo(info)
-        }
+        if (ownerList)
+            list(['in': [['ownerId', ownerList]]]).each { info ->
+                deleteInfo(info)
+            }
     }
 
     void deleteInfoByOwnerAndFileId(String ownerId, String fileId) {

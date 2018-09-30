@@ -11,10 +11,8 @@
         import ns.flex.util.DateUtil;
         import ns.flex.util.IOUtil;
         import ns.flex.util.MessageUtil;
-        import ns.flex.util.RemoteUtil;
 
         private static var progressBox:ProgressBox = new ProgressBox;
-        private static var progressCount:int = 0;
 
         [Bindable]
         public var _file:FileReference;
@@ -58,28 +56,47 @@
             parent.removeChild(this);
         }
 
-        public function set destination(destination:String):void {
+        public function set service(service:RemoteObject):void {
             //每个FileItem一个独立service
-            _service = RemoteUtil.createRemoteObject(destination)
+            _service = service
             _service.getOperation('upload').addEventListener(ResultEvent.RESULT,
                     afterUpload);
             _service.getOperation('download').addEventListener(ResultEvent.RESULT,
                     afterDownload);
-            _service.addEventListener(FaultEvent.FAULT, onFault)
+            _service.getOperation('upload').addEventListener(FaultEvent.FAULT, onFault)
+            _service.getOperation('download').addEventListener(FaultEvent.FAULT, onFault)
+        }
+
+
+        private function download():void {
+            progressBox.show(parent);
+            _service.download(ownerId, fileId);
         }
 
         private function afterDownload(e:ResultEvent):void {
-            progressBox.close();
-            IOUtil.saveFileWithAlert(e.result.file.data, e.result.info.name, Sprite(parent));
+            if (e.result.info.fileId == fileId) {
+                progressBox.close();
+                IOUtil.saveFileWithAlert(e.result.file.data, e.result.info.name, Sprite(parent));
+            }
+        }
+
+
+        private function upload():void {
+            if (status == 'init') {
+                progressBox.show(parent);
+                status = 'uploadStart';
+                trace('upload file: ', fileName, ' with uploadId: ', toString())
+                _service.upload(fileName, _file.data, ownerId, toString());
+            }
         }
 
         private function afterUpload(e:ResultEvent):void {
-            progressCount--;
-            if (progressCount <= 0)
+            if (e.result.uploadId == toString()) {
                 progressBox.close();
-            status = 'uploadComplete';
-            labelBox.setStyle('backgroundColor', 0xB8F88D);
-            fileId = e.result.fileId;
+                status = 'uploadComplete';
+                labelBox.setStyle('backgroundColor', 0xB8F88D);
+                fileId = e.result.fileId;
+            }
         }
 
         private function cc():void {
@@ -94,25 +111,12 @@
                     afterUpload);
             _service.getOperation('download').removeEventListener(ResultEvent.RESULT,
                     afterDownload);
-            _service.removeEventListener(FaultEvent.FAULT, onFault)
-        }
-
-        private function download():void {
-            progressBox.show(parent);
-            _service.download(ownerId, fileId);
+            _service.getOperation('upload').removeEventListener(FaultEvent.FAULT, onFault)
+            _service.getOperation('download').removeEventListener(FaultEvent.FAULT, onFault)
         }
 
         private function onFault(e:FaultEvent):void {
             progressBox.close();
-        }
-
-        private function upload():void {
-            if (status == 'init') {
-                progressCount++;
-                progressBox.show(parent);
-                status = 'uploadStart';
-                _service.upload(fileName, _file.data, ownerId);
-            }
         }
         ]]>
 	</mx:Script>

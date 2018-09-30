@@ -13,10 +13,9 @@
         import ns.flex.util.ContainerUtil;
         import ns.flex.util.IOUtil;
         import ns.flex.util.MessageUtil;
-        import ns.flex.util.RemoteUtil;
 
         //临时id，前缀用于定时清理未关联owner的临时附件
-        public const TEMP_ID:String =
+        public const TEMP_OWNER_ID:String =
                 Constants.ATTACH_TEMP_ID_PREFIX + UIDUtil.createUID();
 
         //ex:[new FileFilter("Images", "*.jpg;*.gif;*.png"),new FileFilter("Documents", "*.pdf;*.doc;*.txt")]
@@ -33,14 +32,7 @@
         private var selectValue:Boolean;
 
         [Bindable]
-        private var service:RemoteObject;
-        [Bindable]
-        private var _destination:String;
-
-        public function set destination(destination:String):void {
-            _destination = destination;
-            service = RemoteUtil.createRemoteObject(destination)
-        }
+        public var service:RemoteObject;
 
         public function get fileNumber():uint {
             var nums:uint = 0;
@@ -55,24 +47,19 @@
             return {fileNumber: fileNumber, ownerId: _ownerId};
         }
 
-        public function get ownerId():String {
-            return _ownerId;
-        }
 
-        public function set ownerId(ownerId:String):void {
+        /**
+         * 如果传入ownerId为空，返回临时ID
+         * @param ownerId
+         * @return
+         */
+        public function setOwnerId(ownerId:String):String {
             eachFileItem(function (item:FileItem):void {
                 item.remove(false);
             }, false);
             //所属对象id未生成时，没有ownerId,先用临时id，生成后再替换
-            if (ownerId)
-                _ownerId = ownerId
-            else {
-                //用一个客户端可以识别的id
-                _ownerId = TEMP_ID;
-                //如果两次都传入TEMP_ID，需要手工触发ownerId变化
-                if (downloader)
-                    downloader.ownerId = TEMP_ID
-            }
+            _ownerId = ownerId ? ownerId : TEMP_OWNER_ID;
+            return _ownerId;
         }
 
         private function deleteSelected():void {
@@ -131,7 +118,7 @@
                             continue;
                         }
                         var fileItem:FileItem = new FileItem;
-                        fileItem.destination = _destination;
+                        fileItem.service = service;
                         fileItem.ownerId = _ownerId;
                         fileItem.fileName = file.name;
                         fileItem.fileSize = file.size;
@@ -159,8 +146,7 @@
 	</mx:Script>
     <mx:VBox label="文件上传/下载[{maxFileNumber}×{IOUtil.getFileSize(maxFileSize)}]"
              paddingLeft="5">
-        <file:Downloader id="downloader" destination="{_destination}" ownerId="{_ownerId}"
-                         deletable="true" resize="fireChange()"/>
+        <file:Downloader id="downloader" service="{service}" deletable="true" resize="fireChange()"/>
         <mx:VBox id="fileBox" resize="fireChange()"/>
         <mx:HBox width="100%">
             <mx:LinkButton label="全选"
