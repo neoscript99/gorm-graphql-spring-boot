@@ -95,7 +95,7 @@
                 progressBox.close();
                 status = 'uploadComplete';
                 labelBox.setStyle('backgroundColor', 0xB8F88D);
-                fileId = e.result.fileId;
+                fileId = e.result.info.fileId;
             }
         }
 

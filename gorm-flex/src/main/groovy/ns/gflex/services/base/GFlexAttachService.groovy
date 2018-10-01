@@ -38,8 +38,8 @@ abstract class GFlexAttachService extends GFlexLabelService {
 
     @Override
     void deleteByIds(List idList, Object domain = null) {
-        attachmentService.deleteInfoByOwners(idList)
         super.deleteByIds(idList, domain)
+        attachmentService.deleteInfoByOwners(idList)
     }
 
     List queryAttachByOwner(def ownerId) {
@@ -54,7 +54,7 @@ abstract class GFlexAttachService extends GFlexLabelService {
     def upload(String fileName, byte[] data, String ownerId, String uploadId) {
         def info = attachmentService.saveWithByte(fileName, ownerId, ownerName, data)
         //后台实际fileId可能和前台传入的不同，返回前台传入的fileId，告知本附件已完成上传
-        return [fileId: info.fileId, uploadId: uploadId]
+        return [info: info, uploadId: uploadId]
     }
 
     def download(String ownerId, String fileId) {
@@ -65,7 +65,4 @@ abstract class GFlexAttachService extends GFlexLabelService {
         attachmentService.deleteInfoByOwnerAndFileId(ownerId, fileId);
     }
 
-    def removeAttachByOwner(def ownerId) {
-        attachmentService.deleteInfoByOwners([ownerId])
-    }
 }
