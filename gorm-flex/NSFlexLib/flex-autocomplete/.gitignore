@@ -1,2 +1,4 @@
 .idea
 bin/
+!fx3src/com/hillelcoren/components/autoComplete/classes
+!fx4src/com/hillelcoren/components/autoComplete/classes
