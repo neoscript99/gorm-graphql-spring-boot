@@ -17,6 +17,7 @@ public class Downloader extends VBox {
         for each (var fileInfo:Object in ArrayUtil.toArray(list)) {
             var fileItem:FileItem = new FileItem;
             fileItem.service = _service;
+            fileItem.infoId = fileInfo.id;
             fileItem.fileId = fileInfo.fileId;
             fileItem.ownerId = fileInfo.ownerId;
             fileItem.fileName = fileInfo.name;

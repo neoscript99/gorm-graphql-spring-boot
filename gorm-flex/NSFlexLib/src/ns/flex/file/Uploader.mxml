@@ -44,7 +44,11 @@
         }
 
         public function get info():Object {
-            return {fileNumber: fileNumber, ownerId: _ownerId};
+            var infoIds:Array = [];
+            eachFileItem(function (item:FileItem):void {
+                infoIds.push(item.infoId);
+            });
+            return {fileNumber: fileNumber, ownerId: _ownerId, infoIds: infoIds};
         }
 
 
@@ -124,6 +128,7 @@
                         fileItem.fileSize = file.size;
                         fileItem.dateCreated = new Date();
                         fileItem.file = file;
+                        fileItem.addEventListener('uploadComplete', fireChange);
                         fileBox.addChild(fileItem);
                         nums++;
                         //load完成会触发Event.COMPLETE事件，这时可以获取文件内容ByteArray

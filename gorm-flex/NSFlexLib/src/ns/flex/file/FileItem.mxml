@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
          creationComplete="cc()" removedFromStage="destory()">
+    <mx:Metadata>
+        [Event(name="uploadComplete")]
+    </mx:Metadata>
     <mx:Script>
 		<![CDATA[
         import mx.rpc.events.FaultEvent;
@@ -30,6 +33,8 @@
         [Bindable]
         public var ownerId:String;
         public var status:String = 'init';
+        [Bindable]
+        public var infoId:String;
 
         /*
          * must has these methods:
@@ -95,7 +100,9 @@
                 progressBox.close();
                 status = 'uploadComplete';
                 labelBox.setStyle('backgroundColor', 0xB8F88D);
+                infoId = e.result.info.id;
                 fileId = e.result.info.fileId;
+                dispatchEvent(new Event('uploadComplete'));
             }
         }
 
