@@ -1,22 +1,17 @@
 package neo.script.gorm.general.repositories
 
-import grails.gorm.DetachedCriteria
 import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
 import groovy.util.logging.Slf4j
 import neo.script.gorm.general.util.GormCriteriaUtil
 import neo.script.util.JsonUtil
 import org.grails.datastore.gorm.GormEntity
-import org.grails.datastore.mapping.model.PersistentEntity
 import org.hibernate.SessionFactory
 import org.hibernate.criterion.CriteriaSpecification
-import org.hibernate.criterion.Projections
 import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
-import org.springframework.validation.FieldError
-
-import java.text.MessageFormat
 
 /**
  * 替换原来的GForm
@@ -28,6 +23,8 @@ import java.text.MessageFormat
 @Slf4j
 @CompileStatic(TypeCheckingMode.SKIP)
 class GormRepository implements GeneralRepository {
+    @Autowired
+    MessageSource messageSource
     @Autowired
     SessionFactory sessionFactory
     /**
@@ -174,6 +171,7 @@ class GormRepository implements GeneralRepository {
 
     /**
      * @see GeneralRepository#saveEntity(Object)
+     * @see org.springframework.validation.Errors
      */
     @Override
     def saveEntity(Object entity) {
@@ -198,15 +196,10 @@ class GormRepository implements GeneralRepository {
         } else {
             StringBuilder sb = new StringBuilder()
             gormEntity.errors.allErrors.each {
-                String msg = it.defaultMessage ? MessageFormat.format(it.defaultMessage, it.arguments) : it.toString();
-                if (FieldError.isAssignableFrom(it.class))
-                    msg = "[$it.field = $it.rejectedValue]$msg"
+                String msg = messageSource.getMessage(it, Locale.default);
                 log.error(msg)
-                log.error(it.toString())
+                log.error("error.code配置参考：{}", it.toString())
                 sb.append("$msg\n")
-                //messageBundle配置参考log.error(it)打印的error.code，
-                //如com.beeb.teller.TeTransInfo.transCode.unique.error
-                //sb.append("${messageSource.getMessage(it, Locale.default)}\n")
 
             }
             throw new RuntimeException(sb.toString())

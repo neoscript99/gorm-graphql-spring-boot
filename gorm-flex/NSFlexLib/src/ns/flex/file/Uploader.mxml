@@ -11,6 +11,7 @@
 
         import ns.flex.common.Constants;
         import ns.flex.util.ContainerUtil;
+        import ns.flex.util.FileTypeFilterCommon;
         import ns.flex.util.IOUtil;
         import ns.flex.util.MessageUtil;
 
@@ -18,8 +19,7 @@
         public const TEMP_OWNER_ID:String =
                 Constants.ATTACH_TEMP_ID_PREFIX + UIDUtil.createUID();
 
-        //ex:[new FileFilter("Images", "*.jpg;*.gif;*.png"),new FileFilter("Documents", "*.pdf;*.doc;*.txt")]
-        public var fileTypeFilter:Array;
+        public var fileTypeFilter:Array = FileTypeFilterCommon.DEFAULT;
         [Bindable]
         public var maxFileNumber:uint = 5;
         [Bindable]
