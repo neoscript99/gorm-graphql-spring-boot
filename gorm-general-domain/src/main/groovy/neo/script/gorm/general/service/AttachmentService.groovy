@@ -10,10 +10,11 @@ import org.springframework.stereotype.Service
 class AttachmentService extends AbstractService<AttachmentInfo> {
 
     AttachmentInfo saveWithFile(File file, String ownerId, String ownerName) {
-        if (!file.isFile())
-            throw new RuntimeException("$file.path,该文件不存在")
+        if (file && file.isFile())
+            return saveWithByte(file.name, ownerId, ownerName, file.getBytes());
+        else
+            throw new RuntimeException("$file,该文件不存在")
 
-        return saveWithByte(file.name, ownerId, ownerName, file.getBytes());
     }
 
     AttachmentInfo saveWithByte(String name, String ownerId, ownerName, byte[] data) {

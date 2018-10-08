@@ -25,11 +25,13 @@ abstract class GFlex1To1AttachService extends GFlexAttachService {
     }
 
     /**
-     * 具体实现类检查ownerId是否存在，如果存在建立关联，tempId不用执行本步骤
+     * 检查ownerId是否存在，如果存在建立关联，tempId不用执行本步骤
      * @param ownerId
      * @param info
      */
-    abstract void makeRelation(String ownerId, AttachmentInfo info);
+    void makeRelation(String ownerId, AttachmentInfo info) {
+        generalRepository.get(domainClass, ownerId).fileInfo = info
+    }
 
     def removeAttach(String ownerId, String fileId) {
         if (!ownerId.startsWith(ATTACH_TEMP_ID_PREFIX))
@@ -37,5 +39,7 @@ abstract class GFlex1To1AttachService extends GFlexAttachService {
         super.removeAttach(ownerId, fileId);
     }
 
-    abstract void deleteRelation(String ownerId, String fileId);
+    void deleteRelation(String ownerId, String fileId) {
+        generalRepository.get(domainClass, ownerId).fileInfo = null
+    }
 }
