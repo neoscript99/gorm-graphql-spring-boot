@@ -15,7 +15,7 @@ spring:
 #org.grails.orm.hibernate.connections.HibernateConnectionSourceSettings
 hibernate:
   hbm2ddl.auto: create-drop
-  show_sql: false
+  show_sql: true
   format_sql: true
   #通过application.groovy实现跟细化的控制
   #naming_strategy: neo.script.gorm.general.config.PrefixedNamingStrategy
@@ -31,7 +31,7 @@ logging:
   pattern.level: "%5p"
   level:
     # equivalent to hibernate.show_sql=true
-    org.hibernate.SQL: DEBUG
+    # org.hibernate.SQL: DEBUG
     org.hibernate.engine.transaction: DEBUG
     org.hibernate.cache: DEBUG
     net.sf.ehcache: DEBUG

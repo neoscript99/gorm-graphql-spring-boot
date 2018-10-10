@@ -12,8 +12,11 @@ import neo.script.gorm.general.domain.sys.AttachmentInfo
 abstract class GFlex1To1AttachService extends GFlexAttachService {
 
     def save(Map map, boolean isMerge = false, Object domain = null) {
-        def infoIds = map[ATTACH_INFO_FIELD]?.infoIds
-        map.fileInfo = infoIds ? [id: infoIds[0]] : null;
+        //仅针对包含Uploader控件的做设置
+        if(map[ATTACH_INFO_FIELD]) {
+            def infoIds = map[ATTACH_INFO_FIELD].infoIds
+            map.fileInfo = infoIds ? [id: infoIds[0]] : null;
+        }
         super.save(map, isMerge, domain);
     }
 
