@@ -19,3 +19,8 @@ bootRun {
     systemProperty 'init', 'true'
     systemProperties System.properties
 }
+
+
+sourceJar {
+    from(sourceSets.main.allSource, sourceSets.test.allSource)
+}

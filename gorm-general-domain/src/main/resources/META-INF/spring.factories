@@ -1,5 +1,10 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   neo.script.gorm.general.GormGeneralDomainAutoConfiguration
+
 # PropertySource Loaders
 org.springframework.boot.env.PropertySourceLoader=\
   neo.script.gorm.general.config.GroovyConfigPropertySourceLoader
+
+# Application Listeners
+org.springframework.context.ApplicationListener=\
+  neo.script.gorm.general.config.ErrorLoggingApplicationListener

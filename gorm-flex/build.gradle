@@ -11,6 +11,10 @@ dependencies {
     testCompile group: 'commons-cli', name: 'commons-cli', version: '1.4'
 }
 
+sourceJar{
+    from(sourceSets.main.allSource, sourceSets.test.allSource)
+}
+
 /*可在 .idea/modules.xml 中手工添加如下flex模块
 <module fileurl="file://$PROJECT_DIR$/gorm-flex/NSFlexLib/NSFlexLib.iml" filepath="$PROJECT_DIR$/gorm-flex/NSFlexLib/NSFlexLib.iml" />
 <module fileurl="file://$PROJECT_DIR$/gorm-flex/gflex-reboot-ui/gflex-reboot-ui.iml" filepath="$PROJECT_DIR$/gorm-flex/gflex-reboot-ui/gflex-reboot-ui.iml" />
