@@ -1,4 +1,4 @@
-user.token.expire.minutes: 10
+token.expire.minutes: 10
 graphiql.enabled: true
 
 server.port: 8080

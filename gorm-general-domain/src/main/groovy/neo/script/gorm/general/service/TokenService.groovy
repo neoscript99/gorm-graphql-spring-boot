@@ -1,7 +1,6 @@
 package neo.script.gorm.general.service
 
 import neo.script.gorm.general.domain.sys.Token
-import neo.script.gorm.general.domain.sys.User
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
@@ -10,11 +9,11 @@ import java.time.LocalDateTime
 
 @Service
 class TokenService extends AbstractService<Token> {
-    @Value('${user.token.expire.minutes}')
+    @Value('${token.expire.minutes}')
     Integer expireMinutes
 
-    Token createToken(User user) {
-        saveEntity(resetExpireTime(new Token(user: user)))
+    Token createToken() {
+        saveEntity(resetExpireTime(new Token()))
     }
 
     Map destoryToken(String id) {
@@ -39,7 +38,7 @@ class TokenService extends AbstractService<Token> {
             [success: false, error: "过期token: $id"]
         else {
             resetExpireTime(token)
-            [success: true, user: token.user]
+            [success: true]
         }
     }
 

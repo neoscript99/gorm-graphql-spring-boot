@@ -13,12 +13,13 @@ import neo.script.util.EncoderUtil
 @EqualsAndHashCode(includes = 'account')
 @InitializeDomian(depends = [Department])
 class User {
+    static final String DEFAULT_PASSWORD = EncoderUtil.sha256('anonymous');
     static final User ADMIN = (new User(account: 'admin', name: '系统管理员', dept: Department.HEAD_OFFICE,
-            editable: false, password: EncoderUtil.sha256('admin')))
+            editable: false, password: DEFAULT_PASSWORD))
     static final User ANONYMOUS = (new User(account: 'anonymous', name: '匿名帐号', dept: Department.HEAD_OFFICE,
-            editable: false, password: EncoderUtil.sha256('anonymous')))
+            editable: false, password: DEFAULT_PASSWORD))
     static final User TEST_USER = (new User(account: 'test.user', name: '测试用户', dept: Department.HEAD_OFFICE,
-            editable: true, password: EncoderUtil.sha256('test')))
+            editable: true, password: DEFAULT_PASSWORD))
 
     String id
     String account

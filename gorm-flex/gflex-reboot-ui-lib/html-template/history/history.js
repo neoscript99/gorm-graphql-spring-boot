@@ -342,7 +342,6 @@ BrowserHistory = (function() {
 
                 if ((window.location.hash == initialHash || window.location.href == initialHref) && (bsl == 1)) {
                     urlActions.back = true;
-                    // FIXME: could this ever be a forward button?
                     // we can't clear it because we still need to check for forwards. Ugg.
                     // clearInterval(this.locationTimer);
                     handleBackButton();

@@ -1,10 +1,6 @@
 package neo.script.gorm.general.service
 
-import neo.script.gorm.general.domain.sys.Department
-import neo.script.gorm.general.domain.sys.Role
 import neo.script.gorm.general.domain.sys.User
-import neo.script.gorm.general.domain.sys.UserRole
-import neo.script.util.EncoderUtil
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

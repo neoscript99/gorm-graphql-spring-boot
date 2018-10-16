@@ -9,20 +9,14 @@ import java.time.LocalDateTime
 
 @Entity
 @TupleConstructor
-@ToString(includePackage = false, includes = 'user,lastUpdated')
+@ToString(includePackage = false, includes = 'expireTime,lastUpdated')
 @EqualsAndHashCode(includes = 'id')
 class Token {
 
     String id
     LocalDateTime expireTime
-    User user
     Boolean destroyed = false
 
     Date dateCreated
     Date lastUpdated
-
-    static mapping = {
-        id generator: 'uuid2'
-        user fetch: 'join', lazy: false
-    }
 }

@@ -1,87 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ReportModule xmlns="ns.flex.report.*" xmlns:mx="http://www.adobe.com/2006/mxml" name="Param"
-			  xmlns:controls="ns.flex.controls.*" destination="flexParamService">
-	<mx:Script>
+              xmlns:controls="ns.flex.controls.*" destination="flexParamService">
+    <mx:Script>
 		<![CDATA[
-			import mx.rpc.events.ResultEvent;
-			import ns.flex.util.ArrayCollectionPlus;
-			import ns.flex.util.ConstraintCommon;
-			import ns.flex.util.DateUtil;
-			import ns.flex.util.DictManager;
-			import ns.flex.util.MessageUtil;
-			import ns.flex.util.RemoteUtil;
+        import mx.rpc.events.ResultEvent;
 
-			[Inspectable(category="General")]
+        import ns.flex.util.DictManager;
+        import ns.flex.util.MessageUtil;
 
-			override protected function cc(e:Event):void
-			{
-				_dgp.addOrder('lastUpdated', 'desc');
-				super.cc(e);
-				reportService.getOperation('saveValue').addEventListener(ResultEvent.RESULT,
-					refresh);
-			}
+        [Inspectable(category="General")]
 
-			override protected function get domain():String
-			{
-				return null;
-			}
+        override protected function cc(e:Event):void {
+            _dgp.addOrder('lastUpdated', 'desc');
+            super.cc(e);
+            reportService.getOperation('saveValue').addEventListener(ResultEvent.RESULT,
+                    refresh);
+        }
 
-			override protected function get queryParam():Object
-			{
-				var param:Object={}
-				if (typeSelect.selectedItem.code)
-					param.type={eq: [['code', typeSelect.selectedItem.code]]};
-				return param;
-			}
+        override protected function get domain():String {
+            return null;
+        }
 
-			private function save():void
-			{
-				if (valueInput.validated)
-					reportService.saveValue(_dgp.selectedItem.id, valueInput.text)
-				else
-					MessageUtil.showMessage('您输入的参数不符合规则，请检查')
-			}
-		]]>
+        override protected function get queryParam():Object {
+            var param:Object = {}
+            if (typeSelect.selectedItem.code)
+                param.type = {eq: [['code', typeSelect.selectedItem.code]]};
+            return param;
+        }
+
+        private function save():void {
+            if (valueInput.validated)
+                reportService.saveValue(_dgp.selectedItem.id, valueInput.text)
+            else
+                MessageUtil.showMessage('您输入的参数不符合规则，请检查')
+        }
+        ]]>
 	</mx:Script>
-	<mx:ApplicationControlBar>
-		<controls:ComboBoxPlus id="typeSelect" labelField="name" change="query()"
-							   dataProvider="{DictManager.getListWithAll('getParamTypeList','name')}"/>
-	</mx:ApplicationControlBar>
-	<mx:HBox width="100%" height="100%">
-		<mx:VBox width="60%" height="100%">
-			<controls:DataGridPlus id="_dgp"
-								   dataProvider="{reportService.list.lastResult}"
-								   width="100%" height="100%">
-				<controls:columns>
-					<controls:DataGridColumnPlus dataField="code" headerText="参数代码"/>
-					<controls:DataGridColumnPlus dataField="name" headerText="参数名称"/>
-					<controls:DataGridColumnPlus dataField="type.name" headerText="参数类型"/>
-					<controls:DataGridColumnPlus dataField="value" headerText="参数值"/>
-					<controls:DataGridColumnPlus dataField="lastUser.name"
-												 headerText="修改人" width="80"/>
-					<controls:DataGridColumnPlus dataField="lastUpdated" headerText="修改时间"
-												 asTime="true" width="120"/>
-				</controls:columns>
-			</controls:DataGridPlus>
-			<controls:Paging id="_paging" countMethod="{reportService.count}"
-							 changePage="queryPage(event.first)"/>
-		</mx:VBox>
-		<mx:Form borderStyle="solid" visible="{_dgp.selectedItem}">
-			<mx:FormItem label="参数名：">
-				<controls:TextInputPlus text="{_dgp.selectedItem.name}" editable="false"/>
-			</mx:FormItem>
-			<mx:FormItem label="参数规则：">
-				<controls:TextInputPlus text="{_dgp.selectedItem.validDescribe}"
-										editable="false"/>
-			</mx:FormItem>
-			<mx:FormItem label="参数值：">
-				<controls:TextInputPlus id="valueInput" text="{_dgp.selectedItem.value}"
-										enter="save()"
-										constraints="{{noSpace: true, required: true, expression: _dgp.selectedItem.validExp}}"/>
-			</mx:FormItem>
-			<mx:FormItem>
-				<mx:Button label="保存" click="save()"/>
-			</mx:FormItem>
-		</mx:Form>
-	</mx:HBox>
+    <mx:ApplicationControlBar>
+        <controls:ComboBoxPlus id="typeSelect" labelField="name" change="query()"
+                               dataProvider="{DictManager.getListWithAll('getParamTypeList','name')}"/>
+    </mx:ApplicationControlBar>
+    <mx:HBox width="100%" height="100%">
+        <mx:VBox width="60%" height="100%">
+            <controls:DataGridPlus id="_dgp"
+                                   dataProvider="{reportService.list.lastResult}"
+                                   width="100%" height="100%">
+                <controls:columns>
+                    <controls:DataGridColumnPlus dataField="code" headerText="参数代码"/>
+                    <controls:DataGridColumnPlus dataField="name" headerText="参数名称"/>
+                    <controls:DataGridColumnPlus dataField="type.name" headerText="参数类型"/>
+                    <controls:DataGridColumnPlus dataField="value" headerText="参数值"/>
+                    <controls:DataGridColumnPlus dataField="lastUser.name"
+                                                 headerText="修改人" width="80"/>
+                    <controls:DataGridColumnPlus dataField="lastUpdated" headerText="修改时间"
+                                                 asTime="true" width="120"/>
+                </controls:columns>
+            </controls:DataGridPlus>
+            <controls:Paging id="_paging" countMethod="{reportService.count}"
+                             changePage="queryPage(event.first)"/>
+        </mx:VBox>
+        <mx:Form borderStyle="solid" visible="{_dgp.selectedItem}">
+            <mx:FormItem label="参数名：">
+                <controls:TextInputPlus text="{_dgp.selectedItem.name}" editable="false"/>
+            </mx:FormItem>
+            <mx:FormItem label="参数规则：">
+                <controls:TextInputPlus text="{_dgp.selectedItem.validDescribe}"
+                                        editable="false"/>
+            </mx:FormItem>
+            <mx:FormItem label="参数值：">
+                <controls:TextInputPlus id="valueInput" text="{_dgp.selectedItem.value}"
+                                        enter="save()"
+                                        constraints="{{noSpace: true, required: true,maxSize:200, expression: _dgp.selectedItem.validExp}}"/>
+            </mx:FormItem>
+            <mx:FormItem>
+                <mx:Button label="保存" click="save()"/>
+            </mx:FormItem>
+        </mx:Form>
+    </mx:HBox>
 </ReportModule>

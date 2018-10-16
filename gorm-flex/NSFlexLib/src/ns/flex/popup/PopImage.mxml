@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PopWindow xmlns="ns.flex.controls.*" xmlns:mx="http://www.adobe.com/2006/mxml" maxWidth="800" maxHeight="600"
+           resize="center()">
+    <mx:Script>
+		<![CDATA[
+        import mx.printing.FlexPrintJob;
+        import mx.printing.FlexPrintJobScaleType;
+        import mx.utils.UIDUtil;
+
+        [Bindable]
+        public var imageData:*;
+        public var imageName:String;
+
+        private function saveImage():void {
+            saveButton.enabled = false;
+            new FileReference().save(imageData,
+                    imageName ? imageName : UIDUtil.createUID() + '.png');
+            saveButton.enabled = true;
+        }
+
+        /**
+         * 自动缩放存在问题
+         */
+        private function print():void {
+            var printJob:FlexPrintJob = new FlexPrintJob();
+            printJob.printAsBitmap = true;
+            printJob.start();
+            printJob.addObject(this, FlexPrintJobScaleType.SHOW_ALL);
+            printJob.send();
+        }
+        ]]>
+	</mx:Script>
+    <mx:Image id="image" data="{imageData}"/>
+    <mx:ControlBar horizontalAlign="right">
+        <mx:Button id="saveButton" label="另存为" click="saveImage()"/>
+        <mx:Button label="打印" click="print()" visible="false"/>
+    </mx:ControlBar>
+</PopWindow>

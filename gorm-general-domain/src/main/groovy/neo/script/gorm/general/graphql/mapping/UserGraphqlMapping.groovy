@@ -48,7 +48,7 @@ class UserGraphqlMapping extends GraphQLMapping {
         Object get(DataFetchingEnvironment environment) {
             def result = userService.login(environment.getArgument('username'), environment.getArgument('password'));
             if (result.success)
-                [success: true, token: tokenService.createToken(result.user).id]
+                [success: true, token: tokenService.createToken().id]
             else
                 result
         }
