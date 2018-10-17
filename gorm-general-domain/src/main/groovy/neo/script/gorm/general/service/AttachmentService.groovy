@@ -4,6 +4,9 @@ import grails.gorm.transactions.ReadOnly
 import neo.script.gorm.general.domain.sys.AttachmentFile
 import neo.script.gorm.general.domain.sys.AttachmentInfo
 import neo.script.util.EncoderUtil
+import org.apache.commons.io.IOUtils
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver
+import org.springframework.core.io.support.ResourcePatternResolver
 import org.springframework.stereotype.Service
 
 @Service
@@ -40,9 +43,16 @@ class AttachmentService extends AbstractService<AttachmentInfo> {
     }
 
     InfoAndFile getInfoAndFile(String ownerId, String fileId) {
-        log.info "getInfoAndFile $ownerId $fileId"
+        log.info "getInfoAndFile ownerId: $ownerId fileId: $fileId"
         new InfoAndFile([info: findFirst([eq: [['ownerId', ownerId], ['fileId', fileId]]]),
                          file: generalRepository.get(AttachmentFile, fileId)])
+    }
+
+    InfoAndFile getInfoAndFile(String infoId) {
+        log.info "getInfoAndFile infoId: $infoId"
+        def info = get(infoId)
+        new InfoAndFile([info: info,
+                         file: generalRepository.get(AttachmentFile, info.fileId)])
     }
 
     void deleteInfoByOwners(List ownerList) {
@@ -73,6 +83,20 @@ class AttachmentService extends AbstractService<AttachmentInfo> {
     List queryByOwner(String ownerId) {
         log.info "queryByOwner $ownerId"
         list([eq: [['ownerId', ownerId]]]);
+    }
+
+    /**
+     * 将本地资源文件保存到数据库附件
+     * @param resPath
+     * @return
+     */
+    AttachmentInfo saveFromResource(String resPath, String ownerName = null, String ownerId = null) {
+        ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
+        def res = resourcePatternResolver.getResource(resPath);
+        //打成jar后，直接取file失败
+        //def file = resourcePatternResolver.getResource(resPath).file;
+        def data = IOUtils.toByteArray(res.getInputStream())
+        saveWithByte(res.filename, ownerId, ownerName, data);
     }
 
     static class InfoAndFile {

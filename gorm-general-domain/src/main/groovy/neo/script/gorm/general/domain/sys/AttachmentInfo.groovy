@@ -26,6 +26,7 @@ class AttachmentInfo {
     static constraints = {
         fileId maxSize: 80
         ownerId maxSize: 80, nullable: true
+        ownerName nullable: true
         name maxSize: 256
     }
     static graphql = true

@@ -32,7 +32,7 @@
 	</mx:Script>
     <mx:Image id="image" data="{imageData}"/>
     <mx:ControlBar horizontalAlign="right">
-        <mx:Button id="saveButton" label="另存为" click="saveImage()"/>
         <mx:Button label="打印" click="print()" visible="false"/>
+        <mx:Button id="saveButton" label="另存为" click="saveImage()"/>
     </mx:ControlBar>
 </PopWindow>
