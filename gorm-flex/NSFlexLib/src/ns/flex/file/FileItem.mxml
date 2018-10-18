@@ -75,11 +75,11 @@
 
         private function download():void {
             progressBox.show(parent);
-            _service.download(ownerId, fileId);
+            _service.download(ownerId, fileId, toString());
         }
 
         private function afterDownload(e:ResultEvent):void {
-            if (e.result.info.fileId == fileId) {
+            if (e.result.downloadId == toString()) {
                 progressBox.close();
                 IOUtil.saveFileWithAlert(e.result.file.data, e.result.info.name, Sprite(parent));
             }

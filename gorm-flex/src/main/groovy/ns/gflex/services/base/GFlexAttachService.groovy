@@ -47,9 +47,12 @@ abstract class GFlexAttachService extends GFlexLabelService {
     }
 
     /**
-     * @param fileName 文件名
-     * @param data 文件原始数据
-     * @return fileId 标志上传完毕
+     *
+     * @param fileName
+     * @param data
+     * @param ownerId
+     * @param uploadId 回传前台的标识符，多个同时进行时可以区分
+     * @return
      */
     def upload(String fileName, byte[] data, String ownerId, String uploadId) {
         def info = attachmentService.saveWithByte(fileName, ownerId, ownerName, data)
@@ -57,8 +60,16 @@ abstract class GFlexAttachService extends GFlexLabelService {
         return [info: info, uploadId: uploadId]
     }
 
-    def download(String ownerId, String fileId) {
-        return attachmentService.getInfoAndFile(ownerId, fileId)
+    /**
+     *
+     * @param ownerId
+     * @param fileId
+     * @param downloadId 回传前台的标识符，多个同时进行时可以区分
+     * @return
+     */
+    def download(String ownerId, String fileId, downloadId) {
+        def infoAndFile = attachmentService.getInfoAndFile(ownerId, fileId)
+        return [info: infoAndFile.info, file: infoAndFile.file, downloadId: downloadId]
     }
 
     def removeAttach(String ownerId, String fileId) {
