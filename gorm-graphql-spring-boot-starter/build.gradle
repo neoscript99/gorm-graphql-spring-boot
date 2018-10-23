@@ -1,7 +1,11 @@
 dependencies {
     compile project(':gorm-general-base')
     compile "org.grails:gorm-graphql:1.0.2"
-    compile 'com.graphql-java:graphiql-spring-boot-starter:3.9.2'
-    compile 'com.graphql-java:graphql-spring-boot-starter:3.9.2'
+    /**
+     * 3.10.0包含批量查询支持
+     * @see https://github.com/graphql-java-kickstart/graphql-java-servlet/pull/48
+     */
+    compile 'com.graphql-java:graphiql-spring-boot-starter:3.10.0'
+    compile 'com.graphql-java:graphql-spring-boot-starter:3.10.0'
     compile(group: 'org.grails', name: 'gorm-hibernate5-spring-boot', version: "${gormVersion}")
 }
