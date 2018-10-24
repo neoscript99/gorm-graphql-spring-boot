@@ -13,8 +13,15 @@ grails.gorm.default.mapping = {
 
     id generator: 'uuid2'
     autoTimestamp true
-    /* version用来做乐观锁，如果是并发修改控制比较松的管理系统，可以不用 */
     //cache true
+    /**
+     *  version用来做乐观锁，如果是并发修改控制比较松的管理系统，可以不用
+     *
+     *  由于设置了cascade:"none"，部份在代码中被直接关联的字典表静态对象，需设置version = false
+     *  否则会造成Hibernate错误：object references an unsaved transient instance
+     *  如：list([eq: [['status', MeetingStatus.ENROLL]]])中的MeetingStatus.ENROLL
+     *  @see neo.script.gorm.general.domain.sys.ParamType
+     */
     version true
     '*'(cascade:"none")
 }

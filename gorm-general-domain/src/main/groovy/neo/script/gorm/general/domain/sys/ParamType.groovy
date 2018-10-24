@@ -25,6 +25,7 @@ class ParamType {
 
     static mapping = {
         id name: 'code', generator: 'assigned'
+        version false
         sort 'seq'
     }
     static final initList = [SYSTEM]
