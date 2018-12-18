@@ -36,11 +36,12 @@ class GormGraphqlSpringBootAutoConfiguration {
         def schema = new Schema(datastore.mappingContext);
         schema.dataFetcherManager = dataFetcherManager;
         schema.dataBinderManager = new DefaultGraphQLDataBinderManager(new GormGraphQLDataBinder());
+        //必须在schema.initialize()之前
+        schema.dateFormatLenient = true
+        schema.dateFormats = ["yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"]
         schema.initialize()
         //listArguments只需criteria，这个需在initialize之后设置
         schema.listArguments = ['criteria': String]
-        schema.dateFormatLenient = true
-        schema.dateFormats = ["yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"]
         schema.generate()
     }
 }
