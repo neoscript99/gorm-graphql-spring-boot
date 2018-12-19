@@ -13,6 +13,7 @@ grails.gorm.default.mapping = {
 
     id generator: 'uuid2'
     autoTimestamp true
+    tablePerHierarchy false
     //cache true
     /**
      *  version用来做乐观锁，如果是并发修改控制比较松的管理系统，可以不用
