@@ -24,6 +24,8 @@ grails.gorm.default.mapping = {
      *  @see neo.script.gorm.general.domain.sys.ParamType
      */
     version true
+    fetch 'join'
+    lazy false
     '*'(cascade:"none")
 }
 

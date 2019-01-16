@@ -12,6 +12,10 @@ import neo.script.util.EncoderUtil
 @ToString(includePackage = false, includes = 'name,dept')
 @EqualsAndHashCode(includes = 'account')
 @InitializeDomian(depends = [Department])
+/**
+ * 管理后台的系统用户信息
+ * sys包下都是管理后台相关domain
+ */
 class User {
     static final String DEFAULT_PASSWORD = EncoderUtil.sha256('anonymous');
     static final User ADMIN = (new User(account: 'admin', name: '系统管理员', dept: Department.HEAD_OFFICE,

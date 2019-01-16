@@ -42,7 +42,7 @@ subprojects {
         apply plugin: 'com.jfrog.bintray'
 
         task sourceJar(type: Jar) {
-            from(sourceSets.test.allSource)
+            from(sourceSets.main.allSource, sourceSets.test.allSource)
         }
 
         publishing {
