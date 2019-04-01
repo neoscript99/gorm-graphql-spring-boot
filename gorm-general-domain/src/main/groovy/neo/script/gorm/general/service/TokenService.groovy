@@ -9,11 +9,22 @@ import java.time.LocalDateTime
 
 @Service
 class TokenService extends AbstractService<Token> {
+
     @Value('${token.expire.minutes}')
     Integer expireMinutes
+    @Value('${token.expire.maxRefreshTimes}')
+    Integer maxRefreshTimes
 
-    Token createToken() {
-        saveEntity(resetExpireTime(new Token()))
+    Token createToken(String user, String role) {
+        return createToken(UUID.randomUUID().toString(), user, role)
+    }
+
+    Token createToken(String id, String user, String role) {
+        return saveEntity(resetExpireTime(new Token([
+                id             : id,
+                maxRefreshTimes: maxRefreshTimes ?: 10,
+                user           : user,
+                role           : role])))
     }
 
     Map destoryToken(String id) {
@@ -45,17 +56,19 @@ class TokenService extends AbstractService<Token> {
 
     private Token resetExpireTime(Token token) {
         def now = LocalDateTime.now()
+        if (token.refreshTimes < token.maxRefreshTimes)
         //一定间隔后再刷新token，避免HibernateOptimisticLockingFailureException
-        if (!token.expireTime || Duration.between(now, token.expireTime).toMinutes() < expireMinutes * 4 / 5) {
-            token.expireTime = now.plusMinutes(expireMinutes)
-            /**
-             * 如果是类内部赋值expireTime
-             * 不会触发org.grails.datastore.mapping.dirty.checking.DirtyCheckable.markDirty
-             * markDirty后事务提交时才会自动保存
-             * 这里没有问题，原先在Token内部调用时有问题
-             */
-            token.markDirty()
-        }
+            if (!token.expireTime || Duration.between(now, token.expireTime).toMinutes() < expireMinutes * 2 / 4) {
+                token.expireTime = now.plusMinutes(expireMinutes)
+                token.refreshTimes++
+                /**
+                 * 如果是类内部赋值expireTime
+                 * 不会触发org.grails.datastore.mapping.dirty.checking.DirtyCheckable.markDirty
+                 * markDirty后事务提交时才会自动保存
+                 * 这里没有问题，原先在Token内部调用时有问题
+                 */
+                token.markDirty()
+            }
         return token
     }
 }

@@ -1,4 +1,5 @@
 token.expire.minutes: 10
+token.expire.maxRefreshTimes: 100
 graphiql.enabled: true
 
 server.port: 8080
