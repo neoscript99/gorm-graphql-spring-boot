@@ -1,0 +1,23 @@
+@import '~antd/dist/antd.css';
+
+
+.logo {
+    height: 32px;
+    width: 132px;
+    background: rgba(255,255,255,.7);
+    margin: 16px;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    padding-bottom: 10px;
+}
+
+.flex-row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
