@@ -4,7 +4,7 @@ class InitService {
 
   init (): void {
     console.log('InitService')
-    stores.menuStore.listAll({})
+    stores.menuStore.listAll({ order: ['seq'] })
   }
 }
 

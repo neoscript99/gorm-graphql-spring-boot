@@ -1,69 +1,73 @@
 package neo.script.gorm.general.service
 
-import groovy.xml.MarkupBuilder
 import neo.script.gorm.general.domain.sys.Menu
+import neo.script.gorm.general.domain.sys.Role
 import neo.script.gorm.general.domain.sys.RoleMenu
 import neo.script.gorm.general.domain.sys.User
 import neo.script.gorm.general.domain.sys.UserRole
 import org.springframework.stereotype.Service
 
 @Service
-/**
- *
- */
-class MenuService extends AbstractService<Menu>{
+class MenuService extends AbstractService<Menu> {
 
-	/**
-	 * @return menu xml
-	 */
-	String getUserTree(){
-		Set dispalyMenus=new HashSet()
-		UserRole.findAllByUser(User.findByAccount(sessionAccount)).each{ userRole ->
-			RoleMenu.findAllByRole(userRole.role).each { roleMenu->
-				dispalyMenus+=getGenealogy(roleMenu.menu)
-			}
-		}
-		return generateXML(dispalyMenus)
-	}
+    /**
+     * 获取用户对用角色所具有的所有菜单，并分目录和排序
+     * @return menu xml
+     */
+    Collection<MenuNode> getUserTree(User user) {
+        return generateTree(UserRole.findAllByUser(user)*.role)
+    }
 
-	String getRoleTree(def roleId){
-		Set dispalyMenus=new HashSet()
-		list([role:[idEq:[roleId]]],RoleMenu).each {roleMenu->
-			dispalyMenus+=getGenealogy(roleMenu.menu)
-		}
-		return generateXML(dispalyMenus)
-	}
+    Collection<MenuNode> getRoleTree(Role role) {
+        return generateTree(getMenuByRoles([role]))
+    }
 
-	String getFullTree(){
-		Set dispalyMenus=new HashSet(list())
-		return generateXML(dispalyMenus)
-	}
+    Collection<MenuNode> getFullTree() {
+        return generateTree(list())
+    }
 
-	protected String generateXML(Set dispalyMenus){
-		StringWriter writer = new StringWriter()
-		MarkupBuilder builder = new MarkupBuilder(writer)
-		builder.root {
-			dispalyMenus.findAll{!it.parentId}.sort().each {
-				generateTree(it,dispalyMenus,builder)
-			}
-		}
-		String xmlStr = writer.toString()
-		log.debug xmlStr
-		return xmlStr
-	}
+    protected Collection<Menu> getMenuByRoles(List<Role> roleList) {
+        def roleMenus = new HashSet<Menu>()
+        roleList.each { role ->
+            roleMenus += RoleMenu.findAllByRole(role)*.menu
+        }
+        return roleMenus
+    }
 
-	private List getGenealogy(Menu m){
-		List list = [m]
-		while(m.parentId)
-			list<<(m=Menu.get(m.parentId))
-		return list
-	}
+    protected Collection<MenuNode> generateTree(Collection<Menu> menuList) {
+        def displayMenus = new HashSet<Menu>()
+        menuList.each {
+            displayMenus += getGenealogy(it)
+        }
+        def nodeList = new LinkedList<MenuNode>()
+        displayMenus.findAll { !it.parentId }.sort().each {
+            nodeList.add(new MenuNode(it, generateSubTree(it, displayMenus)))
+        }
+        return nodeList
+    }
 
-	private generateTree(Menu menu,Set dispalyMenus,MarkupBuilder builder){
-		builder.node(id:menu.id,label:menu.label,app:menu.app,isBranch:!menu.app){
-			dispalyMenus.findAll { it.parentId==menu.id }.sort().each{
-				generateTree(it,dispalyMenus,builder)
-			}
-		}
-	}
+    private List getGenealogy(Menu m) {
+        List list = [m]
+        while (m.parentId)
+            list << (m = Menu.get(m.parentId))
+        return list
+    }
+
+    private Collection<MenuNode> generateSubTree(Menu parent, Collection<Menu> displayMenus) {
+        def subList = new LinkedList<MenuNode>()
+        displayMenus.findAll { it.parentId == parent.id }.sort().each {
+            subList.add(new MenuNode(it, generateSubTree(it, displayMenus)))
+        }
+        return subList
+    }
+}
+
+
+class MenuNode {
+    MenuNode(Menu m, Collection<Menu> sub) {
+        this.menu = m
+        this.subMenus = sub
+    }
+    Menu menu
+    Collection<Menu> subMenus
 }
