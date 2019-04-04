@@ -14,7 +14,7 @@ class UserService extends AbstractService<User> {
 
     @Transactional(readOnly = true)
     Map login(String account, String password) {
-        def user = findFirst([eq: [['account', account]]])
+        def user = findByAccount(account)
         String msg;
         if (user) {
             if (!user.enabled)
@@ -29,5 +29,9 @@ class UserService extends AbstractService<User> {
             [success: false, error: msg]
         } else
             [success: true, user: user]
+    }
+
+    User findByAccount(String account) {
+        findFirst([eq: [['account', account]]])
     }
 }

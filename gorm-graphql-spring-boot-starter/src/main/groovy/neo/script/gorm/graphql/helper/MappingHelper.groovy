@@ -2,6 +2,7 @@ package neo.script.gorm.graphql.helper
 
 import neo.script.gorm.graphql.entity.GraphQLDataFetcherFlag
 import neo.script.gorm.graphql.entity.GraphQLMappingFlag
+import neo.script.gorm.graphql.schema.GraphQLTypeRegister
 import org.grails.datastore.mapping.model.PersistentEntity
 import org.grails.gorm.graphql.GraphQLEntityHelper
 import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
@@ -9,6 +10,7 @@ import org.grails.gorm.graphql.fetcher.BindingGormDataFetcher
 import org.grails.gorm.graphql.fetcher.DeletingGormDataFetcher
 import org.grails.gorm.graphql.fetcher.ReadingGormDataFetcher
 import org.grails.gorm.graphql.fetcher.manager.GraphQLDataFetcherManager
+import org.grails.gorm.graphql.types.GraphQLTypeManager
 import org.grails.orm.hibernate.HibernateDatastore
 import org.springframework.context.ApplicationContext
 
@@ -51,5 +53,11 @@ class MappingHelper {
                 dataFetcherManager.registerDeletingDataFetcher(flag.entityClass(), bean);
 
         };
+    }
+
+    static void typePreprocess(ApplicationContext applicationContext, GraphQLTypeManager typeManager) {
+        applicationContext.getBeansOfType(GraphQLTypeRegister).each { name, bean ->
+            bean.doRegister(typeManager);
+        }
     }
 }

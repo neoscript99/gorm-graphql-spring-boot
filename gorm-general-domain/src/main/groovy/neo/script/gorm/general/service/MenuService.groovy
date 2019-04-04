@@ -14,15 +14,15 @@ class MenuService extends AbstractService<Menu> {
      * 获取用户对用角色所具有的所有菜单，并分目录和排序
      * @return menu xml
      */
-    Collection<MenuNode> getUserTree(User user) {
-        return generateTree(UserRole.findAllByUser(user)*.role)
+    MenuNode getUserTree(User user) {
+        return generateTree(getMenuByRoles(UserRole.findAllByUser(user)*.role))
     }
 
-    Collection<MenuNode> getRoleTree(Role role) {
+    MenuNode getRoleTree(Role role) {
         return generateTree(getMenuByRoles([role]))
     }
 
-    Collection<MenuNode> getFullTree() {
+    MenuNode getFullTree() {
         return generateTree(list())
     }
 
@@ -34,22 +34,20 @@ class MenuService extends AbstractService<Menu> {
         return roleMenus
     }
 
-    protected Collection<MenuNode> generateTree(Collection<Menu> menuList) {
+    protected MenuNode generateTree(Collection<Menu> menuList) {
         def displayMenus = new HashSet<Menu>()
         menuList.each {
             displayMenus += getGenealogy(it)
         }
-        def nodeList = new LinkedList<MenuNode>()
-        displayMenus.findAll { !it.parentId }.sort().each {
-            nodeList.add(new MenuNode(it, generateSubTree(it, displayMenus)))
-        }
-        return nodeList
+        //root节点为单一的，无parent的节点
+        def root = displayMenus.find { !it.parentId }
+        return new MenuNode(root, generateSubTree(root, displayMenus))
     }
 
     private List getGenealogy(Menu m) {
         List list = [m]
         while (m.parentId)
-            list << (m = Menu.get(m.parentId))
+            list << (m = get(m.parentId))
         return list
     }
 
@@ -70,4 +68,9 @@ class MenuNode {
     }
     Menu menu
     Collection<Menu> subMenus
+
+    @Override
+    public String toString() {
+        return """\n$menu - [$subMenus]""";
+    }
 }

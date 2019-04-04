@@ -42,6 +42,8 @@ class GormGraphqlSpringBootAutoConfiguration {
         schema.initialize()
         //listArguments只需criteria，这个需在initialize之后设置
         schema.listArguments = ['criteria': String]
+
+        MappingHelper.typePreprocess(applicationContext, schema.typeManager)
         schema.generate()
     }
 }
