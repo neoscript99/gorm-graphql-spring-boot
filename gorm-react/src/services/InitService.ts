@@ -1,10 +1,10 @@
-import stores from '../stores'
+import stores, { graphqlClient } from '../stores'
 
 class InitService {
 
-  init (): void {
+  init(): void {
     console.log('InitService')
-    stores.menuStore.listAll({ order: ['seq'] })
+    stores.menuStore.getMenuTree('gorm-dev-token')
   }
 }
 

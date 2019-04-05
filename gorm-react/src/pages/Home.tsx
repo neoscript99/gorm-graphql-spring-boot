@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Layout, Menu, Breadcrumb, Icon } from 'antd'
 import { observer } from 'mobx-react'
-import GraphqlStore from 'oo-graphql-mobx/lib/GraphqlStore'
+import MenuStore, { MenuNode } from '../stores/MenuStore';
 
 const {
   Header, Content, Footer, Sider
@@ -10,7 +10,7 @@ const {
 const SubMenu = Menu.SubMenu
 
 @observer
-class Home extends Component<{ menuStore: GraphqlStore }, { collapsed: boolean }> {
+class Home extends Component<{ menuStore: MenuStore }, { collapsed: boolean }> {
   state = {
     collapsed: false,
   }
@@ -20,7 +20,8 @@ class Home extends Component<{ menuStore: GraphqlStore }, { collapsed: boolean }
     this.setState({ collapsed })
   }
 
-  render () {
+  render() {
+    const { menuStore } = this.props;
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Header>
@@ -34,35 +35,16 @@ class Home extends Component<{ menuStore: GraphqlStore }, { collapsed: boolean }
             theme="light"
           >
             <Menu theme="light" defaultSelectedKeys={['1']} mode="inline">
-              <Menu.Item key="1">
-                <Icon type="pie-chart" />
-                <span>Option 1</span>
-              </Menu.Item>
-              <Menu.Item key="2">
-                <Icon type="desktop" />
-                <span>Option 2</span>
-              </Menu.Item>
-              <SubMenu
-                key="sub1"
-                title={<span><Icon type="user" /><span>User</span></span>}
-              >
-                <Menu.Item key="3">Tom</Menu.Item>
-                <Menu.Item key="4">Bill</Menu.Item>
-                <Menu.Item key="5">Alex</Menu.Item>
-              </SubMenu>
-              <SubMenu
-                key="sub2"
-                title={<span><Icon type="team" /><span>Team</span></span>}
-              >
-                <Menu.Item key="6">Team 1</Menu.Item>
-                <Menu.Item key="8">Team 2</Menu.Item>
-              </SubMenu>
-              <Menu.Item key="9">
-                <Icon type="file" />
-                <span>File</span>
-              </Menu.Item>
-              {this.props.menuStore.allList.map((item) => (
-                <Menu.Item key={item.id}><Icon type="file" /><span>{item.label}</span></Menu.Item>)
+              {menuStore.menuTree.subMenus.map((menuNode) => {
+                  return menuNode.menu.app ? (
+                      <Menu.Item key={menuNode.menu.app}><Icon type="file" /><span>{menuNode.menu.label}</span></Menu.Item>)
+                    : (<SubMenu
+                      key={menuNode.menu.id}
+                      title={<span><Icon type="folder" /><span>{menuNode.menu.label}</span></span>}>
+                      {menuNode.subMenus.map((subNode) => (<Menu.Item key={subNode.menu.app}><Icon
+                        type="file" /><span>{subNode.menu.label}</span></Menu.Item>))}
+                    </SubMenu>)
+                }
               )}
             </Menu>
           </Sider>

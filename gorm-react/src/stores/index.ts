@@ -1,5 +1,6 @@
 import { GraphqlClient, GraphqlStore } from 'oo-graphql-mobx'
 import config from '../utils/config'
+import MenuStore from './MenuStore';
 
 const defaultVariables = { token: 'gorm-dev-token' }
 
@@ -12,7 +13,7 @@ export const graphqlClient = new GraphqlClient({
 const storeParam = { graphqlClient } //, messageListeners: [messageListener] }
 
 const paramStore = new GraphqlStore({ domain: 'param', ...storeParam })
-const menuStore = new GraphqlStore({ domain: 'menu', ...storeParam })
+const menuStore = new MenuStore(graphqlClient)
 
 export default {
   paramStore,
