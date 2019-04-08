@@ -1,4 +1,4 @@
-import stores, { graphqlClient } from '../stores'
+import stores from '../stores'
 
 class InitService {
 

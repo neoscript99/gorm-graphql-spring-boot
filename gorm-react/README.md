@@ -1,5 +1,21 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## 常用脚本
+
+### `local share oo-graphql-mobx`
+
+```bash
+npm config get prefix
+j oo-graphql-mobx
+npm link
+```
+
+### `link oo-graphql-mobx`
+
+```bash
+npm link oo-graphql-mobx
+```
+
 ## Available Scripts
 
 In the project directory, you can run:
