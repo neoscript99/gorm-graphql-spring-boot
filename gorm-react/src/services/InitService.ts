@@ -1,11 +1,11 @@
-import stores from '../stores'
+import MenuService from './MenuService';
 
-class InitService {
+export default class InitService {
+  constructor(private menuService: MenuService) {
+  }
 
   init(): void {
     console.log('InitService')
-    stores.menuStore.getMenuTree('gorm-dev-token')
+    this.menuService.getMenuTree('gorm-dev-token')
   }
 }
-
-export default new InitService()

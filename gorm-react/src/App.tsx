@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import './App.css'
 import Home from './pages/Home'
 import mobxStores from './stores'
-import initService from './services/InitService'
+import { initService } from './services'
 import { Provider } from 'mobx-react'
 
 initService.init()
 
 class App extends Component {
-  render () {
+  render() {
     return (
       <Provider {...mobxStores}>
         <Home menuStore={mobxStores.menuStore} />
