@@ -1,8 +1,8 @@
-import { MobxStore } from 'oo-graphql-service'
+import { MobxDomainStore } from 'oo-graphql-service'
 import MenuStore from './MenuStore';
 
 export default {
-  paramStore: new MobxStore(),
+  paramStore: new MobxDomainStore(),
   menuStore: new MenuStore()
 }
 

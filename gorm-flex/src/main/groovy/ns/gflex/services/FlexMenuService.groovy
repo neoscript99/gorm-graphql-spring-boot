@@ -3,9 +3,9 @@ package ns.gflex.services
 import groovy.xml.MarkupBuilder
 import neo.script.gorm.general.domain.sys.Menu
 import neo.script.gorm.general.domain.sys.RoleMenu
-import neo.script.gorm.general.domain.sys.User
-import neo.script.gorm.general.domain.sys.UserRole
+import neo.script.gorm.general.service.*
 import ns.gflex.services.base.GFlexService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 
@@ -15,64 +15,51 @@ import org.springframework.stereotype.Service
  * @author wangchu
  */
 @Service
-class FlexMenuService extends GFlexService{
-	
-	/**
-	 * @return menu xml
-	 */
-	String getUserTree(){		
-		Set dispalyMenus=new HashSet()
-		UserRole.findAllByUser(User.findByAccount(sessionAccount)).each{ userRole ->
-			RoleMenu.findAllByRole(userRole.role).each { roleMenu->
-				dispalyMenus+=getGenealogy(roleMenu.menu)
-			}
-		}
-		return generateXML(dispalyMenus)
-	}
-	
-	String getRoleTree(def roleId){
-		Set dispalyMenus=new HashSet()
-		list([role:[idEq:[roleId]]],RoleMenu).each {roleMenu->
-			dispalyMenus+=getGenealogy(roleMenu.menu)
-		}
-		return generateXML(dispalyMenus)
-	}
-	
-	String getFullTree(){		
-		Set dispalyMenus=new HashSet(list())
-		return generateXML(dispalyMenus)
-	}
-	
-	protected String generateXML(Set dispalyMenus){
-		StringWriter writer = new StringWriter()
-		MarkupBuilder builder = new MarkupBuilder(writer)
-		builder.root {
-			dispalyMenus.findAll{!it.parentId}.sort().each {
-				generateTree(it,dispalyMenus,builder)
-			}
-		}
-		String xmlStr = writer.toString()
-		log.debug xmlStr
-		return xmlStr
-	}
-	
-	private List getGenealogy(Menu m){
-		List list = [m]
-		while(m.parentId)
-			list<<(m=Menu.get(m.parentId))
-		return list
-	}
-	
-	private generateTree(Menu menu,Set dispalyMenus,MarkupBuilder builder){
-		builder.node(id:menu.id,label:menu.label,app:menu.app,isBranch:!menu.app){
-			dispalyMenus.findAll { it.parentId==menu.id }.sort().each{ 
-				generateTree(it,dispalyMenus,builder)
-			}
-		}
-	}
-	
-	@Override
-	public Class getDomainClass() {
-		return Menu.class;
-	}
+class FlexMenuService extends GFlexService {
+    @Autowired
+    MenuService menuService
+    @Autowired
+    UserService userService
+
+    /**
+     * @return menu xml
+     */
+    String getUserTree() {
+        return generateXML(menuService.getUserTree(userService.findByAccount(sessionAccount)))
+    }
+
+    String getRoleTree(def roleId) {
+        return generateXML(menuService.getRoleTree(list([role: [idEq: [roleId]]], RoleMenu)))
+    }
+
+    String getFullTree() {
+        return generateXML(menuService.getFullTree())
+    }
+
+    protected String generateXML(MenuNode rootNode) {
+        StringWriter writer = new StringWriter()
+        MarkupBuilder builder = new MarkupBuilder(writer)
+        builder.root {
+            rootNode.subMenus.each {
+                generateTree(it, builder)
+            }
+        }
+        String xmlStr = writer.toString()
+        log.debug xmlStr
+        return xmlStr
+    }
+
+    private generateTree(MenuNode menuNode, MarkupBuilder builder) {
+        Menu menu = menuNode.menu
+        builder.node(id: menu.id, label: menu.label, app: menu.app, isBranch: !menu.app) {
+            menuNode.subMenus.each {
+                generateTree(it, builder)
+            }
+        }
+    }
+
+    @Override
+    public Class getDomainClass() {
+        return Menu.class;
+    }
 }

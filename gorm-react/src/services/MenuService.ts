@@ -4,13 +4,15 @@ import gql from 'graphql-tag';
 import MenuStore, { MenuNode } from '../stores/MenuStore';
 
 export default class MenuService {
+  menuDodeFields: Promise<string>;
 
   constructor(public store: MenuStore, private domainGraphql: DomainGraphql, private defaultVariables: any) {
+    this.menuDodeFields = domainGraphql.getFields('MenuNode')
   }
 
   getMenuTree(token: String) {
-    this.domainGraphql.getFields('MenuNode')
-      .then(fields => this.domainGraphql.apolloClient.query<{ [key: string]: MenuNode }>({
+    this.menuDodeFields.then(fields =>
+      this.domainGraphql.apolloClient.query<{ [key: string]: MenuNode }>({
         query: gql`query menuTree {
                       menuTree(token: "${token}") {
                       ${fields}
