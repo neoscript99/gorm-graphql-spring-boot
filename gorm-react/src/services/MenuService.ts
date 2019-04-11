@@ -1,17 +1,19 @@
-import { DomainGraphql } from 'oo-graphql-service'
+import { DomainGraphql, Entity } from 'oo-graphql-service'
 
 import gql from 'graphql-tag';
 import MenuStore, { MenuNode } from '../stores/MenuStore';
+import DomainService from 'oo-graphql-service/lib/DomainService';
 
-export default class MenuService {
-  menuDodeFields: Promise<string>;
+export default class MenuService extends DomainService<MenuStore> {
+  menuNodeFields: Promise<string>;
 
-  constructor(public store: MenuStore, private domainGraphql: DomainGraphql, private defaultVariables: any) {
-    this.menuDodeFields = domainGraphql.getFields('MenuNode')
+  constructor(domainGraphql: DomainGraphql) {
+    super('menu', MenuStore, domainGraphql);
+    this.menuNodeFields = domainGraphql.getFields('MenuNode')
   }
 
-  getMenuTree(token: String) {
-    this.menuDodeFields.then(fields =>
+  getMenuTree(token: String): void {
+    this.menuNodeFields.then(fields =>
       this.domainGraphql.apolloClient.query<{ [key: string]: MenuNode }>({
         query: gql`query menuTree {
                       menuTree(token: "${token}") {
@@ -19,7 +21,7 @@ export default class MenuService {
                     }}`,
         fetchPolicy: 'no-cache',
         variables: {
-          ...this.defaultVariables
+          ...this.domainGraphql.defaultVariables
         }
       }))
       .then(result => this.store.menuTree = result.data.menuTree)

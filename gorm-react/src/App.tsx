@@ -1,18 +1,21 @@
 import React, { Component } from 'react'
 import './App.css'
 import Home from './pages/Home'
-import mobxStores from './stores'
 import { initService } from './services'
-import { Provider } from 'mobx-react'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Login from './pages/Login';
 
 initService.init()
 
 class App extends Component {
   render() {
     return (
-      <Provider {...mobxStores}>
-        <Home menuStore={mobxStores.menuStore} />
-      </Provider>
+      <Router>
+        <Switch>
+          <Route path="/" component={Home} />
+          <Route path="/login/" component={Login} />
+        </Switch>
+      </Router>
     )
   }
 }
