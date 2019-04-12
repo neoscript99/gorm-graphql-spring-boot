@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { Table } from 'antd';
 import { paramService } from '../services'
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import { timeFormater } from '../utils/dateUtils';
+import { timeFormater, toPageInfo } from '../utils/myutils';
 import { ListResult } from 'oo-graphql-service/lib/DomainGraphql';
 
 const { store: paramStore } = paramService
@@ -26,25 +26,31 @@ export default class Param extends Component<any, S> {
     pagination: {
       pageSize: 2,
       onChange: (page: number, pageSize?: number) => {
-        if (pageSize)
-          paramStore.pageInfo.pageSize = pageSize
-        this.query(page)
-      }
+        this.state.pagination.current = page;
+        this.query()
+      },
+      onShowSizeChange: (current, size) => {
+        this.state.pagination.pageSize = size
+        this.state.pagination.current = 1;
+        this.query()
+      },
+      showSizeChanger: true,
+      showQuickJumper: true,
+      showTotal: (total) => `共 ${total} 记录  `
     }, loading: false
   }
 
-  query(page: number = 1) {
+  query() {
+    this.setState({ loading: true })
     let { pagination } = this.state;
-    paramStore.pageInfo.currentPage = page
-    paramService.listPage({ criteria: {}, orders: ['lastUpdated'] })
+    paramService.listPage({ criteria: {}, pageInfo: toPageInfo(pagination), orders: [['lastUpdated', 'desc',]] })
       .then((data: ListResult) => {
         pagination.total = data.totalCount
-        this.setState({ ...this.state, pagination })
+        this.setState({ pagination, loading: false })
       })
   }
 
   componentDidMount(): void {
-    paramStore.pageInfo.pageSize = this.state.pagination.pageSize
     this.query()
   }
 
