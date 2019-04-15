@@ -19,16 +19,14 @@ const columns: Array<ColumnProps<Entity>> = [
 
 @observer
 class Role extends EntityList {
-  state = EntityList.InitState
 
   render(): ReactNode {
     return (
       <Table dataSource={roleService.store.allList}
              columns={columns}
-             pagination={false}
              bordered
              rowKey='id'
-             {...this.state.tableProps}>
+             {...this.tableProps}>
       </Table>)
   }
 

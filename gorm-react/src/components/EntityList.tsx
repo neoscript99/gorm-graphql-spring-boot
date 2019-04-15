@@ -1,39 +1,40 @@
-import React, { Component, ReactNode } from 'react'
+import React, { Component } from 'react'
 import DomainService, { ListOptions } from 'oo-graphql-service/lib/DomainService';
 import MobxDomainStore from 'oo-graphql-service/lib/mobx/MobxDomainStore';
 import { ListResult } from 'oo-graphql-service/lib/DomainGraphql';
 import { TableProps } from 'antd/lib/table';
 import { Entity } from 'oo-graphql-service';
-import { PaginationConfig } from 'antd/lib/pagination';
 
 export interface EntityListState {
-  tableProps: {
-    loading: boolean
-    pagination: PaginationConfig | false;
-  }
+  tableProps?: TableProps<Entity>
 }
 
 
 abstract class EntityList<P =any, S extends EntityListState= EntityListState>
   extends Component<P, S> {
-  constructor(props: P, initState: S) {
-    super(props)
-    initState.tableProps = { loading: false, pagination: false }
-    this.state = initState
-  }
+  tableProps: TableProps<Entity> = { loading: false, pagination: false }
 
   abstract get domainService(): DomainService<MobxDomainStore>;
 
   query(): Promise<ListResult> {
-    this.setState({ tableProps: { ...this.state.tableProps, loading: true } })
-    return this.domainService.listAll(this.queryParam)
-      .finally(() =>
-        this.setState({ tableProps: { ...this.state.tableProps, loading: false } })
-      )
+    return this.showLoading<ListResult>(this.domainService.listAll(this.queryParam))
+  }
+
+  showLoading<T>(promise: Promise<T>): Promise<T> {
+    this.tableProps.loading = true
+    this.updateState()
+    return promise.finally(() => {
+      this.tableProps.loading = false
+      this.updateState()
+    })
   }
 
   componentDidMount(): void {
     this.query()
+  }
+
+  protected updateState(): void {
+    this.setState({ tableProps: this.tableProps })
   }
 
   protected get queryParam(): ListOptions {
