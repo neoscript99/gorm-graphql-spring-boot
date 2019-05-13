@@ -1,0 +1,10 @@
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+    compile project(':gorm-flex')
+    compile 'net.unicon.cas:cas-client-autoconfig-support:2.2.0-GA'
+}
+
+springBoot {
+    mainClass = 'neo.script.gorm.portal.GormPortalApp'
+}

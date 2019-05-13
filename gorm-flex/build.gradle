@@ -11,6 +11,13 @@ dependencies {
     testCompile group: 'commons-cli', name: 'commons-cli', version: '1.4'
 }
 
+task swfCopy(type: Copy) {
+    from('build/resources/main/static/dev') {
+        include '**/*.*'
+    }
+    into 'src/main/resources/static/swf'
+}
+
 sourceJar{
     from(sourceSets.main.allSource, sourceSets.test.allSource)
 }

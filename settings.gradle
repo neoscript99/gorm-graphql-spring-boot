@@ -21,4 +21,5 @@ include 'gorm-general-base',
         'gorm-graphql-spring-boot-starter',
         'gorm-flex',
         'gorm-graphql-spring-boot-demo',
-        'gorm-react'
+        'gorm-react',
+        'gorm-portal'
