@@ -5,6 +5,9 @@ import neo.script.gorm.general.initializer.InitializeDomian
 
 @Entity
 @InitializeDomian
+/**
+ * 权限控制表
+ */
 class Authorization {
     String id
     //include exclude
@@ -13,13 +16,13 @@ class Authorization {
      * @see Token#userType
      */
     String userType
-    String role
+    String roleName
     //domain name | other
-    String resource
+    String resourceName
     //self | org | all
-    String region
-    Boolean query
-    Boolean mutation
+    String regionName
+    Boolean queryAllow
+    Boolean mutationAllow
     Date lastUpdated
 
     static initList = []

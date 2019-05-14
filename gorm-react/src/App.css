@@ -1,11 +1,20 @@
 @import '~antd/dist/antd.css';
 
-
 .logo {
-    height: 32px;
-    width: 132px;
-    background: rgba(255,255,255,.7);
-    margin: 16px;
+    height: 49px;
+    width: 220px;
+    background-image: url('asset/logo.png');
+    margin: 8px;
+}
+
+.portal_layout {
+    background: #fff;
+    box-shadow: 0 2px 8px #f0f1f2
+}
+
+.portal_body {
+    background: #f3f3f3;
+    box-shadow: 0 2px 8px #f0f1f2
 }
 
 .flex-col {

@@ -20,7 +20,7 @@ class Token {
     //到期之前如有访问，可刷新次数
     Integer maxRefreshTimes
     Integer refreshTimes = 0
-    String user
+    String username
     //用户类型，sys - 后台管理用户，pub - 公网用户
     String userType = 'sys'
     String role
@@ -32,7 +32,7 @@ class Token {
         id generator: 'assigned'
     }
     static constraints = {
-        user nullable: true
+        username nullable: true
         role nullable: true
     }
 
@@ -40,5 +40,5 @@ class Token {
             id             : 'gorm-dev-token',
             expireTime     : LocalDateTime.of(2021, 1, 1, 1, 1),
             maxRefreshTimes: 10,
-            user           : 'admin'])]
+            username           : 'admin'])]
 }

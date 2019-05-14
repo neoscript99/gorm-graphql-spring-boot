@@ -3,7 +3,6 @@ package neo.script.gorm.general.graphql.mapping
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import neo.script.gorm.general.domain.sys.Menu
-import neo.script.gorm.general.domain.sys.User
 import neo.script.gorm.general.service.MenuNode
 import neo.script.gorm.general.service.MenuService
 import neo.script.gorm.general.service.TokenService
@@ -36,7 +35,7 @@ class MenuGraphqlMapping extends GraphQLMapping {
         Object get(DataFetchingEnvironment environment) {
             def token = tokenService.get(environment.getArgument('token'));
 
-            return menuService.getUserTree(userService.findByAccount(token.user))
+            return menuService.getUserTree(userService.findByAccount(token.username))
         }
     }
 }
