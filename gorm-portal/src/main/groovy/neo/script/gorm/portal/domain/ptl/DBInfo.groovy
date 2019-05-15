@@ -9,7 +9,7 @@ import neo.script.gorm.general.initializer.InitializeDomian
 @ToString(includePackage = false, includes = 'dbName')
 @EqualsAndHashCode(includes = 'id')
 @InitializeDomian(profiles = 'dev')
-class PortalDb {
+class DBInfo {
     String id
     String dbName
     String driverClassName
@@ -25,7 +25,7 @@ class PortalDb {
         url maxSize: 128
     }
 
-    static PortalDb SCOTT = new PortalDb([
+    static DBInfo SCOTT = new DBInfo([
             dbName         : 'OA数据库',
             driverClassName: 'oracle.jdbc.OracleDriver',
             url            : 'jdbc:oracle:thin:@114.115.153.164:1521:orcl',

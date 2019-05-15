@@ -3,16 +3,23 @@
 .logo {
     height: 49px;
     width: 220px;
-    background-image: url('asset/logo.png');
+    background: url('asset/logo.png'), no-repeat;
     margin: 8px;
 }
 
 .portal_layout {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
     background: #fff;
-    box-shadow: 0 2px 8px #f0f1f2
+    box-shadow: 0 2px 8px #f0f1f2;
+    font-weight: bolder;
 }
 
 .portal_body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
     background: #f3f3f3;
     box-shadow: 0 2px 8px #f0f1f2
 }

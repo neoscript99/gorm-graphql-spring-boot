@@ -16,6 +16,10 @@ const domainGraphql: DomainGraphql = new DomainGraphql(apolloClient, defaultVari
 
 export const paramService = new DomainService('param', MobxDomainStore, domainGraphql);
 export const roleService = new DomainService('role', MobxDomainStore, domainGraphql);
+export const portalService = new DomainService('portal', MobxDomainStore, domainGraphql);
+export const portletService = new DomainService('portlet', MobxDomainStore, domainGraphql);
+export const portletLinkService = new DomainService('portletLink', MobxDomainStore, domainGraphql);
+export const portletTableService = new DomainService('portletTable', MobxDomainStore, domainGraphql);
 export const menuService = new MenuService(domainGraphql);
 export const initService = new InitService(menuService)
 
