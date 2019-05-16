@@ -28,8 +28,8 @@ class PortalInitializer extends AbstractDataInitializer implements DataInitializ
         [
                 save(new Menu(label: '门户管理', app: 'PortalManage', seq: 10, parentId: portalFolder.id)),
                 save(new Menu(label: '控件管理', app: 'PortletManage', seq: 20, parentId: portalFolder.id)),
-                save(new Menu(label: '数据源管理', app: 'PortalDbManager', seq: 30, parentId: portalFolder.id)),
-                save(new Menu(label: '查询管理', app: 'PortalDbQueryManager', seq: 40, parentId: portalFolder.id)),
+                save(new Menu(label: '数据源管理', app: 'PortalDbManage', seq: 30, parentId: portalFolder.id)),
+                save(new Menu(label: '查询管理', app: 'PortalDbQueryManage', seq: 40, parentId: portalFolder.id)),
         ].each {
             save(new RoleMenu(role: Role.ADMINISTRATORS, menu: it))
         }

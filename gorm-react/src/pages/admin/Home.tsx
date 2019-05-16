@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Button, Divider, Icon, Layout } from 'antd'
 import { observer } from 'mobx-react'
-import { Route, Switch } from 'react-router-dom';
+import { Link, Route, Switch } from 'react-router-dom';
 import Welcome from './Welcome';
 import Role from './Role';
 import User from './User';
@@ -11,6 +11,11 @@ import Profile from './Profile';
 import MenuTree from '../../components/MenuTree';
 import { menuService } from '../../services';
 import { Location } from 'history';
+import PortalManage from './PortalManage';
+import PortalDbManage from './PortalDbManage';
+import PortalDbQueryManage from './PortalDbQueryManage';
+import PortletManage from './PortletManage'
+
 
 const {
   Header, Content, Footer, Sider
@@ -18,6 +23,7 @@ const {
 
 interface P {
   location: Location
+  history: any
 }
 
 @observer
@@ -31,21 +37,21 @@ class Home extends Component<P, { collapsed: boolean }> {
     this.setState({ collapsed })
   }
 
-  render() {
+  render () {
     const pathPrefix = '/admin/'
     const { store: menuStore } = menuService;
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Header className='flex-row'
-                style={{
-                  fontWeight: 'bolder',
-                  fontSize: '1.5rem',
-                  color: 'white',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}>
-          <div><Icon type='tool'/><Divider type="vertical" />系统设置</div>
-          <Button type='primary' shape='circle' icon='home' href='/' />
+          style={{
+            fontWeight: 'bolder',
+            fontSize: '1.5rem',
+            color: 'white',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+          <div><Icon type='tool' /><Divider type="vertical" />系统设置</div>
+          <Button type='primary' shape='circle' icon='home' onClick={() => this.props.history.push('/')} />
         </Header>
         <Layout>
           <Sider
@@ -60,10 +66,14 @@ class Home extends Component<P, { collapsed: boolean }> {
             <Content style={{ margin: '1rem', padding: 24, background: '#fff', height: '100%', minHeight: 360 }}>
               <Switch>
                 <Route path={`${pathPrefix}Role/`} component={Role} />
-                <Route path="/User/" component={User} />
-                <Route path="/Note/" component={Note} />
+                <Route path={`${pathPrefix}User/`} component={User} />
+                <Route path={`${pathPrefix}Note/`} component={Note} />
                 <Route path={`${pathPrefix}Param/`} component={Param} />
-                <Route path="/Profile/" component={Profile} />
+                <Route path={`${pathPrefix}Profile/`} component={Profile} />
+                <Route path={`${pathPrefix}PortalManage/`} component={PortalManage} />
+                <Route path={`${pathPrefix}PortletManage/`} component={PortletManage} />
+                <Route path={`${pathPrefix}PortalDbManage/`} component={PortalDbManage} />
+                <Route path={`${pathPrefix}PortalDbQueryManage/`} component={PortalDbQueryManage} />
                 <Route component={Welcome} />
               </Switch>
             </Content>

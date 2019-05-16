@@ -10,11 +10,11 @@ import neo.script.gorm.general.initializer.InitializeDomian
 @TupleConstructor(excludes = 'id, dateCreated, lastUpdated')
 @ToString(includePackage = false, includes = 'id, lastUpdated')
 @EqualsAndHashCode(includes = 'id')
-@InitializeDomian(profiles = 'dev', depends = DBInfo)
-class DBQuery {
+@InitializeDomian(profiles = 'dev', depends = PortalDb)
+class PortalDbQuery {
     String id
 
-    DBInfo db
+    PortalDb db
     String queryName
     String sql
 
@@ -27,10 +27,11 @@ class DBQuery {
     static constraints = {
         sql maxSize: 1024
     }
+    static graphql = true
 
-    static DBQuery EMP_LIST = new DBQuery(DBInfo.SCOTT, '员工列表',
+    static PortalDbQuery EMP_LIST = new PortalDbQuery(PortalDb.SCOTT, '员工列表',
             "select empno,ename,job,mgr,to_char(hiredate,'yyyy-mm-dd') hiredate,sal,comm,deptno from emp")
-    static DBQuery DEPT_LIST = new DBQuery(DBInfo.SCOTT, '部门列表',
+    static PortalDbQuery DEPT_LIST = new PortalDbQuery(PortalDb.SCOTT, '部门列表',
             'select deptno, dname, loc from dept')
     static initList = [EMP_LIST, DEPT_LIST]
 }

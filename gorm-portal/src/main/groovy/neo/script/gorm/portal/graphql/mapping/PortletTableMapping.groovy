@@ -16,7 +16,6 @@ class PortletTableMapping extends GraphQLMapping {
     PortletTableService portletTableService
 
     PortletTableMapping() {
-        exclude('dbQuery')
         query('portletTableData', [String]) {
             description 'get database query data'
             argument('portletTableId', String)

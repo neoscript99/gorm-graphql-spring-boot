@@ -1,26 +1,24 @@
 import React, { ReactNode } from 'react'
 import { observer } from 'mobx-react';
 import { Table } from 'antd';
-import { noteService } from '../../services'
+import { portalService } from '../../services'
 import { ColumnProps } from 'antd/lib/table';
-import { commonColumns } from '../../utils/myutils';
+import { booleanLabel, timeFormater } from '../../utils/myutils';
 import EntityPageList from '../../components/EntityPageList';
 import MobxDomainStore from 'oo-graphql-service/lib/mobx/MobxDomainStore';
 import DomainService from 'oo-graphql-service/lib/DomainService';
 import { Entity } from 'oo-graphql-service';
 
-const { store } = noteService
+const { store } = portalService
 const columns: Array<ColumnProps<Entity>> = [
-  { title: '标题', dataIndex: 'title' },
-  { title: '内容', dataIndex: 'content' },
-  { title: '附件数', dataIndex: 'attachNum' },
-  commonColumns.lastUser,
-  commonColumns.lastUpdated,
-];
+  { title: '门户名称', dataIndex: 'portalName' },
+  { title: '门户图标', dataIndex: 'portalIcon' },
+  { title: '是否启用', dataIndex: 'enabled', render: booleanLabel },
+  { title: '修改时间', dataIndex: 'lastUpdated', render: timeFormater }];
 
 
 @observer
-export default class Note extends EntityPageList {
+export default class PortalManage extends EntityPageList {
 
   render (): ReactNode {
     return (
@@ -33,6 +31,6 @@ export default class Note extends EntityPageList {
   }
 
   get domainService (): DomainService<MobxDomainStore> {
-    return noteService;
+    return portalService;
   }
 }

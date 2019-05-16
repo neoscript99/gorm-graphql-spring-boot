@@ -14,31 +14,36 @@ abstract class EntityList<P =any, S extends EntityListState= EntityListState>
   extends Component<P, S> {
   tableProps: TableProps<Entity> = { loading: false, pagination: false }
 
-  abstract get domainService(): DomainService<MobxDomainStore>;
+  abstract get domainService (): DomainService<MobxDomainStore>;
 
-  query(): Promise<ListResult> {
-    return this.showLoading<ListResult>(this.domainService.listAll(this.queryParam))
+  query (): Promise<ListResult> {
+    const p = this.domainService.listAll(this.queryParam)
+    this.showLoading(p)
+    return p
   }
 
-  showLoading<T>(promise: Promise<T>): Promise<T> {
+  showLoading (promise: Promise<any>): void {
     this.tableProps.loading = true
     this.updateState()
-    return promise.finally(() => {
+    promise.finally(() => {
       this.tableProps.loading = false
       this.updateState()
     })
   }
 
-  componentDidMount(): void {
+  componentDidMount (): void {
     this.query()
   }
 
-  protected updateState(): void {
+  protected updateState (): void {
     this.setState({ tableProps: this.tableProps })
   }
 
-  protected get queryParam(): ListOptions {
-    return {};
+  protected get queryParam (): ListOptions {
+    return {
+      criteria: {},
+      orders: [['lastUpdated', 'desc',]]
+    };
   }
 }
 

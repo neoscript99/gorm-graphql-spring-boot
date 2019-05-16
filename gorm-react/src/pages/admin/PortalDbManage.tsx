@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import { observer } from 'mobx-react';
 import { Table } from 'antd';
-import { noteService } from '../../services'
+import { portletDbService } from '../../services'
 import { ColumnProps } from 'antd/lib/table';
 import { commonColumns } from '../../utils/myutils';
 import EntityPageList from '../../components/EntityPageList';
@@ -9,18 +9,19 @@ import MobxDomainStore from 'oo-graphql-service/lib/mobx/MobxDomainStore';
 import DomainService from 'oo-graphql-service/lib/DomainService';
 import { Entity } from 'oo-graphql-service';
 
-const { store } = noteService
+const { store } = portletDbService
 const columns: Array<ColumnProps<Entity>> = [
-  { title: '标题', dataIndex: 'title' },
-  { title: '内容', dataIndex: 'content' },
-  { title: '附件数', dataIndex: 'attachNum' },
-  commonColumns.lastUser,
-  commonColumns.lastUpdated,
-];
+  { title: '数据库名称', dataIndex: 'dbName' },
+  { title: '驱动类', dataIndex: 'driverClassName' },
+  { title: '连接url', dataIndex: 'url' },
+  { title: '用户名', dataIndex: 'username' },
+  { title: '密码', dataIndex: 'password' },
+  { title: '测试Sql', dataIndex: 'testSql' },
+  commonColumns.lastUpdated];
 
 
 @observer
-export default class Note extends EntityPageList {
+export default class PortalDbManage extends EntityPageList {
 
   render (): ReactNode {
     return (
@@ -33,6 +34,6 @@ export default class Note extends EntityPageList {
   }
 
   get domainService (): DomainService<MobxDomainStore> {
-    return noteService;
+    return portletDbService;
   }
 }

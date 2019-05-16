@@ -10,7 +10,7 @@ abstract class EntityPageList<P =any, S extends EntityListState= EntityListState
   extends EntityList<P, S> {
 
   pagination: PaginationConfig = {
-    pageSize: 2,
+    pageSize: 5,
     onChange: this.pageChange.bind(this),
     onShowSizeChange: this.pageSizeChange.bind(this),
     showSizeChanger: true,
@@ -21,28 +21,28 @@ abstract class EntityPageList<P =any, S extends EntityListState= EntityListState
     loading: false, pagination: this.pagination
   }
 
-  pageChange(page: number, pageSize?: number): void {
+  pageChange (page: number, pageSize?: number): void {
     this.pagination.current = page;
     this.query()
   }
 
-  pageSizeChange(current: number, size: number): void {
+  pageSizeChange (current: number, size: number): void {
     this.pagination.pageSize = size
     this.pagination.current = 1;
     this.query()
   }
 
-  query(): Promise<ListResult> {
+  query (): Promise<ListResult> {
     const promise = this.domainService.listPage({
-      criteria: {},
-      pageInfo: toPageInfo(this.pagination),
-      orders: [['lastUpdated', 'desc',]]
+      ...this.queryParam,
+      pageInfo: toPageInfo(this.pagination)
     })
       .then((data: ListResult) => {
         this.pagination.total = data.totalCount
         return data
       })
-    return this.showLoading<ListResult>(promise)
+    this.showLoading(promise)
+    return promise;
   }
 }
 

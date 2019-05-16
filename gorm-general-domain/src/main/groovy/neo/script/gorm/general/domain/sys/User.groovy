@@ -21,9 +21,9 @@ class User {
     static final User ADMIN = (new User(account: 'admin', name: '系统管理员', dept: Department.HEAD_OFFICE,
             editable: false, password: DEFAULT_PASSWORD))
     static final User ANONYMOUS = (new User(account: 'anonymous', name: '匿名帐号', dept: Department.HEAD_OFFICE,
-            editable: false, password: DEFAULT_PASSWORD))
+            editable: false, password: DEFAULT_PASSWORD, lastUser: ADMIN))
     static final User TEST_USER = (new User(account: 'test.user', name: '测试用户', dept: Department.HEAD_OFFICE,
-            editable: true, password: DEFAULT_PASSWORD))
+            editable: true, password: DEFAULT_PASSWORD, lastUser: ADMIN))
 
     String id
     String account
@@ -34,12 +34,17 @@ class User {
 
     Department dept
 
+    User lastUser;
+    Date lastUpdated;
+    Date dateCreated;
+
     static mapping = {
         dept fetch: 'join', lazy: false
     }
     static constraints = {
         account unique: true
         password maxSize: 80
+        lastUser nullable: true
     }
 
     static final initList = [ADMIN, ANONYMOUS, TEST_USER]

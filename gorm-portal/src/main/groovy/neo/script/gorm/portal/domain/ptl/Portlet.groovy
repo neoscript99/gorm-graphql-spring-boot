@@ -7,7 +7,7 @@ import groovy.transform.TupleConstructor
 
 @Entity
 @TupleConstructor(excludes = 'id, dateCreated, lastUpdated, version')
-@ToString(includePackage = false, includes = 'id, lastUpdated')
+@ToString(includePackage = false, includes = 'portletName')
 @EqualsAndHashCode(includes = 'id')
 class Portlet {
     String id
