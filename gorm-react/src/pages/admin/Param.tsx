@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react'
 import { observer } from 'mobx-react';
 import { Table } from 'antd';
-import { paramService } from '../services'
+import { paramService } from '../../services'
 import { ColumnProps } from 'antd/lib/table';
-import { timeFormater } from '../utils/myutils';
-import EntityPageList from '../components/EntityPageList';
+import { timeFormater } from '../../utils/myutils';
+import EntityPageList from '../../components/EntityPageList';
 import MobxDomainStore from 'oo-graphql-service/lib/mobx/MobxDomainStore';
 import DomainService from 'oo-graphql-service/lib/DomainService';
 import { Entity } from 'oo-graphql-service';

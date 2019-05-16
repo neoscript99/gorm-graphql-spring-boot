@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React from 'react'
 import { Menu, Icon, Layout, Anchor, BackTop } from 'antd'
 import { observer } from 'mobx-react'
 import { portalService, portletService } from '../services';
@@ -10,10 +10,15 @@ const {
 } = Layout
 
 @observer
-class Portal extends PureComponent {
+class Portal extends React.Component {
   componentDidMount() {
     portalService.listAll({ criteria: { eq: [['enabled', true]] } })
-      .then(listResult => portletService.listAll({ criteria: { eq: [['portal.id', listResult.results[0].id]] } }))
+      .then(listResult => portletService.listAll({
+        criteria: {
+          eq: [['portal.id', listResult.results[0].id]],
+          order: ['type']
+        }
+      }))
   }
 
   render() {
@@ -30,7 +35,12 @@ class Portal extends PureComponent {
                   <Icon type={portal.portalIcon} />
                   <Link to='#' style={{ display: 'inline' }}>{portal.portalName}</Link>
                 </Menu.Item>)
-            }</Menu>
+            }
+            <Menu.Item key='admin'>
+              <Icon type='tool' />
+              <Link to='/admin/' style={{ display: 'inline' }}>系统设置</Link>
+            </Menu.Item>
+          </Menu>
         </Header>
         <Layout>
           <Sider

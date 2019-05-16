@@ -28,7 +28,9 @@ class DBQuery {
         sql maxSize: 1024
     }
 
-    static DBQuery EMP_LIST = new DBQuery(DBInfo.SCOTT, '员工列表', 'select empno,ename,job,mgr,hiredate,sal,comm,deptno from emp')
-    static DBQuery DEPT_LIST = new DBQuery(DBInfo.SCOTT, '部门列表', 'select deptno, dname, loc from dept')
+    static DBQuery EMP_LIST = new DBQuery(DBInfo.SCOTT, '员工列表',
+            "select empno,ename,job,mgr,to_char(hiredate,'yyyy-mm-dd') hiredate,sal,comm,deptno from emp")
+    static DBQuery DEPT_LIST = new DBQuery(DBInfo.SCOTT, '部门列表',
+            'select deptno, dname, loc from dept')
     static initList = [EMP_LIST, DEPT_LIST]
 }

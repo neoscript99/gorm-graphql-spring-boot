@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react'
 import { Table } from 'antd';
-import EntityList from '../components/EntityList';
-import { roleService } from '../services';
+import EntityList from '../../components/EntityList';
+import { roleService } from '../../services';
 import { ColumnProps } from 'antd/lib/table';
-import { booleanLabel, timeFormater } from '../utils/myutils';
+import { booleanLabel, timeFormater } from '../../utils/myutils';
 import { Entity } from 'oo-graphql-service';
 import { observer } from 'mobx-react';
 import MobxDomainStore from 'oo-graphql-service/lib/mobx/MobxDomainStore';

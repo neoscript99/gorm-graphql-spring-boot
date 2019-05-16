@@ -1,25 +1,27 @@
-import React, { PureComponent } from 'react';
+import React, { ReactNode } from 'react';
 import { Entity } from 'oo-graphql-service';
 import { portletLinkService } from '../services';
 import { observer } from 'mobx-react';
+import { Button } from 'antd';
 
 @observer
-class PortletLink extends PureComponent<{ portlet: Entity }, { link: Entity }> {
-  state = { link: { id: '', linkUrl: '', imageUrl: '', portletName: '' } }
+class PortletLink extends React.Component<{ portlet: Entity }, { link: Entity }> {
 
   componentDidMount() {
     portletLinkService.get(this.props.portlet.id)
-      .then(value => this.setState({ link: value }))
+      .then(link => this.setState({ link }))
   }
 
-  render() {
-    const { link } = this.state
-    return (
-      link && <div>
-        <a href={link.linkUrl} target='_blank'>{link.imageUrl ?
-          <img src={link.imageUrl} width='100%' /> : link.portletName}</a>
-      </div>
-    );
+  render(): ReactNode {
+    if (this.state && this.state.link) {
+      const { link } = this.state
+      return <Button type="primary" icon="link" size='large' style={{ height: '6rem' }}
+                     onClick={() => window.open(link.linkUrl, '_blank')}>
+        {link.portletName}
+      </Button>
+    }
+    else
+      return null
   }
 }
 

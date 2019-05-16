@@ -6,7 +6,7 @@ import groovy.transform.ToString
 import neo.script.gorm.general.initializer.InitializeDomian
 
 @Entity
-@ToString(includePackage = false, includes = 'dbName')
+@ToString(includePackage = false, includes = 'dbName, id')
 @EqualsAndHashCode(includes = 'id')
 @InitializeDomian(profiles = 'dev')
 class DBInfo {
@@ -16,6 +16,7 @@ class DBInfo {
     String url
     String username
     String password
+    String testSql
 
     Date dateCreated
     Date lastUpdated
@@ -30,7 +31,8 @@ class DBInfo {
             driverClassName: 'oracle.jdbc.OracleDriver',
             url            : 'jdbc:oracle:thin:@114.115.153.164:1521:orcl',
             username       : 'scott',
-            password       : 'tiger'
+            password       : 'tiger',
+            testSql        : 'select 1 from dual'
     ])
 
     static initList = [SCOTT]

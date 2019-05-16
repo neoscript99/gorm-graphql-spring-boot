@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Layout } from 'antd'
+import { Button, Divider, Icon, Layout } from 'antd'
 import { observer } from 'mobx-react'
 import { Route, Switch } from 'react-router-dom';
 import Welcome from './Welcome';
@@ -8,15 +8,20 @@ import User from './User';
 import Note from './Note';
 import Param from './Param';
 import Profile from './Profile';
-import MenuTree from '../components/MenuTree';
-import { menuService } from '../services';
+import MenuTree from '../../components/MenuTree';
+import { menuService } from '../../services';
+import { Location } from 'history';
 
 const {
   Header, Content, Footer, Sider
 } = Layout
 
+interface P {
+  location: Location
+}
+
 @observer
-class Home extends Component<any, { collapsed: boolean }> {
+class Home extends Component<P, { collapsed: boolean }> {
   state = {
     collapsed: false,
   }
@@ -27,11 +32,20 @@ class Home extends Component<any, { collapsed: boolean }> {
   }
 
   render() {
+    const pathPrefix = '/admin/'
     const { store: menuStore } = menuService;
     return (
       <Layout style={{ minHeight: '100vh' }}>
-        <Header>
-          <div className="logo"/>
+        <Header className='flex-row'
+                style={{
+                  fontWeight: 'bolder',
+                  fontSize: '1.5rem',
+                  color: 'white',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+          <div><Icon type='tool'/><Divider type="vertical" />系统设置</div>
+          <Button type='primary' shape='circle' icon='home' href='/' />
         </Header>
         <Layout>
           <Sider
@@ -40,21 +54,21 @@ class Home extends Component<any, { collapsed: boolean }> {
             onCollapse={this.onCollapse}
             theme="light"
           >
-            <MenuTree rootMenu={menuStore.menuTree} />
+            <MenuTree rootMenu={menuStore.menuTree} pathPrefix={pathPrefix} />
           </Sider>
           <Layout>
             <Content style={{ margin: '1rem', padding: 24, background: '#fff', height: '100%', minHeight: 360 }}>
               <Switch>
-                <Route path="/Role/" component={Role} />
+                <Route path={`${pathPrefix}Role/`} component={Role} />
                 <Route path="/User/" component={User} />
                 <Route path="/Note/" component={Note} />
-                <Route path="/Param/" component={Param} />
+                <Route path={`${pathPrefix}Param/`} component={Param} />
                 <Route path="/Profile/" component={Profile} />
                 <Route component={Welcome} />
               </Switch>
             </Content>
             <Footer style={{ textAlign: 'center' }}>
-              羽意软件 ©2019
+              顶点软件 ©2019
             </Footer>
           </Layout>
         </Layout>

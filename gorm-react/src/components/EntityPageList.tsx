@@ -1,5 +1,4 @@
 import React from 'react'
-import { paramService } from '../services'
 import { PaginationConfig, TableProps } from 'antd/lib/table';
 import { toPageInfo } from '../utils/myutils';
 import { ListResult } from 'oo-graphql-service/lib/DomainGraphql';
@@ -34,7 +33,7 @@ abstract class EntityPageList<P =any, S extends EntityListState= EntityListState
   }
 
   query(): Promise<ListResult> {
-    const promise = paramService.listPage({
+    const promise = this.domainService.listPage({
       criteria: {},
       pageInfo: toPageInfo(this.pagination),
       orders: [['lastUpdated', 'desc',]]

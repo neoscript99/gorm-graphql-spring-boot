@@ -1,10 +1,9 @@
-import React, { PureComponent, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { Entity } from 'oo-graphql-service';
 import PortletLink from './PortletLink';
 import PortletTable from './PortletTable';
-import { Card } from 'antd';
 
-class PortletSwitch extends PureComponent<{ portlet: Entity }> {
+class PortletSwitch extends React.Component<{ portlet: Entity }> {
   getPortlet(portlet: Entity): ReactNode {
 
     switch (portlet.type) {
@@ -20,10 +19,10 @@ class PortletSwitch extends PureComponent<{ portlet: Entity }> {
 
   render() {
     const { portlet } = this.props;
-    return <Card style={{ width: 300, margin: '1rem 0 0 1rem' }} title={portlet.portletName}
-                 extra={<a id={portlet.id} />}>
+    return <div style={{ margin: '1rem 0 0 1rem' }}>
+      <a id={portlet.id} />
       {this.getPortlet(portlet)}
-    </Card>
+    </div>
   }
 }
 

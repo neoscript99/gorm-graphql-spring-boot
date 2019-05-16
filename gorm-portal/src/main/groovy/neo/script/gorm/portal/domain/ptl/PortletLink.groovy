@@ -23,7 +23,7 @@ class PortletLink extends Portlet {
 
     static initList = [
             new PortletLink('金蝶OA系统EAS', Portal.PERSONAL_PORTAL, 'PortletLink', 'http://www.bing.com'),
-            new PortletLink('新绩效考核系统', Portal.PERSONAL_PORTAL, 'PortletLink', 'http://www.bing.com'),
-            new PortletLink('信贷管理系统', Portal.PERSONAL_PORTAL, 'PortletLink', 'http://www.bing.com')
+            new PortletLink('新绩效考核系统', Portal.PERSONAL_PORTAL, 'PortletLink', 'http://www.qq.com'),
+            new PortletLink('信贷管理系统', Portal.PERSONAL_PORTAL, 'PortletLink', 'http://www.z.cn')
     ]
 }

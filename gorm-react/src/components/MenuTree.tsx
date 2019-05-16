@@ -5,20 +5,25 @@ import { MenuNode } from '../stores/MenuStore';
 
 const SubMenu = Menu.SubMenu
 
-function getTree(menuNode: MenuNode) {
+function getTree(menuNode: MenuNode, pathPrefix: string) {
   if (menuNode.menu.app)
     return (
       <Menu.Item key={menuNode.menu.id}>
         <Icon type="file" />
-        <Link to={`/${menuNode.menu.app}/`} style={{ display: 'inline' }}>{menuNode.menu.label}</Link>
+        <Link to={`${pathPrefix}${menuNode.menu.app}/`} style={{ display: 'inline' }}>{menuNode.menu.label}</Link>
       </Menu.Item>)
   else
     return (<SubMenu key={menuNode.menu.id} title={<span><Icon type="folder" />{menuNode.menu.label}</span>}>
-      {menuNode.subMenus.map((subNode) => getTree(subNode))}
+      {menuNode.subMenus.map((subNode) => getTree(subNode, pathPrefix))}
     </SubMenu>)
 }
 
-export default ({ rootMenu }: { rootMenu: MenuNode }) =>
+interface P {
+  rootMenu: MenuNode
+  pathPrefix: string
+}
+
+export default ({ rootMenu, pathPrefix }: P) =>
   <Menu theme="light" defaultSelectedKeys={['1']} mode="inline">
-    {rootMenu.subMenus.map((menuNode) => getTree(menuNode))}
+    {rootMenu.subMenus.map((menuNode) => getTree(menuNode, pathPrefix))}
   </Menu>

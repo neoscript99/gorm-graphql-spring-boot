@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import './App.css'
-import Home from './pages/Home'
+import Home from './pages/admin/Home'
 import { initService } from './services'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Login from './pages/Login';
+import Login from './pages/admin/Login';
 import Portal from './pages/Portal';
 
 initService.init()
