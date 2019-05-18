@@ -40,6 +40,7 @@ class User {
 
     static mapping = {
         dept fetch: 'join', lazy: false
+        lastUser fetch: 'join', lazy: false
     }
     static constraints = {
         account unique: true

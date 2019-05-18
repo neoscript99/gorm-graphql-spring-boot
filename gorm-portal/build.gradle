@@ -9,3 +9,11 @@ dependencies {
 springBoot {
     mainClass = 'neo.script.gorm.portal.GormPortalApp'
 }
+
+bootRun {
+    jvmArgs('-Dspring.output.ansi.enabled=always')
+    systemProperty 'spring.profiles.active', 'dev'
+    systemProperty 'init', 'true'
+    systemProperties System.properties
+}
+

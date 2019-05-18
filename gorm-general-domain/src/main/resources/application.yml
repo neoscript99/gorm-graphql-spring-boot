@@ -4,8 +4,9 @@ graphiql.enabled: true
 
 server.port: 8080
 spring:
-  h2.console.enabled: true
-
+  h2.console:
+    enabled: true
+    settings.web-allow-others: true
   datasource:
     pooled: true
     name: devDb
