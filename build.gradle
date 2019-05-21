@@ -88,9 +88,3 @@ subprojects {
 }
 
 
-task htmlCopy(type: Copy) {
-    from('gorm-react/build/') {
-        include '**/*.*'
-    }
-    into 'gorm-general-domain/src/main/resources/static/'
-}

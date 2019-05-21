@@ -24,3 +24,12 @@ bootRun {
 sourceJar {
     from(sourceSets.main.allSource, sourceSets.test.allSource)
 }
+
+task copyHtml(type: Copy) {
+    from('../gorm-react/build/') {
+        include '**/*.*'
+    }
+    into 'src/main/resources/static/'
+}
+
+build.dependsOn copyHtml

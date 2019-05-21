@@ -18,6 +18,8 @@ task swfCopy(type: Copy) {
     into 'src/main/resources/static/swf'
 }
 
+build.dependsOn swfCopy
+
 sourceJar{
     from(sourceSets.main.allSource, sourceSets.test.allSource)
 }

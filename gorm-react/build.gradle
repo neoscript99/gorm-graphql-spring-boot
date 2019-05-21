@@ -1,9 +1,24 @@
 plugins {
-  id "com.moowork.node" version "1.2.0"
+    id "com.moowork.node" version "1.2.0"
 }
 node {
-  download = false
+    download = false
 }
-task start(type: YarnTask) {
-  args = ['start']
+task yarnStart(type: YarnTask) {
+    args = ['start']
+}
+
+task yarnBuild(type: YarnTask) {
+    args = ['build']
+}
+
+task copyToPortal(type: Copy) {
+    from('build/') {
+        include '**/*.*'
+    }
+    into '../gorm-portal/build/resources/main/static/'
+}
+
+task buildAndCopy(type: GradleBuild) {
+    tasks = ['yarnBuild', 'copyToPortal']
 }
