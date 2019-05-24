@@ -7,6 +7,7 @@ import neo.script.gorm.general.service.MenuNode
 import neo.script.gorm.general.service.MenuService
 import neo.script.gorm.general.service.TokenService
 import neo.script.gorm.general.service.UserService
+import neo.script.gorm.general.util.TokenHolder
 import neo.script.gorm.graphql.entity.GraphQLMappingFlag
 import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,7 +26,6 @@ class MenuGraphqlMapping extends GraphQLMapping {
     MenuGraphqlMapping() {
         query('menuTree', MenuNode) {
             description 'get sys user menu tree'
-            argument('token', String)
             dataFetcher(new MenuTreeDataFetcher())
         }
     }
@@ -33,9 +33,7 @@ class MenuGraphqlMapping extends GraphQLMapping {
     class MenuTreeDataFetcher implements DataFetcher {
         @Override
         Object get(DataFetchingEnvironment environment) {
-            def token = tokenService.get(environment.getArgument('token'));
-
-            return menuService.getUserTree(userService.findByAccount(token.username))
+            return menuService.getUserTree(userService.findByAccount(TokenHolder.getToken().username))
         }
     }
 }

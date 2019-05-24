@@ -42,15 +42,19 @@ class SecurityInstrumentation extends NoOpInstrumentation {
         if (executionAuthorization && !executionAuthorization.isAuthorized(parameters))
             throw new GormAbortExecutionException('无token', 'TokenError');
 
-        //Variables包含token信息
+        //Variables包含token信息，put后传递给后续instrument
         (parameters.getInstrumentationState() as Map).putAll(parameters.getVariables())
+        def operation = parameters.operation ?: parameters.query.substring(0, parameters.query.indexOf("{")).trim()
         def beginTime = LocalDateTime.now();
+        log.info("Query '{}' 开始执行时间：{}.", operation, beginTime)
         return new InstrumentationContext<ExecutionResult>() {
             @Override
             void onEnd(ExecutionResult result, Throwable t) {
-                def duration = Duration.between(beginTime, LocalDateTime.now())
-                log.debug("Query '{}' execution duration is {} seconds plus {} milliseconds.",
-                        parameters.operation ?: parameters.query.substring(0, parameters.query.indexOf("{")).trim(),
+                def endTime = LocalDateTime.now();
+                def duration = Duration.between(beginTime, endTime)
+                log.info("Query '{}' 结束执行时间：{}.", operation, endTime)
+                log.info("Query '{}' 执行用时 {}秒 {}毫秒.",
+                        operation,
                         duration.seconds, duration.toMillis() % 1000)
             }
         };

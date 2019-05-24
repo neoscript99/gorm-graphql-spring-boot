@@ -20,16 +20,22 @@ bootRun {
     systemProperties System.properties
 }
 
-
 sourceJar {
     from(sourceSets.main.allSource, sourceSets.test.allSource)
 }
 
-task copyHtml(type: Copy) {
+task copyReact(type: Copy) {
     from('../gorm-react/build/') {
         include '**/*.*'
     }
-    into 'src/main/resources/static/'
+    into 'build/resources/main/static/'
+}
+//先evaluat依赖的工程，才能拿到对应的task yarnBuild
+evaluationDependsOn(":gorm-react")
+def yarnBuild = project(":gorm-react").tasks.yarnBuild
+bootRepackage {
+    copyReact.mustRunAfter(yarnBuild)
+    dependsOn(yarnBuild, copyReact)
 }
 
-build.dependsOn copyHtml
+bootRun.dependsOn copyReact

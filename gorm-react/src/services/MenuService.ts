@@ -15,8 +15,8 @@ export default class MenuService extends DomainService<MenuStore> {
   getMenuTree(token: String): void {
     this.menuNodeFields.then(fields =>
       this.domainGraphql.apolloClient.query<{ [key: string]: MenuNode }>({
-        query: gql`query menuTree {
-                      menuTree(token: "${token}") {
+        query: gql`query menuTreeQuery {
+                      menuTree {
                       ${fields}
                     }}`,
         fetchPolicy: 'no-cache',

@@ -15,15 +15,15 @@ class TokenService extends AbstractService<Token> {
     @Value('${token.expire.maxRefreshTimes}')
     Integer maxRefreshTimes
 
-    Token createToken(String user, String role) {
-        return createToken(UUID.randomUUID().toString(), user, role)
+    Token createToken(String username, String role) {
+        return createToken(UUID.randomUUID().toString(), username, role)
     }
 
-    Token createToken(String id, String user, String role) {
+    Token createToken(String id, String username, String role) {
         return saveEntity(resetExpireTime(new Token([
                 id             : id,
                 maxRefreshTimes: maxRefreshTimes ?: 10,
-                user           : user,
+                username           : username,
                 role           : role])))
     }
 
@@ -49,7 +49,7 @@ class TokenService extends AbstractService<Token> {
             [success: false, error: "过期token: $id"]
         else {
             resetExpireTime(token)
-            [success: true]
+            [success: true, token: token]
         }
     }
 

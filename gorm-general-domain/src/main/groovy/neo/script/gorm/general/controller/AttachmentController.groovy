@@ -16,12 +16,6 @@ import java.util.concurrent.TimeUnit
 class AttachmentController {
     @Autowired
     AttachmentService attachmentService
-
-    @GetMapping("/")
-    public ResponseEntity<String> root() throws IOException {
-        return ResponseEntity.notFound().build()
-    }
-
     @GetMapping("attach/{id}")
     public ResponseEntity<byte[]> getAttach(@PathVariable("id") String id) throws IOException {
         def info = attachmentService.get(id)

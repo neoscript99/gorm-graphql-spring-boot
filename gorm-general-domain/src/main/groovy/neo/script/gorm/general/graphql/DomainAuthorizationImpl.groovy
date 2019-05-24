@@ -3,6 +3,7 @@ package neo.script.gorm.general.graphql
 import graphql.execution.instrumentation.parameters.InstrumentationFieldFetchParameters
 import graphql.schema.DataFetcher
 import neo.script.gorm.general.service.TokenService
+import neo.script.gorm.general.util.TokenHolder
 import neo.script.gorm.graphql.security.DomainAuthorization
 import org.grails.gorm.graphql.fetcher.GraphQLDataFetcherType
 import org.grails.gorm.graphql.fetcher.interceptor.InterceptingDataFetcher
@@ -14,7 +15,7 @@ class DomainAuthorizationImpl implements DomainAuthorization {
 
     static final MUTATION_TYPE_LIST =
             [GraphQLDataFetcherType.CREATE, GraphQLDataFetcherType.DELETE, GraphQLDataFetcherType.UPDATE]
-    static final SKIP_TOKEN_OPERATION = ['logout', 'login']
+    static final SKIP_TOKEN_OPERATION = ['login']
     @Autowired
     TokenService tokenService
 
@@ -37,8 +38,16 @@ class DomainAuthorizationImpl implements DomainAuthorization {
                         break;
                 }
             };
-            return SKIP_TOKEN_OPERATION.contains(parameters.field.name) ||
-                    (token && tokenService.validateToken(token).success)
+            if (SKIP_TOKEN_OPERATION.contains(parameters.field.name))
+                return true;
+            else {
+                def result = tokenService.validateToken(token)
+                if (token && result.success) {
+                    TokenHolder.setToken(result.token)
+                    return true;
+                }
+            }
+            return false
         }
         return true
     }
