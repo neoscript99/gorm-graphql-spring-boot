@@ -1,0 +1,47 @@
+
+.login-page {
+    margin: 0;
+    min-height: 10em;
+    height: 100vh;
+    background-image: url(https://images.unsplash.com/photo-1448518184296-a22facb4446f);
+    background-size: cover;
+    background-position: center top;
+    color: #888;
+    line-height: 1.75;
+    padding-top: 8rem;
+}
+
+.l-col-wrap {
+    display: flex;
+}
+
+.l-col {
+    min-width: 50%;
+    width: 50%;
+    max-width: 50%;
+}
+
+.form-box {
+    max-width: 50em;
+    background-color: rgba(255, 255, 255, 0.77);
+    border-radius: 0.25em;
+    overflow: hidden;
+    margin: 0 auto 0;
+    box-shadow: 0 0 30px -5px rgba(0, 0, 0, 0.5);
+}
+
+.form-box__form {
+    padding: 2em;
+}
+
+.form-box__content {
+    background-color: #fff;
+    padding: 2em;
+}
+
+.form-box__title {
+    font-weight: 300;
+    font-size: 1.75em;
+    color: #133e40;
+    margin-top: 0;
+}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Button, Divider, Icon, Layout } from 'antd'
 import { observer } from 'mobx-react'
-import { Link, Route, Switch } from 'react-router-dom';
+import { Link, Redirect, Route, Switch } from 'react-router-dom';
 import Welcome from './Welcome';
 import Role from './Role';
 import User from './User';
@@ -9,7 +9,7 @@ import Note from './Note';
 import Param from './Param';
 import Profile from './Profile';
 import MenuTree from '../../components/MenuTree';
-import { menuService } from '../../services';
+import { menuService, userService } from '../../services';
 import { Location } from 'history';
 import PortalManage from './PortalManage';
 import PortalDbManage from './PortalDbManage';
@@ -40,6 +40,8 @@ class Home extends Component<P, { collapsed: boolean }> {
   render () {
     const pathPrefix = '/admin/'
     const { store: menuStore } = menuService;
+    if (!userService.store.currentItem.id)
+      return (<Redirect to="/login/" />)
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Header className='flex-row'

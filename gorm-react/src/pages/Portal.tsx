@@ -1,8 +1,8 @@
 import React from 'react'
 import { Menu, Icon, Layout, Anchor, BackTop } from 'antd'
 import { observer } from 'mobx-react'
-import { portalService, portletService } from '../services';
-import { Link } from 'react-router-dom';
+import { portalService, portletService, userService } from '../services';
+import { Link, Redirect } from 'react-router-dom';
 import PortletSwitch from '../components/PortletSwitch';
 
 const {
@@ -24,6 +24,8 @@ class Portal extends React.Component {
   render() {
     const { store: portalStore } = portalService;
     const { store: portletStore } = portletService;
+    if (!userService.store.currentItem.id)
+      return (<Redirect to="/login/" />)
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Header className="portal_layout">
@@ -39,6 +41,10 @@ class Portal extends React.Component {
             <Menu.Item key='admin'>
               <Icon type='tool' />
               <Link to='/admin/' style={{ display: 'inline' }}>系统设置</Link>
+            </Menu.Item>
+            <Menu.Item key='login'>
+              <Icon type='user' />
+              <Link to='/logout/' style={{ display: 'inline' }}>退出登录</Link>
             </Menu.Item>
           </Menu>
         </Header>

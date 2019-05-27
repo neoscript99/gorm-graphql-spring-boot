@@ -5,6 +5,7 @@
   "homepage": ".",
   "dependencies": {
     "antd": "^3.15.1",
+    "js-sha256": "^0.9.0",
     "mobx": "^5.9.0",
     "mobx-react": "^5.4.3",
     "oo-graphql-service": "^1.2.0",

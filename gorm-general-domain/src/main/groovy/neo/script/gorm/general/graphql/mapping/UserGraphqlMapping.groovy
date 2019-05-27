@@ -28,6 +28,7 @@ class UserGraphqlMapping extends GraphQLMapping {
             returns {
                 field('success', Boolean)
                 field('token', String)
+                field('user', User)
                 field('error', String)
             }
         }
@@ -48,7 +49,9 @@ class UserGraphqlMapping extends GraphQLMapping {
         Object get(DataFetchingEnvironment environment) {
             def result = userService.login(environment.getArgument('username'), environment.getArgument('password'));
             if (result.success)
-                [success: true, token: tokenService.createToken(result.user.account, 'admin').id]
+                [success: true,
+                 user   : result.user,
+                 token  : tokenService.createToken(result.user.account, 'admin').id]
             else
                 result
         }
