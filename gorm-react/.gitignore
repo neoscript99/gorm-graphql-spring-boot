@@ -28,3 +28,4 @@ out/
 .vscode
 yarn.lock
 
+lib/

@@ -1,7 +1,7 @@
 {
   "name": "gorm-react",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.1",
+  "description": "Typescript, AntDesign, Mobx and Graphql startup project.",
   "homepage": ".",
   "dependencies": {
     "antd": "^3.15.1",
@@ -28,8 +28,14 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test"
+    "test": "react-scripts test",
+    "pub": "tsc && npm publish"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "author": "Neo Wong",
+  "license": "ISC",
   "eslintConfig": {
     "extends": "react-app"
   },

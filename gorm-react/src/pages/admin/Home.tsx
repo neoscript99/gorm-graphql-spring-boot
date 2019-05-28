@@ -80,7 +80,7 @@ class Home extends Component<P, { collapsed: boolean }> {
               </Switch>
             </Content>
             <Footer style={{ textAlign: 'center' }}>
-              顶点软件 ©2019
+              羽意软件 ©2019
             </Footer>
           </Layout>
         </Layout>

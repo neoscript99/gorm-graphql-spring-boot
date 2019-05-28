@@ -79,3 +79,10 @@ class LoginForm extends Component<FormComponentProps<any>> {
 }
 
 export default Form.create({ name: 'normal_login' })(LoginForm);
+
+
+export const Logout = () => {
+  userService.clearLoginInfoLocal()
+  userService.changeCurrentItem({})
+  return <Redirect to="/login/" />
+}

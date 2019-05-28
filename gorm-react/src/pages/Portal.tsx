@@ -11,15 +11,6 @@ const {
 
 @observer
 class Portal extends React.Component {
-  componentDidMount() {
-    portalService.listAll({ criteria: { eq: [['enabled', true]] } })
-      .then(listResult => portletService.listAll({
-        criteria: {
-          eq: [['portal.id', listResult.results[0].id]],
-          order: ['type']
-        }
-      }))
-  }
 
   render() {
     const { store: portalStore } = portalService;
@@ -67,7 +58,7 @@ class Portal extends React.Component {
                   justifyContent: 'space-around',
                   alignItems: 'center'
                 }}>
-          <div style={{ marginTop: '0.5rem' }}>宁波通商银行股份有限公司</div>
+          <div style={{ marginTop: '0.5rem' }}>宁波羽意软件股份有限公司</div>
           <BackTop />
         </Footer>
       </Layout>

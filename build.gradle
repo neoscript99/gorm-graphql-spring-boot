@@ -13,6 +13,9 @@ version = PROJECT_VERSION
 group = PROJECT_GROUP
 
 subprojects {
+    if (it.name.endsWith('react'))
+        return
+
     apply plugin: 'groovy'
 
     repositories {

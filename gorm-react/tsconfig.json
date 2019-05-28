@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "outDir": "lib",
     "lib": [
       "dom",
       "dom.iterable",
@@ -18,7 +19,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "sourceMap": true
   },
   "include": [
     "src"
