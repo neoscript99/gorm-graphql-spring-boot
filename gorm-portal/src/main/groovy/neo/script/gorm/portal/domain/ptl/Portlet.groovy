@@ -12,14 +12,10 @@ import groovy.transform.TupleConstructor
 class Portlet {
     String id
     String portletName
-    Portal portal
     String type
 
     Date dateCreated
     Date lastUpdated
 
-    static mapping = {
-        portal fetch: 'join', lazy: false
-    }
     static graphql = true
 }

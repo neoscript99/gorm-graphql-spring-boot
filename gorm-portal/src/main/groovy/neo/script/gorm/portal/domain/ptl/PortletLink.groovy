@@ -1,13 +1,12 @@
 package neo.script.gorm.portal.domain.ptl
 
 import grails.gorm.annotation.Entity
-import groovy.transform.EqualsAndHashCode
 import groovy.transform.TupleConstructor
 import neo.script.gorm.general.initializer.InitializeDomian
 
 @Entity
 @TupleConstructor(includeSuperProperties = true, excludes = 'id, dateCreated, lastUpdated, version')
-@InitializeDomian(profiles = 'dev', depends = Portal)
+@InitializeDomian(profiles = 'dev', depends = PortalCol)
 class PortletLink extends Portlet {
 
     String linkUrl
@@ -18,9 +17,9 @@ class PortletLink extends Portlet {
     }
     static graphql = true
 
-    static initList = [
-            new PortletLink('金蝶OA系统EAS', Portal.PERSONAL_PORTAL, 'PortletLink', 'http://www.bing.com'),
-            new PortletLink('新绩效考核系统', Portal.PERSONAL_PORTAL, 'PortletLink', 'http://www.qq.com'),
-            new PortletLink('信贷管理系统', Portal.PERSONAL_PORTAL, 'PortletLink', 'http://www.z.cn')
-    ]
+    static DEMO_LINK1 = new PortletLink('金蝶OA系统EAS', 'PortletLink', 'http://www.bing.com')
+    static DEMO_LINK2 = new PortletLink('新绩效考核系统', 'PortletLink', 'http://www.qq.com')
+    static DEMO_LINK3 = new PortletLink('信贷管理系统', 'PortletLink', 'http://www.z.cn')
+
+    static initList = [DEMO_LINK1, DEMO_LINK2, DEMO_LINK3]
 }

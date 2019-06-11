@@ -1,12 +1,13 @@
 import React from 'react'
-import { Menu, Icon, Layout, Anchor, BackTop } from 'antd'
+import { Menu, Icon, Layout, BackTop, Col, Row } from 'antd'
 import { observer } from 'mobx-react'
-import { portalService, portletService, userService } from '../services';
+import { portalService, userService } from '../services';
 import { Link, Redirect } from 'react-router-dom';
-import PortletSwitch from '../components/PortletSwitch';
+import PortalRows from '../components/PortalRows';
+import PortalSider from '../components/PortalSider';
 
 const {
-  Header, Content, Footer, Sider
+  Header, Content, Footer
 } = Layout
 
 @observer
@@ -14,7 +15,6 @@ class Portal extends React.Component {
 
   render() {
     const { store: portalStore } = portalService;
-    const { store: portletStore } = portletService;
     if (!userService.store.currentItem.id)
       return (<Redirect to="/login/" />)
     return (
@@ -40,16 +40,9 @@ class Portal extends React.Component {
           </Menu>
         </Header>
         <Layout>
-          <Sider
-            style={{ backgroundColor: '#ffffff', borderTop: 'solid thin #f3f3f3', borderBottom: 'solid thin #f3f3f3' }}>
-            <Anchor style={{ backgroundColor: 'inherit', margin: '0.5rem' }}>
-              {portletStore.allList && portletStore.allList.map((portlet, index) =>
-                <Anchor.Link key={portlet.id} href={'#' + portlet.id} title={`${index + 1}、${portlet.portletName}`} />)}
-            </Anchor>
-          </Sider>
-          <Content className="portal_body">
-            {portletStore.allList && portletStore.allList.map(portlet =>
-              <PortletSwitch key={portlet.id} portlet={portlet} />)}
+          {portalStore.currentItem && <PortalSider portal={portalStore.currentItem} />}
+          <Content>
+            {portalStore.currentItem && <PortalRows portal={portalStore.currentItem} />}
           </Content>
         </Layout>
         <Footer className="portal_layout"
@@ -58,7 +51,7 @@ class Portal extends React.Component {
                   justifyContent: 'space-around',
                   alignItems: 'center'
                 }}>
-          <div style={{ marginTop: '0.5rem' }}>宁波羽意软件股份有限公司</div>
+          <div style={{ marginTop: '0.5rem' }}>顶点软件</div>
           <BackTop />
         </Footer>
       </Layout>

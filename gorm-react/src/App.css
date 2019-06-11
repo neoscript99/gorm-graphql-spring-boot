@@ -16,14 +16,6 @@
     font-weight: bolder;
 }
 
-.portal_body {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    background: #f3f3f3;
-    box-shadow: 0 2px 8px #f0f1f2
-}
-
 .flex-col {
     display: flex;
     flex-direction: column;

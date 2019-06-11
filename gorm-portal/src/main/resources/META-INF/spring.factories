@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  neo.script.gorm.portal.GormPortalAutoConfig
