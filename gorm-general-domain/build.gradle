@@ -1,4 +1,3 @@
-apply plugin: 'org.springframework.boot'
 
 dependencies {
     compile project(':gorm-general-base')
@@ -19,23 +18,3 @@ bootRun {
     systemProperty 'init', 'true'
     systemProperties System.properties
 }
-
-sourceJar {
-    from(sourceSets.main.allSource, sourceSets.test.allSource)
-}
-
-task copyReact(type: Copy) {
-    from('../gorm-react/build/') {
-        include '**/*.*'
-    }
-    into 'build/resources/main/static/'
-}
-//先evaluat依赖的工程，才能拿到对应的task yarnBuild
-evaluationDependsOn(":gorm-react")
-def yarnBuild = project(":gorm-react").tasks.yarnBuild
-bootRepackage {
-    copyReact.mustRunAfter(yarnBuild)
-    dependsOn(yarnBuild, copyReact)
-}
-
-bootRun.dependsOn copyReact

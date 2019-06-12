@@ -1,0 +1,45 @@
+.head-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 1rem;
+}
+
+.head-icon span {
+    height: 32px;
+    line-height: 36px;
+}
+
+/*nav*/
+.lq-nav {
+    height: 30px;
+    line-height: 30px;
+    color: #fff;
+    font-size: 14px;
+    background: #3E8AC5;
+    padding: 0 10px;
+}
+
+#luqiao ul {
+    margin: 0;
+    padding: 0;
+}
+
+.lq-nav li {
+    float: left;
+    font-size: 14px;
+    padding: 0 16px;
+    position: relative;
+    list-style: none;
+    vertical-align: middle;
+}
+
+.lq-nav li > a {
+    color: #fff;
+}
+
+.lq-nav li.active, .lq-nav li:hover {
+    background: #F6A85F
+}
+

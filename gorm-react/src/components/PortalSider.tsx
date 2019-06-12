@@ -24,8 +24,10 @@ class PortalSider extends React.Component<P> {
       .filter(value => value.portal.id === this.props.portal.id)
 
     const portletList = rowRelList.flatMap(
-      rowRel => rowRel.row.cols.flatMap(
-        (col: Entity) =>
+      rowRel => rowRel.row.cols
+        .slice()
+        .sort((a: Entity, b: Entity) => a.colOrder - b.colOrder)
+        .flatMap((col: Entity) =>
           portletColRelService.store.allList
             .filter(colRel => colRel.col.id === col.id)
             .map(colRel => colRel.portlet))

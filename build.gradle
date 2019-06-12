@@ -40,13 +40,13 @@ subprojects {
         testCompile "org.spockframework:spock-spring:$spockVersion"
         testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
     }
-
+    
     if (!it.name.endsWith('demo')) {
         apply plugin: 'maven-publish'
         apply plugin: 'com.jfrog.bintray'
 
         task sourceJar(type: Jar) {
-            from(sourceSets.main.allSource, sourceSets.test.allSource)
+            from(sourceSets.test.allSource)
         }
 
         publishing {
@@ -86,6 +86,29 @@ subprojects {
                     vcsTag = "v$PROJECT_VERSION"
                 }
             }
+        }
+    }
+
+    if (['gorm-flex','gorm-general-domain','gorm-portal'].contains(it.name)) {
+        apply plugin: 'org.springframework.boot'
+        
+        task copyReact(type: Copy) {
+            from('../gorm-react/build/') {
+                include '**/*.*'
+            }
+            into 'build/resources/main/static/'
+        }
+        //先evaluat依赖的工程，才能拿到对应的task yarnBuild
+        evaluationDependsOn(":gorm-react")
+        def yarnBuild = project(":gorm-react").tasks.yarnBuild
+        bootRepackage {
+            copyReact.mustRunAfter(yarnBuild)
+            dependsOn(yarnBuild, copyReact)
+        }
+        bootRun.dependsOn copyReact
+
+        sourceJar {
+            from(sourceSets.main.allSource, sourceSets.test.allSource)
         }
     }
 }
