@@ -3,8 +3,8 @@ import { Menu, Icon, Layout, BackTop, Col, Row } from 'antd'
 import { observer } from 'mobx-react'
 import { portalService, userService } from '../services';
 import { Link, Redirect } from 'react-router-dom';
-import PortalRows from '../components/PortalRows';
-import PortalSider from '../components/PortalSider';
+import PortalRows from '../components/portal/PortalRows';
+import PortalSider from '../components/portal/PortalSider';
 
 const {
   Header, Content, Footer

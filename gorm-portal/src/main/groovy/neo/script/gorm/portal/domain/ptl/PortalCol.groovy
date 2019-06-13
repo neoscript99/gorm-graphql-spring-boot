@@ -14,26 +14,27 @@ import neo.script.gorm.general.initializer.InitializeDomian
 class PortalCol {
     String id
 
+    String colName
     PortalRow row
-    Integer colOrder    //Õ¤¸ñË³Ğò£¬flex ²¼¾ÖÄ£Ê½ÏÂÓĞĞ§	number	0
-    Integer span    //Õ¤¸ñÕ¼Î»¸ñÊı£¬Îª 0 Ê±Ïàµ±ÓÚ display: none	number	-
+    Integer colOrder    //æ …æ ¼é¡ºåºï¼Œflex å¸ƒå±€æ¨¡å¼ä¸‹æœ‰æ•ˆ	number	0
+    Integer span    //æ …æ ¼å ä½æ ¼æ•°ï¼Œä¸º 0 æ—¶ç›¸å½“äº display: none	number	-
+    String style = '''{ "display": "flex", "justifyContent": "center", "flexWrap": "wrap" }'''
 
-    //ÒÔÏÂ·Ç±ØÊäÏî
-    Integer colOffset    //Õ¤¸ñ×ó²àµÄ¼ä¸ô¸ñÊı£¬¼ä¸ôÄÚ²»¿ÉÒÔÓĞÕ¤¸ñ	number	0
-    Integer pull    //Õ¤¸ñÏò×óÒÆ¶¯¸ñÊı	number	0
-    Integer push    //Õ¤¸ñÏòÓÒÒÆ¶¯¸ñÊı	number	0
+    //ä»¥ä¸‹éå¿…è¾“é¡¹
+    Integer colOffset    //æ …æ ¼å·¦ä¾§çš„é—´éš”æ ¼æ•°ï¼Œé—´éš”å†…ä¸å¯ä»¥æœ‰æ …æ ¼	number	0
+    Integer pull    //æ …æ ¼å‘å·¦ç§»åŠ¨æ ¼æ•°	number	0
+    Integer push    //æ …æ ¼å‘å³ç§»åŠ¨æ ¼æ•°	number	0
     /**
      * <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
-     * »òÖ»ÉèÖÃspan
+     * æˆ–åªè®¾ç½®span
      * <Col xs={2} sm={4} md={6} lg={8} xl={10}>
      */
-    String xs    //<576px ÏìÓ¦Ê½Õ¤¸ñ£¬¿ÉÎªÕ¤¸ñÊı»òÒ»¸ö°üº¬ÆäËûÊôĞÔµÄ¶ÔÏó	number|object	-
-    String sm    //¡İ576px ÏìÓ¦Ê½Õ¤¸ñ£¬¿ÉÎªÕ¤¸ñÊı»òÒ»¸ö°üº¬ÆäËûÊôĞÔµÄ¶ÔÏó	number|object	-
-    String md    //¡İ768px ÏìÓ¦Ê½Õ¤¸ñ£¬¿ÉÎªÕ¤¸ñÊı»òÒ»¸ö°üº¬ÆäËûÊôĞÔµÄ¶ÔÏó	number|object	-
-    String lg    //¡İ992px ÏìÓ¦Ê½Õ¤¸ñ£¬¿ÉÎªÕ¤¸ñÊı»òÒ»¸ö°üº¬ÆäËûÊôĞÔµÄ¶ÔÏó	number|object	-
-    String xl    //¡İ1200px ÏìÓ¦Ê½Õ¤¸ñ£¬¿ÉÎªÕ¤¸ñÊı»òÒ»¸ö°üº¬ÆäËûÊôĞÔµÄ¶ÔÏó	number|object	-
-    String xxl    //¡İ1600px ÏìÓ¦Ê½Õ¤¸ñ£¬¿ÉÎªÕ¤¸ñÊı»òÒ»¸ö°üº¬ÆäËûÊôĞÔµÄ¶ÔÏó	number|object	-
-    String style = '''{ "display": "flex", "justifyContent": "center", "flexWrap": "wrap" }'''
+    String xs    //<576px å“åº”å¼æ …æ ¼ï¼Œå¯ä¸ºæ …æ ¼æ•°æˆ–ä¸€ä¸ªåŒ…å«å…¶ä»–å±æ€§çš„å¯¹è±¡	number|object	-
+    String sm    //â‰¥576px å“åº”å¼æ …æ ¼ï¼Œå¯ä¸ºæ …æ ¼æ•°æˆ–ä¸€ä¸ªåŒ…å«å…¶ä»–å±æ€§çš„å¯¹è±¡	number|object	-
+    String md    //â‰¥768px å“åº”å¼æ …æ ¼ï¼Œå¯ä¸ºæ …æ ¼æ•°æˆ–ä¸€ä¸ªåŒ…å«å…¶ä»–å±æ€§çš„å¯¹è±¡	number|object	-
+    String lg    //â‰¥992px å“åº”å¼æ …æ ¼ï¼Œå¯ä¸ºæ …æ ¼æ•°æˆ–ä¸€ä¸ªåŒ…å«å…¶ä»–å±æ€§çš„å¯¹è±¡	number|object	-
+    String xl    //â‰¥1200px å“åº”å¼æ …æ ¼ï¼Œå¯ä¸ºæ …æ ¼æ•°æˆ–ä¸€ä¸ªåŒ…å«å…¶ä»–å±æ€§çš„å¯¹è±¡	number|object	-
+    String xxl    //â‰¥1600px å“åº”å¼æ …æ ¼ï¼Œå¯ä¸ºæ …æ ¼æ•°æˆ–ä¸€ä¸ªåŒ…å«å…¶ä»–å±æ€§çš„å¯¹è±¡	number|object	-
 
     Date dateCreated
     Date lastUpdated
@@ -42,6 +43,7 @@ class PortalCol {
         row fetch: 'join', lazy: false
     }
     static constraints = {
+        colName unique: true
         colOffset nullable: true
         pull nullable: true
         push nullable: true
@@ -54,9 +56,14 @@ class PortalCol {
         style maxSize: 256
     }
     static graphql = true
-    static PortalCol DEMO_ROW1_COL1 = new PortalCol(PortalRow.DEMO_ROW1, 1, 24)
-    static PortalCol DEMO_ROW2_COL1 = new PortalCol(PortalRow.DEMO_ROW2, 1, 6)
-    static PortalCol DEMO_ROW2_COL2 = new PortalCol(PortalRow.DEMO_ROW2, 2, 12)
-    static PortalCol DEMO_ROW2_COL3 = new PortalCol(PortalRow.DEMO_ROW2, 3, 6)
-    static initList = [DEMO_ROW1_COL1, DEMO_ROW2_COL1, DEMO_ROW2_COL2, DEMO_ROW2_COL3]
+    static PortalCol DEMO_ROW1_COL1 = new PortalCol('DEMO_ROW1_COL1', PortalRow.DEMO_ROW1, 1, 24)
+    static PortalCol DEMO_ROW2_COL1 = new PortalCol('DEMO_ROW2_COL1', PortalRow.DEMO_ROW2, 1, 6)
+    static PortalCol DEMO_ROW2_COL2 = new PortalCol('DEMO_ROW2_COL2', PortalRow.DEMO_ROW2, 2, 12)
+    static PortalCol DEMO_ROW2_COL3 = new PortalCol('DEMO_ROW2_COL3', PortalRow.DEMO_ROW2, 3, 6)
+
+    static PortalCol LUQIAO_ROW1_COL1 = new PortalCol('LUQIAO_ROW1_COL1', PortalRow.LUQIAO_ROW1, 1, 6)
+    static PortalCol LUQIAO_ROW1_COL2 = new PortalCol('LUQIAO_ROW1_COL2', PortalRow.LUQIAO_ROW1, 2, 12)
+    static PortalCol LUQIAO_ROW1_COL3 = new PortalCol('LUQIAO_ROW1_COL3', PortalRow.LUQIAO_ROW1, 3, 6)
+
+    static initList = [DEMO_ROW1_COL1, DEMO_ROW2_COL1, DEMO_ROW2_COL2, DEMO_ROW2_COL3, LUQIAO_ROW1_COL1, LUQIAO_ROW1_COL2, LUQIAO_ROW1_COL3]
 }

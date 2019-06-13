@@ -30,9 +30,9 @@ class Portal {
     static graphql = true
 
     static Portal PERSONAL_PORTAL = new Portal('个人门户', 'personal', 'user', 1)
-    static Portal LIVEBPM_PORTAL_DEMO = new Portal('LIVEBPM', 'livebpm', 'user', 4)
+    static Portal LUQIAO = new Portal('路桥门户', 'luqiao', 'user', 4)
     static initList = [
-            PERSONAL_PORTAL, LIVEBPM_PORTAL_DEMO,
+            PERSONAL_PORTAL, LUQIAO,
             new Portal('仪表盘', 'pie-chart', 'pie-chart', 2),
             new Portal('流程中心', 'radar-chart', 'radar-chart', 3)
     ]

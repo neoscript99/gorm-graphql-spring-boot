@@ -5,24 +5,23 @@ import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import groovy.transform.TupleConstructor
 import neo.script.gorm.general.initializer.InitializeDomian
-import neo.script.gorm.portal.domain.ptl.Portal
 
 @Entity
 @TupleConstructor(excludes = 'id, dateCreated, lastUpdated, version')
 @ToString(includePackage = false, includes = 'id, lastUpdated')
 @EqualsAndHashCode(includes = 'id')
-@InitializeDomian(profiles = 'dev', depends = Portal)
+@InitializeDomian(profiles = 'dev')
 class LiveServer {
     String id
-
+    String serverName
     String restRoot
     String restUser
     String restPassword
-    Portal portal
-    String loginPath = '/userService/login'
-    String userInfoPath = '/userService/getUserInfo'
-    String noticePath = '/messageCenter/queryNotices'
-    String objectQueryPath = '/lbObject/query'
+    Boolean enabled = true
+    String loginUri = '/userService/login?userId={userId}&password={password}'
+    String userInfoUri = '/userService/getUserInfo?userId={userId}&sessionId={sessionId}'
+    String noticeUri = '/messageCenter/queryNotices?userId={userId}&sessionId={sessionId}&type={type}'
+    String objectQueryUri = '/lbObject/query'
     //定时更新
     String sessionId
 
@@ -30,13 +29,18 @@ class LiveServer {
     Date lastUpdated
 
     static mapping = {
-        portal fetch: 'join', lazy: false
     }
     static constraints = {
         restRoot maxSize: 128
-        sessionId nullable: true
+        loginUri maxSize: 128
+        userInfoUri maxSize: 128
+        noticeUri maxSize: 128
+        sessionId nullable: true, maxSize: 128
     }
     static graphql = true
-    static LiveServer LIVEBPM_DEMO_SERVER = new LiveServer('http://114.115.153.164:7070/service/LBREST', 'rest', '000000', Portal.LIVEBPM_PORTAL_DEMO)
-    static initList = [LIVEBPM_DEMO_SERVER]
+    static LiveServer DEMO_SERVER =
+            new LiveServer('部门Livebpm环境',
+                    'http://114.115.153.164:7070/service/LBREST',
+                    'rest', '000000')
+    static initList = [DEMO_SERVER]
 }

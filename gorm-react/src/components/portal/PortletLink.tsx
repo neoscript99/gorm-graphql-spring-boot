@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Entity } from 'oo-graphql-service';
-import { portletLinkService } from '../services';
+import { portletLinkService } from '../../services';
 import { observer } from 'mobx-react';
 import { Button } from 'antd';
 

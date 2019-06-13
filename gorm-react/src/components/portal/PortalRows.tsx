@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
-import { portalRowRelService } from '../services';
+import { portalRowRelService } from '../../services';
 import { observer } from 'mobx-react';
 import { Row } from 'antd';
 import { Entity } from 'oo-graphql-service';
-import { clearEntity } from '../utils/myutils';
+import { clearEntity } from '../../utils/myutils';
 import PortalCol from './PortalCol';
 
 interface P {
@@ -21,7 +21,7 @@ class PortalRows extends React.Component<P> {
       .filter(value => value.portal.id === this.props.portal.id)
 
     return <Fragment>
-      {relList.map(rel => <Row {...clearEntity(rel.row, 'rowOrder', 'cols')} key={rel.id}>
+      {relList.map(rel => <Row {...clearEntity(rel.row, 'rowName', 'rowOrder', 'cols')} key={rel.id}>
         {
           rel.row.cols
             .slice()

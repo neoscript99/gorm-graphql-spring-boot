@@ -1,6 +1,6 @@
 import React from 'react';
 import { Entity } from 'oo-graphql-service';
-import { portletTableService } from '../services';
+import { portletTableService } from '../../services';
 import { observer } from 'mobx-react';
 import { Card, Table } from 'antd';
 

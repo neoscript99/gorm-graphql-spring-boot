@@ -13,11 +13,11 @@ import neo.script.gorm.general.initializer.InitializeDomian
 @InitializeDomian(profiles = 'dev')
 class PortalRow {
     String id
-
-    Integer gutter    //Õ¤¸ñ¼ä¸ô£¬¿ÉÒÔĞ´³ÉÏñËØÖµ»òÖ§³ÖÏìÓ¦Ê½µÄ¶ÔÏóĞ´·¨ { xs: 8, sm: 16, md: 24}	number/object	0
-    String align    //flex ²¼¾ÖÏÂµÄ´¹Ö±¶ÔÆë·½Ê½£ºtop middle bottom	string	top
-    String justify    //flex ²¼¾ÖÏÂµÄË®Æ½ÅÅÁĞ·½Ê½£ºstart end center space-around space-between	string	start
-    String type    //²¼¾ÖÄ£Ê½£¬¿ÉÑ¡ flex£¬ÏÖ´úä¯ÀÀÆ÷ ÏÂÓĞĞ§	string
+    String rowName
+    Integer gutter    //æ …æ ¼é—´éš”ï¼Œå¯ä»¥å†™æˆåƒç´ å€¼æˆ–æ”¯æŒå“åº”å¼çš„å¯¹è±¡å†™æ³• { xs: 8, sm: 16, md: 24}	number/object	0
+    String align    //flex å¸ƒå±€ä¸‹çš„å‚ç›´å¯¹é½æ–¹å¼ï¼štop middle bottom	string	top
+    String justify    //flex å¸ƒå±€ä¸‹çš„æ°´å¹³æ’åˆ—æ–¹å¼ï¼šstart end center space-around space-between	string	start
+    String type    //å¸ƒå±€æ¨¡å¼ï¼Œå¯é€‰ flexï¼Œç°ä»£æµè§ˆå™¨ ä¸‹æœ‰æ•ˆ	string
 
     Date dateCreated
     Date lastUpdated
@@ -27,13 +27,15 @@ class PortalRow {
         cols cascade: 'all-delete-orphan', fetch: 'join', lazy: false
     }
     static constraints = {
+        rowName unique: true
         align nullable: true
         gutter nullable: true
         justify nullable: true
         type nullable: true
     }
     static graphql = true
-    static DEMO_ROW1 = new PortalRow(16)
-    static DEMO_ROW2 = new PortalRow(16)
-    static initList = [DEMO_ROW1, DEMO_ROW2]
+    static DEMO_ROW1 = new PortalRow('DEMO_ROW1', 16)
+    static DEMO_ROW2 = new PortalRow('DEMO_ROW2', 16)
+    static LUQIAO_ROW1 = new PortalRow('LUQIAO_ROW1', 16)
+    static initList = [DEMO_ROW1, DEMO_ROW2, LUQIAO_ROW1]
 }

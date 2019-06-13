@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { observer } from 'mobx-react';
 import { Anchor, Layout } from 'antd';
 import { Entity } from 'oo-graphql-service';
-import { portalRowRelService, portletColRelService } from '../services';
+import { portalRowRelService, portletColRelService } from '../../services';
 
 
 const {

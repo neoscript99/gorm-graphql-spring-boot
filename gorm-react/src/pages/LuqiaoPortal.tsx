@@ -16,6 +16,8 @@ import icon4 from '../asset/img/icon4.png'
 import icon5 from '../asset/img/icon5.png'
 import icon6 from '../asset/img/icon6.png'
 import icon7 from '../asset/img/icon7.png'
+import { portalService } from '../services';
+import PortalRows from '../components/portal/PortalRows';
 
 const {
   Header, Content
@@ -69,7 +71,9 @@ class LuqiaoPortal extends Component {
           </div>
         </Header>
         <Content style={{ background: '#f4f4f4' }}>
-          Content
+          {portalService.store.allList && portalService.store.allList
+            .filter(p => (p.portalCode as string).startsWith('luqiao'))
+            .map(p => <PortalRows key={p.id} portal={p} />)}
         </Content>
       </Layout>
     );

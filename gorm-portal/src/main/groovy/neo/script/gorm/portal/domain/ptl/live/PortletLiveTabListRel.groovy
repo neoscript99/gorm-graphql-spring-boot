@@ -1,4 +1,4 @@
-package neo.script.gorm.portal.domain.ptl
+package neo.script.gorm.portal.domain.ptl.live
 
 import grails.gorm.annotation.Entity
 import groovy.transform.EqualsAndHashCode
@@ -10,25 +10,25 @@ import neo.script.gorm.general.initializer.InitializeDomian
 @TupleConstructor(excludes = 'id, dateCreated, lastUpdated, version')
 @ToString(includePackage = false, includes = 'id, lastUpdated')
 @EqualsAndHashCode(includes = 'id')
-@InitializeDomian(profiles = 'dev', depends = [Portal, PortalRow])
-class PortalRowRel {
+@InitializeDomian(profiles = 'dev', depends = [PortletLiveTab, PortletLiveList])
+class PortletLiveTabListRel {
     String id
-    Portal portal
-    PortalRow row
-    Integer rowOrder
+
+    PortletLiveTab tab
+    PortletLiveList list
+    Integer listOrder = 0
+
     Date dateCreated
     Date lastUpdated
 
     static mapping = {
-        portal fetch: 'join', lazy: false
-        row fetch: 'join', lazy: false
+        tab fetch: 'join', lazy: false
+        list fetch: 'join', lazy: false
     }
     static constraints = {
     }
     static graphql = true
-    static initList = [
-            new PortalRowRel(Portal.PERSONAL_PORTAL, PortalRow.DEMO_ROW1, 1),
-            new PortalRowRel(Portal.PERSONAL_PORTAL, PortalRow.DEMO_ROW2, 2),
-            new PortalRowRel(Portal.LUQIAO, PortalRow.LUQIAO_ROW1, 1),
-    ]
+
+    static PortletLiveTabListRel = new PortletLiveTabListRel(PortletLiveTab.DEMO_TAB, PortletLiveList.DEMO_LIST, 1)
+    static initList = []
 }
