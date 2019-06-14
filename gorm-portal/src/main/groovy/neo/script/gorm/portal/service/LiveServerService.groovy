@@ -37,8 +37,8 @@ class LiveServerService extends AbstractService<LiveServer> {
     }
 
     def userLogin(LiveServer liveServer) {
-        def url = liveServer.restRoot + liveServer.loginUri
-        //不能直接用restTemplate.getForObject(it.restRoot + it.loginUri, LoginRes.class, it.restUser, it.restPassword)
+        def url = liveServer.serverRoot + liveServer.restPath + liveServer.loginUri
+        //不能直接用restTemplate.getForObject(url, LoginRes.class, it.restUser, it.restPassword)
         //该服务不接受Accept header [application/json, application/*+json]
         def result = restTemplate.getForObject(url, String.class, liveServer.restUser, liveServer.restPassword)
         return JsonUtil.fromJson(result, LoginRes.class);
@@ -49,7 +49,7 @@ class LiveServerService extends AbstractService<LiveServer> {
     }
 
     def getUserInfo(LiveServer liveServer, String userId) {
-        def url = liveServer.restRoot + liveServer.userInfoUri
+        def url = liveServer.serverRoot + liveServer.restPath + liveServer.userInfoUri
         return restTemplate.getForObject(url, String.class, userId, liveServer.sessionId)
     }
 
@@ -59,7 +59,7 @@ class LiveServerService extends AbstractService<LiveServer> {
     }
 
     def queryNotices(LiveServer liveServer, String userId, String type) {
-        def url = liveServer.restRoot + liveServer.noticeUri
+        def url = liveServer.serverRoot + liveServer.restPath + liveServer.noticeUri
         return restTemplate.getForObject(url, String.class, userId, liveServer.sessionId, type)
     }
 
@@ -69,7 +69,7 @@ class LiveServerService extends AbstractService<LiveServer> {
 
     def objectQuery(LiveQuery liveQuery) {
         def liveServer = liveQuery.liveServer
-        def url = liveServer.restRoot + liveServer.objectQueryUri
+        def url = liveServer.serverRoot + liveServer.restPath + liveServer.objectQueryUri
         def requestData = [objectName : liveQuery.objectName,
                            condition  : liveQuery.condition,
                            queryOption: [

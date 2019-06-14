@@ -5,6 +5,7 @@ import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import groovy.transform.TupleConstructor
 import neo.script.gorm.general.initializer.InitializeDomian
+import neo.script.gorm.portal.util.Consts
 
 @Entity
 @TupleConstructor(excludes = 'id, dateCreated, lastUpdated, version')
@@ -18,7 +19,7 @@ class PortalCol {
     PortalRow row
     Integer colOrder    //栅格顺序，flex 布局模式下有效	number	0
     Integer span    //栅格占位格数，为 0 时相当于 display: none	number	-
-    String style = '''{ "display": "flex", "justifyContent": "center", "flexWrap": "wrap" }'''
+    String style = Consts.STYLE_FLEX_ROW
 
     //以下非必输项
     Integer colOffset    //栅格左侧的间隔格数，间隔内不可以有栅格	number	0
@@ -57,13 +58,10 @@ class PortalCol {
     }
     static graphql = true
     static PortalCol DEMO_ROW1_COL1 = new PortalCol('DEMO_ROW1_COL1', PortalRow.DEMO_ROW1, 1, 24)
-    static PortalCol DEMO_ROW2_COL1 = new PortalCol('DEMO_ROW2_COL1', PortalRow.DEMO_ROW2, 1, 6)
+    static PortalCol DEMO_ROW2_COL1 = new PortalCol('DEMO_ROW2_COL1', PortalRow.DEMO_ROW2, 1, 6, Consts.STYLE_FLEX_COL)
     static PortalCol DEMO_ROW2_COL2 = new PortalCol('DEMO_ROW2_COL2', PortalRow.DEMO_ROW2, 2, 12)
-    static PortalCol DEMO_ROW2_COL3 = new PortalCol('DEMO_ROW2_COL3', PortalRow.DEMO_ROW2, 3, 6)
+    static PortalCol DEMO_ROW2_COL3 = new PortalCol('DEMO_ROW2_COL3', PortalRow.DEMO_ROW2, 3, 6, Consts.STYLE_FLEX_COL)
 
-    static PortalCol LUQIAO_ROW1_COL1 = new PortalCol('LUQIAO_ROW1_COL1', PortalRow.LUQIAO_ROW1, 1, 6)
-    static PortalCol LUQIAO_ROW1_COL2 = new PortalCol('LUQIAO_ROW1_COL2', PortalRow.LUQIAO_ROW1, 2, 12)
-    static PortalCol LUQIAO_ROW1_COL3 = new PortalCol('LUQIAO_ROW1_COL3', PortalRow.LUQIAO_ROW1, 3, 6)
 
-    static initList = [DEMO_ROW1_COL1, DEMO_ROW2_COL1, DEMO_ROW2_COL2, DEMO_ROW2_COL3, LUQIAO_ROW1_COL1, LUQIAO_ROW1_COL2, LUQIAO_ROW1_COL3]
+    static initList = [DEMO_ROW1_COL1, DEMO_ROW2_COL1, DEMO_ROW2_COL2, DEMO_ROW2_COL3]
 }

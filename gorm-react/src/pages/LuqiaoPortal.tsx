@@ -27,7 +27,7 @@ const {
 class LuqiaoPortal extends Component {
   render() {
     return (
-      <Layout id='luqiao'>
+      <Layout id='luqiao' style={{ minHeight: '100vh' }}>
         <Header
           style={{ background: '#fff', padding: 0, height: 'auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -70,7 +70,7 @@ class LuqiaoPortal extends Component {
             <span style={{ color: '#999', margin: '0 1rem' }}>更多>></span>
           </div>
         </Header>
-        <Content style={{ background: '#f4f4f4' }}>
+        <Content style={{ background: '#f4f4f4', padding: '0.5rem' }}>
           {portalService.store.allList && portalService.store.allList
             .filter(p => (p.portalCode as string).startsWith('luqiao'))
             .map(p => <PortalRows key={p.id} portal={p} />)}

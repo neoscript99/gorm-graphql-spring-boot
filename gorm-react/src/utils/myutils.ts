@@ -32,3 +32,11 @@ export function clearEntity(entity: any, ...deleteProps: string[]) {
   deleteProps.every(prop => delete rest[prop])
   return rest
 }
+
+export function dateStringConvert(fromDateFormat: string, toDateFormat: string, text: string) {
+  if (text && fromDateFormat && toDateFormat)
+    return moment(text, fromDateFormat)
+      .format(toDateFormat)
+  else
+    return text
+}

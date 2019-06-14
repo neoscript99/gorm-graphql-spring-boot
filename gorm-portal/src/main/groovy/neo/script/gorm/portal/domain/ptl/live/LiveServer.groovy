@@ -14,7 +14,8 @@ import neo.script.gorm.general.initializer.InitializeDomian
 class LiveServer {
     String id
     String serverName
-    String restRoot
+    String serverRoot
+    String restPath
     String restUser
     String restPassword
     Boolean enabled = true
@@ -31,7 +32,7 @@ class LiveServer {
     static mapping = {
     }
     static constraints = {
-        restRoot maxSize: 128
+        serverRoot maxSize: 128
         loginUri maxSize: 128
         userInfoUri maxSize: 128
         noticeUri maxSize: 128
@@ -40,7 +41,8 @@ class LiveServer {
     static graphql = true
     static LiveServer DEMO_SERVER =
             new LiveServer('部门Livebpm环境',
-                    'http://114.115.153.164:7070/service/LBREST',
+                    'http://114.115.153.164:7070',
+                    '/service/LBREST',
                     'rest', '000000')
     static initList = [DEMO_SERVER]
 }

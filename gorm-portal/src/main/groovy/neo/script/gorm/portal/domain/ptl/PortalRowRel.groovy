@@ -28,7 +28,6 @@ class PortalRowRel {
     static graphql = true
     static initList = [
             new PortalRowRel(Portal.PERSONAL_PORTAL, PortalRow.DEMO_ROW1, 1),
-            new PortalRowRel(Portal.PERSONAL_PORTAL, PortalRow.DEMO_ROW2, 2),
-            new PortalRowRel(Portal.LUQIAO, PortalRow.LUQIAO_ROW1, 1),
+            new PortalRowRel(Portal.PERSONAL_PORTAL, PortalRow.DEMO_ROW2, 2)
     ]
 }

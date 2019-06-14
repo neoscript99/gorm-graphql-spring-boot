@@ -29,6 +29,6 @@ class PortletLiveTabListRel {
     }
     static graphql = true
 
-    static PortletLiveTabListRel = new PortletLiveTabListRel(PortletLiveTab.DEMO_TAB, PortletLiveList.DEMO_LIST, 1)
+    static PortletLiveTabListRel = new PortletLiveTabListRel(PortletLiveTab.DEMO_TAB, PortletLiveList.USER_LINK_LIST, 1)
     static initList = []
 }

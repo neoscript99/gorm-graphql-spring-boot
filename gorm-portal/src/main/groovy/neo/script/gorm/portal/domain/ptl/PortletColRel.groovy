@@ -43,9 +43,5 @@ class PortletColRel {
             new PortletColRel(PortalCol.DEMO_ROW2_COL2, PortletPie.DEMO_PIE6, 6),
             new PortletColRel(PortalCol.DEMO_ROW2_COL1, PortletTable.DEMO_TABLE1, 6),
             new PortletColRel(PortalCol.DEMO_ROW2_COL3, PortletTable.DEMO_TABLE2, 6),
-
-            new PortletColRel(PortalCol.LUQIAO_ROW1_COL1, PortletLiveList.DEMO_LIST, 6),
-            new PortletColRel(PortalCol.LUQIAO_ROW1_COL2, PortletLiveList.DEMO_LIST, 6),
-            new PortletColRel(PortalCol.LUQIAO_ROW1_COL3, PortletLiveList.DEMO_LIST, 6),
     ]
 }

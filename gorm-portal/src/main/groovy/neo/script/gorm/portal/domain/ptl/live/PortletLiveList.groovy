@@ -14,12 +14,13 @@ import neo.script.gorm.portal.domain.ptl.Portlet
 @InitializeDomian(profiles = 'dev', depends = LiveQuery)
 class PortletLiveList extends Portlet {
     LiveQuery liveQuery
-    String titleField
+    String titleFields
     String cateField
     String dateField
     String iconField
-    String fromDateFormat
-    String toDateFormat
+    String rowKey = 'ID'
+    String fromDateFormat = 'YYYY-MM-DD HH:mm:ss'
+    String toDateFormat = 'YYYY-MM-DD'
 
     static mapping = {
         liveQuery fetch: 'join', lazy: false
@@ -28,11 +29,12 @@ class PortletLiveList extends Portlet {
         cateField nullable: true
         iconField nullable: true
         dateField nullable: true
+        extraLink nullable: true
         fromDateFormat nullable: true
         toDateFormat nullable: true
     }
     static graphql = true
 
-    static DEMO_LIST = new PortletLiveList('员工列表', 'PortletLiveList', LiveQuery.DEMO_QUERY, "Name", 'Grade', 'LastLogin')
-    static initList = [DEMO_LIST]
+    static USER_LINK_LIST = new PortletLiveList('通讯录', 'PortletLiveList', LiveQuery.USER_LINK, "Name,UserID", 'Grade', 'ChgPwdTime')
+    static initList = [USER_LINK_LIST]
 }

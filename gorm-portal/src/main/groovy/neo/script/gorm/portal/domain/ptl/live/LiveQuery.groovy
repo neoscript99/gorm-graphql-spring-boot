@@ -21,7 +21,7 @@ class LiveQuery {
     //如果传入BOTH，每个字段会返回显示值和实际值两个值
     String valueOption = 'DISPLAY'
     Integer batchNo = 1 //1(当前页数),
-    Integer batchSize = 10//(每页记录数),
+    Integer batchSize = 1000//(每页记录数),
     Boolean queryCount = true//true(是否需要返回记录总数)}
 
     Date dateCreated
@@ -31,8 +31,9 @@ class LiveQuery {
         liveServer fetch: 'join', lazy: false
     }
     static constraints = {
+        condition blank: true
     }
     static graphql = true
-    static LiveQuery DEMO_QUERY = new LiveQuery(LiveServer.DEMO_SERVER, 'tUser', 'LastLogin is not null')
-    static initList = [DEMO_QUERY]
+    static LiveQuery USER_LINK = new LiveQuery(LiveServer.DEMO_SERVER, 'tUserLink')
+    static initList = [USER_LINK]
 }

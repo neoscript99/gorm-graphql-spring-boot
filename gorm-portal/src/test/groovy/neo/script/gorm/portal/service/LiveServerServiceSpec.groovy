@@ -22,9 +22,9 @@ class LiveServerServiceSpec extends Specification {
         RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build();
         def it = LiveServer.DEMO_SERVER
 
-        //不能直接用restTemplate.getForObject(it.restRoot + it.loginUri, LoginRes.class, it.restUser, it.restPassword)
+        //不能直接用restTemplate.getForObject(url, LoginRes.class, it.restUser, it.restPassword)
         //该服务不接受Accept header [application/json, application/*+json]
-        def result = restTemplate.getForObject(it.restRoot + it.loginUri, String.class, it.restUser, it.restPassword)
+        def result = restTemplate.getForObject(it.serverRoot+it.restPath + it.loginUri, String.class, it.restUser, it.restPassword)
         LiveServerService.LoginRes loginRes = JsonUtil.fromJson(result, LiveServerService.LoginRes.class);
         if (loginRes.result == 1) {
             log.info('Livebos登入成功：{}', loginRes)
@@ -45,7 +45,7 @@ class LiveServerServiceSpec extends Specification {
 
         log.info(lss.getUserInfo(liveServer, 'admin'))
         log.info(lss.queryNotices(liveServer, 'admin', '0'))
-        log.info(lss.objectQuery(LiveQuery.DEMO_QUERY))
+        log.info(lss.objectQuery(LiveQuery.USER_LINK))
         expect:
         true
     }
