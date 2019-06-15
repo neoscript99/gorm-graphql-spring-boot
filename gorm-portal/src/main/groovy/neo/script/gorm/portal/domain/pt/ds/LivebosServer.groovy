@@ -1,4 +1,4 @@
-package neo.script.gorm.portal.domain.ptl.live
+package neo.script.gorm.portal.domain.pt.ds
 
 import grails.gorm.annotation.Entity
 import groovy.transform.EqualsAndHashCode
@@ -11,7 +11,7 @@ import neo.script.gorm.general.initializer.InitializeDomian
 @ToString(includePackage = false, includes = 'id, lastUpdated')
 @EqualsAndHashCode(includes = 'id')
 @InitializeDomian(profiles = 'dev')
-class LiveServer {
+class LivebosServer {
     String id
     String serverName
     String serverRoot
@@ -39,8 +39,8 @@ class LiveServer {
         sessionId nullable: true, maxSize: 128
     }
     static graphql = true
-    static LiveServer DEMO_SERVER =
-            new LiveServer('部门Livebpm环境',
+    static LivebosServer DEMO_SERVER =
+            new LivebosServer('部门Livebpm环境',
                     'http://114.115.153.164:7070',
                     '/service/LBREST',
                     'rest', '000000')

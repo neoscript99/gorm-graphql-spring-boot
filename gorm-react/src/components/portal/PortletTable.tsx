@@ -1,6 +1,6 @@
 import React from 'react';
 import { Entity } from 'oo-graphql-service';
-import { portletTableService } from '../../services';
+import { portletDsService, portletTableService } from '../../services';
 import { observer } from 'mobx-react';
 import { Card, Table } from 'antd';
 
@@ -11,12 +11,12 @@ interface S {
 }
 
 @observer
-class PortletTable extends React.Component<{ portlet: Entity }, S> {
+class PortletTable extends React.Component<{ portlet: Entity, ds: any }, S> {
   componentDidMount() {
-    const { portlet } = this.props;
+    const { portlet, ds } = this.props;
     portletTableService.get(portlet.id)
       .then(table => this.setState({ table, columns: JSON.parse(table.columns) }))
-    portlet.id && portletTableService.getData(portlet.id)
+    portlet.id && portletDsService.getData(ds.id)
       .then(jsonList => this.setState({ tableData: jsonList.map(json => JSON.parse(json)) }))
   }
 
@@ -28,8 +28,7 @@ class PortletTable extends React.Component<{ portlet: Entity }, S> {
                rowKey={table.rowKey}
                pagination={{ pageSize: 5 }} bordered />
       </Card>
-    }
-    else
+    } else
       return null
   }
 }

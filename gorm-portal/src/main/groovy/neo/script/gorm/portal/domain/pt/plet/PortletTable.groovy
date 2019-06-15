@@ -1,4 +1,4 @@
-package neo.script.gorm.portal.domain.ptl
+package neo.script.gorm.portal.domain.pt.plet
 
 import grails.gorm.annotation.Entity
 import groovy.transform.TupleConstructor
@@ -6,29 +6,24 @@ import neo.script.gorm.general.initializer.InitializeDomian
 
 @Entity
 @TupleConstructor(includeSuperProperties = true, excludes = 'id, dateCreated, lastUpdated, version')
-@InitializeDomian(profiles = 'dev', depends = [PortalCol, PortalDbQuery])
+@InitializeDomian(profiles = 'dev')
 class PortletTable extends Portlet {
 
-    PortalDbQuery dbQuery
     String columns
     String rowKey
-
-    static mapping = {
-        dbQuery fetch: 'join', lazy: false
-    }
 
     static constraints = {
         columns maxSize: 512
     }
-    static graphql
+    static graphql = true
 
-    static DEMO_TABLE1 = new PortletTable('员工列表', 'PortletTable', PortalDbQuery.EMP_LIST,
+    static DEMO_TABLE1 = new PortletTable('员工列表', 'PortletTable',
             """[{"title": "员工号", "dataIndex": "EMPNO", "sorter": true }, 
                                  {"title": "员工名", "dataIndex": "ENAME" },
                                  {"title": "入职日期", "dataIndex": "HIREDATE" }
                             ]""", 'EMPNO'
     )
-    static DEMO_TABLE2 = new PortletTable('部门列表', 'PortletTable', PortalDbQuery.DEPT_LIST,
+    static DEMO_TABLE2 = new PortletTable('部门列表', 'PortletTable',
             """[{"title": "部门号", "dataIndex": "DEPTNO" }, 
                                  {"title": "部门名", "dataIndex": "DNAME" },
                                  {"title": "办公地址", "dataIndex": "LOC" }

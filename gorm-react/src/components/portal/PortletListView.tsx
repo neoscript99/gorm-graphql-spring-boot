@@ -1,13 +1,13 @@
 import React from 'react';
 import Portlet from './Portlet';
 import { DomainService, Entity, MobxDomainStore } from 'oo-graphql-service';
-import { portletLiveListService } from '../../services';
+import { portletListViewService } from '../../services';
 import { Card, Table } from 'antd';
 import { dateStringConvert } from '../../utils/myutils';
 import { ColumnProps } from 'antd/lib/table';
 
 
-class PortletLiveList extends Portlet {
+class PortletListView extends Portlet {
   render() {
     if (!this.state)
       return null;
@@ -44,8 +44,8 @@ class PortletLiveList extends Portlet {
   }
 
   get portletService(): DomainService<MobxDomainStore> {
-    return portletLiveListService;
+    return portletListViewService;
   }
 }
 
-export default PortletLiveList;
+export default PortletListView;

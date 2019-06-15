@@ -2,14 +2,14 @@ package neo.script.gorm.portal.service
 
 import groovy.sql.Sql
 import neo.script.gorm.general.service.AbstractService
-import neo.script.gorm.portal.domain.ptl.PortalDb
+import neo.script.gorm.portal.domain.pt.ds.RdbServer
 import org.springframework.stereotype.Service
 
 @Service
-class PortalDbService extends AbstractService<PortalDb> {
+class PortalRdbService extends AbstractService<RdbServer> {
     private final groovySqlMap = new HashMap<String, Sql>()
 
-    synchronized Sql getSql(PortalDb db) {
+    synchronized Sql getSql(RdbServer db) {
         def sql = groovySqlMap.get(db.id)
         if (sql) {
             try {
@@ -27,7 +27,7 @@ class PortalDbService extends AbstractService<PortalDb> {
         return sql
     }
 
-    Sql newSql(PortalDb db) {
+    Sql newSql(RdbServer db) {
         return Sql.newInstance(db.url, db.username, db.password, db.driverClassName)
     }
 }

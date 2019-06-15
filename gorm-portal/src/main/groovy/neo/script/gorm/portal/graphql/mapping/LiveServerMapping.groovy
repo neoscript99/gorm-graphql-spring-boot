@@ -3,14 +3,14 @@ package neo.script.gorm.portal.graphql.mapping
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import neo.script.gorm.graphql.entity.GraphQLMappingFlag
-import neo.script.gorm.portal.domain.ptl.live.LiveServer
+import neo.script.gorm.portal.domain.pt.ds.LivebosServer
 import neo.script.gorm.portal.service.LiveServerService
 import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
-@GraphQLMappingFlag(LiveServer)
+@GraphQLMappingFlag(LivebosServer)
 class LiveServerMapping extends GraphQLMapping {
     @Autowired
     LiveServerService liveServerService

@@ -21,7 +21,7 @@ class PortalCol extends Component<P> {
            offset={col.colOffset} style={JSON.parse(col.style)}>
         {portletColRelService.store.allList.filter(rel => rel.col.id === col.id)
           .map(rel =>
-            <PortletSwitch key={rel.portlet.id} portlet={rel.portlet} />)}
+            <PortletSwitch key={rel.portlet.id} portlet={rel.portlet} ds={rel.ds} />)}
       </Col>
     );
   }

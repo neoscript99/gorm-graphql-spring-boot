@@ -1,4 +1,4 @@
-package neo.script.gorm.portal.domain.ptl
+package neo.script.gorm.portal.domain.pt.ds
 
 import grails.gorm.annotation.Entity
 import groovy.transform.EqualsAndHashCode
@@ -9,7 +9,7 @@ import neo.script.gorm.general.initializer.InitializeDomian
 @ToString(includePackage = false, includes = 'dbName, id')
 @EqualsAndHashCode(includes = 'id')
 @InitializeDomian(profiles = 'dev')
-class PortalDb {
+class RdbServer {
     String id
     String dbName
     String driverClassName
@@ -27,7 +27,7 @@ class PortalDb {
     }
     static graphql = true
 
-    static PortalDb SCOTT = new PortalDb([
+    static RdbServer SCOTT = new RdbServer([
             dbName         : 'OA数据库',
             driverClassName: 'oracle.jdbc.OracleDriver',
             url            : 'jdbc:oracle:thin:@114.115.153.164:1521:orcl',

@@ -1,4 +1,4 @@
-import { domainGraphql, liveServerService } from '../services';
+import { domainGraphql, livebosServerService } from '../services';
 
 import { graphqlVars } from '../services';
 import { DomainService, MobxDomainStore } from 'oo-graphql-service';
@@ -6,17 +6,17 @@ import { DomainService, MobxDomainStore } from 'oo-graphql-service';
 graphqlVars.token = 'gorm-dev-token'
 
 it('test server', async () => {
-  const liveServer = await liveServerService.findFirst({})
+  const liveServer = await livebosServerService.findFirst({})
   expect(liveServer)
     .toBeTruthy()
 
-  const userInfo = await liveServerService.getUserInfo(liveServer.id as string, 'admin');
+  const userInfo = await livebosServerService.getUserInfo(liveServer.id as string, 'admin');
   console.log(userInfo);
   expect(userInfo.name)
     .toEqual('管理员')
 
 
-  const notice = await liveServerService.queryNotices(liveServer.id as string, 'admin');
+  const notice = await livebosServerService.queryNotices(liveServer.id as string, 'admin');
   console.log(notice);
   expect(notice.result)
     .toEqual(1)
@@ -28,7 +28,7 @@ it('livebos object query test', async () => {
   const liveQuery = await liveQueryService.findFirst({})
   console.log(liveQuery);
   expect(liveQuery).toBeTruthy()
-  const result = await liveServerService.objectQuery(liveQuery.id as string);
+  const result = await livebosServerService.objectQuery(liveQuery.id as string);
   console.log(result.data);
   expect(result.count)
     .toBeGreaterThan(0)

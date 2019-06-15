@@ -1,4 +1,4 @@
-package neo.script.gorm.portal.domain.ptl.live
+package neo.script.gorm.portal.domain.pt.ds
 
 import grails.gorm.annotation.Entity
 import groovy.transform.EqualsAndHashCode
@@ -7,13 +7,13 @@ import groovy.transform.TupleConstructor
 import neo.script.gorm.general.initializer.InitializeDomian
 
 @Entity
-@TupleConstructor(excludes = 'id, dateCreated, lastUpdated, version')
+@TupleConstructor(includeSuperProperties = true, excludes = 'id, dateCreated, lastUpdated, version')
 @ToString(includePackage = false, includes = 'id, lastUpdated')
 @EqualsAndHashCode(includes = 'id')
-@InitializeDomian(profiles = 'dev', depends = LiveServer)
-class LiveQuery {
-    String id
-    LiveServer liveServer
+@InitializeDomian(profiles = 'dev', depends = LivebosServer)
+class LivebosQuery extends PortletDs {
+
+    LivebosServer liveServer
     String objectName   //对象名,
     String condition = ''   //ID>0 查询条件,
     //queryOption
@@ -24,8 +24,6 @@ class LiveQuery {
     Integer batchSize = 1000//(每页记录数),
     Boolean queryCount = true//true(是否需要返回记录总数)}
 
-    Date dateCreated
-    Date lastUpdated
 
     static mapping = {
         liveServer fetch: 'join', lazy: false
@@ -34,6 +32,6 @@ class LiveQuery {
         condition blank: true
     }
     static graphql = true
-    static LiveQuery USER_LINK = new LiveQuery(LiveServer.DEMO_SERVER, 'tUserLink')
+    static LivebosQuery USER_LINK = new LivebosQuery('通讯录', 'LivebosQuery', LivebosServer.DEMO_SERVER, 'tUserLink')
     static initList = [USER_LINK]
 }

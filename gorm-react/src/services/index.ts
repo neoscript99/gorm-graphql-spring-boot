@@ -6,7 +6,7 @@ import {
 } from 'oo-graphql-service'
 import config from '../utils/config'
 import MenuService from '../services/MenuService';
-import PortletTableService from './PortletTableService';
+import PortletDsService from './PortletDsService';
 import UserService, { LoginInfo } from './UserService';
 import LiveServerService from './LiveServerService';
 
@@ -26,11 +26,12 @@ export const portalRowRelService = new DomainService('portalRowRel', MobxDomainS
 export const portletColRelService = new DomainService('portletColRel', MobxDomainStore, domainGraphql);
 export const portletService = new DomainService('portlet', MobxDomainStore, domainGraphql);
 export const portletLinkService = new DomainService('portletLink', MobxDomainStore, domainGraphql);
-export const portletTableService = new PortletTableService('portletTable', MobxDomainStore, domainGraphql);
-export const portletLiveListService = new PortletTableService('portletLiveList', MobxDomainStore, domainGraphql);
-export const portletDbService = new DomainService('portalDb', MobxDomainStore, domainGraphql);
-export const portletDbQueryService = new DomainService('portalDbQuery', MobxDomainStore, domainGraphql);
-export const liveServerService = new LiveServerService('liveServer', MobxDomainStore, domainGraphql);
+export const portletTableService = new DomainService('portletTable', MobxDomainStore, domainGraphql);
+export const portletDsService = new PortletDsService('portletDs', MobxDomainStore, domainGraphql);
+export const portletListViewService = new DomainService('portletListView', MobxDomainStore, domainGraphql);
+export const rdbServerService = new DomainService('rdbServer', MobxDomainStore, domainGraphql);
+export const rdbQueryService = new DomainService('rdbQuery', MobxDomainStore, domainGraphql);
+export const livebosServerService = new LiveServerService('livebosServer', MobxDomainStore, domainGraphql);
 export const menuService = new MenuService(domainGraphql);
 
 function afterLogin(login: LoginInfo) {

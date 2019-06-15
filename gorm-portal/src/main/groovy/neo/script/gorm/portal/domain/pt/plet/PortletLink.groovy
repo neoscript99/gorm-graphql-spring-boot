@@ -1,8 +1,9 @@
-package neo.script.gorm.portal.domain.ptl
+package neo.script.gorm.portal.domain.pt.plet
 
 import grails.gorm.annotation.Entity
 import groovy.transform.TupleConstructor
 import neo.script.gorm.general.initializer.InitializeDomian
+import neo.script.gorm.portal.domain.pt.PortalCol
 
 @Entity
 @TupleConstructor(includeSuperProperties = true, excludes = 'id, dateCreated, lastUpdated, version')

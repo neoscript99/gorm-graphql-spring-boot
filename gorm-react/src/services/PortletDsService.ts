@@ -2,18 +2,18 @@ import DomainService from 'oo-graphql-service/lib/DomainService';
 import { MobxDomainStore } from 'oo-graphql-service';
 import gql from 'graphql-tag';
 
-export default class PortletTableService extends DomainService<MobxDomainStore> {
+export default class PortletDsService extends DomainService<MobxDomainStore> {
 
   getData(id: string): Promise<string[]> {
-    return this.domainGraphql.apolloClient.query<{ portletTableData: string[] }>({
-      query: gql`query portletTableDataQuery{
-                  portletTableData(portletTableId: "${id}")
+    return this.domainGraphql.apolloClient.query<{ portletData: string[] }>({
+      query: gql`query portletDataQuery{
+                  portletData(dsId: "${id}")
                 }`,
       fetchPolicy: 'no-cache',
       variables: {
         ...this.domainGraphql.defaultVariables
       }
     })
-      .then(data => data.data.portletTableData)
+      .then(data => data.data.portletData)
   }
 }

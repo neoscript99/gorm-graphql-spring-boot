@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Entity } from 'oo-graphql-service';
 import DomainService from 'oo-graphql-service/lib/DomainService';
 import MobxDomainStore from 'oo-graphql-service/lib/mobx/MobxDomainStore';
-import { liveServerService } from '../../services';
+import { livebosServerService } from '../../services';
 import { LiveObject } from '../../services/LiveServerService';
 
 export interface PortletProps {
@@ -28,7 +28,7 @@ abstract class Portlet<P extends PortletProps = PortletProps, S extends PortletS
     this.portletService.get(this.props.portlet.id)
       .then(portlet => {
         if (portlet.liveQuery) {
-          liveServerService.objectQuery(portlet.liveQuery.id)
+          livebosServerService.objectQuery(portlet.liveQuery.id)
             .then(liveObject => this.setState({ portlet, liveObject }))
         } else
           this.setState({ portlet })
