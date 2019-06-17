@@ -20,19 +20,19 @@ export interface LiveNotice {
   message: string
 }
 
-export interface LiveObject {
+export interface LivebosObject {
   //最终数据转化到这里
   data: any[]
   queryId: string
   hasMore: boolean
   count: number
-  metaData: LiveObjectMetaData
+  metaData: LivebosObjectMetaData
   result: number
   message: string
   records: any[][]
 }
 
-export interface LiveObjectMetaData {
+export interface LivebosObjectMetaData {
   colCount: number
   colInfo: {
     name: string
@@ -43,45 +43,45 @@ export interface LiveObjectMetaData {
   }[]
 }
 
-export default class LiveServerService extends DomainService<MobxDomainStore> {
+export default class LivebosServerService extends DomainService<MobxDomainStore> {
 
-  getUserInfo(liveServerId: string, userId: string): Promise<LiveUserInfo> {
-    return this.domainGraphql.apolloClient.query<{ liveGetUserInfo: string }>({
-      query: gql`query liveGetUserInfo{
-                  liveGetUserInfo(liveServerId: "${liveServerId}", userId: "${userId}")
+  getUserInfo(livebosServerId: string, userId: string): Promise<LiveUserInfo> {
+    return this.domainGraphql.apolloClient.query<{ livebosGetUserInfo: string }>({
+      query: gql`query livebosGetUserInfo{
+                  livebosGetUserInfo(livebosServerId: "${livebosServerId}", userId: "${userId}")
                 }`,
       fetchPolicy: 'no-cache',
       variables: {
         ...this.domainGraphql.defaultVariables
       }
     })
-      .then(data => JSON.parse(data.data.liveGetUserInfo))
+      .then(data => JSON.parse(data.data.livebosGetUserInfo))
   }
 
-  queryNotices(liveServerId: string, userId: string, type: string = '0'): Promise<LiveNotice> {
-    return this.domainGraphql.apolloClient.query<{ liveQueryNotices: string }>({
-      query: gql`query liveQueryNotices{
-                  liveQueryNotices(liveServerId: "${liveServerId}", userId: "${userId}", type: "${type}")
+  queryNotices(livebosServerId: string, userId: string, type: string = '0'): Promise<LiveNotice> {
+    return this.domainGraphql.apolloClient.query<{ livebosQueryNotices: string }>({
+      query: gql`query livebosQueryNotices{
+                  livebosQueryNotices(livebosServerId: "${livebosServerId}", userId: "${userId}", type: "${type}")
                 }`,
       fetchPolicy: 'no-cache',
       variables: {
         ...this.domainGraphql.defaultVariables
       }
     })
-      .then(data => JSON.parse(data.data.liveQueryNotices))
+      .then(data => JSON.parse(data.data.livebosQueryNotices))
   }
 
-  objectQuery(liveQueryId: string): Promise<LiveObject> {
-    return this.domainGraphql.apolloClient.query<{ liveObjectQuery: string }>({
-      query: gql`query liveObjectQuery{
-                  liveObjectQuery(liveQueryId: "${liveQueryId}")
+  objectQuery(livebosQueryId: string): Promise<LivebosObject> {
+    return this.domainGraphql.apolloClient.query<{ livebosObjectQuery: string }>({
+      query: gql`query livebosObjectQuery{
+                  livebosObjectQuery(livebosQueryId: "${livebosQueryId}")
                 }`,
       fetchPolicy: 'no-cache',
       variables: {
         ...this.domainGraphql.defaultVariables
       }
     })
-      .then(data => JSON.parse(data.data.liveObjectQuery) as LiveObject)
+      .then(data => JSON.parse(data.data.livebosObjectQuery) as LivebosObject)
       .then(lb => {
         const { records, metaData: { colInfo } } = lb;
         if (records && records.length > 0) {

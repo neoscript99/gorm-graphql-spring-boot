@@ -5,7 +5,7 @@ import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import groovy.transform.TupleConstructor
 import neo.script.gorm.general.initializer.InitializeDomian
-import neo.script.gorm.portal.domain.pt.ds.LivebosQuery
+import neo.script.gorm.portal.domain.pt.pds.LivebosQuery
 
 @Entity
 @TupleConstructor(includeSuperProperties = true, excludes = 'id, dateCreated, lastUpdated, version')
@@ -13,7 +13,6 @@ import neo.script.gorm.portal.domain.pt.ds.LivebosQuery
 @EqualsAndHashCode(includes = 'id')
 @InitializeDomian(profiles = 'dev', depends = LivebosQuery)
 class PortletListView extends Portlet {
-    LivebosQuery liveQuery
     String titleFields
     String cateField
     String dateField
@@ -23,9 +22,6 @@ class PortletListView extends Portlet {
     String fromDateFormat = 'YYYY-MM-DD HH:mm:ss'
     String toDateFormat = 'YYYY-MM-DD'
 
-    static mapping = {
-        liveQuery fetch: 'join', lazy: false
-    }
     static constraints = {
         cateField nullable: true
         iconField nullable: true

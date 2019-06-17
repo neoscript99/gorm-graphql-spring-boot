@@ -2,7 +2,7 @@ package neo.script.gorm.portal.service
 
 import groovy.sql.Sql
 import neo.script.gorm.general.service.AbstractService
-import neo.script.gorm.portal.domain.pt.ds.RdbServer
+import neo.script.gorm.portal.domain.pt.pds.RdbServer
 import org.springframework.stereotype.Service
 
 @Service

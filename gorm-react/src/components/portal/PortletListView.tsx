@@ -15,9 +15,9 @@ class PortletListView extends Portlet {
     const {
       portlet: {
         portletName, titleFields, cateField, dateField, extraLink, fromDateFormat, toDateFormat,
-        liveQuery: { objectName, liveServer: { serverRoot } }
+        ds: { objectName, livebosServer: { serverRoot } }
       },
-      liveObject: { data }
+      livebosObject: { data }
     } = this.state
     const columns: ColumnProps<Entity>[] = [
       { title: 'category', dataIndex: cateField, render: (text: string) => `[${text}]` },

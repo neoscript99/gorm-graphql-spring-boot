@@ -11,13 +11,12 @@ interface S {
 }
 
 @observer
-class PortletTable extends React.Component<{ portlet: Entity, ds: any }, S> {
-  componentDidMount() {
-    const { portlet, ds } = this.props;
-    portletTableService.get(portlet.id)
-      .then(table => this.setState({ table, columns: JSON.parse(table.columns) }))
-    portlet.id && portletDsService.getData(ds.id)
-      .then(jsonList => this.setState({ tableData: jsonList.map(json => JSON.parse(json)) }))
+class PortletTable extends React.Component<{ portlet: Entity }, S> {
+  async componentDidMount() {
+    const { portlet } = this.props;
+    const table = await portletTableService.get(portlet.id)
+    const jsonList = await portletDsService.getData(portlet.ds.id)
+    this.setState({ table, columns: JSON.parse(table.columns), tableData: jsonList.map(json => JSON.parse(json)) })
   }
 
   render() {

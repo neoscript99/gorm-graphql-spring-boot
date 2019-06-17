@@ -18,9 +18,9 @@ class PortletLink extends Portlet {
     }
     static graphql = true
 
-    static DEMO_LINK1 = new PortletLink('金蝶OA系统EAS', 'PortletLink', 'http://www.bing.com')
-    static DEMO_LINK2 = new PortletLink('新绩效考核系统', 'PortletLink', 'http://www.qq.com')
-    static DEMO_LINK3 = new PortletLink('信贷管理系统', 'PortletLink', 'http://www.z.cn')
+    static DEMO_LINK1 = new PortletLink('金蝶OA系统EAS', 'PortletLink', null, 'http://www.bing.com')
+    static DEMO_LINK2 = new PortletLink('新绩效考核系统', 'PortletLink', null, 'http://www.qq.com')
+    static DEMO_LINK3 = new PortletLink('信贷管理系统', 'PortletLink', null, 'http://www.z.cn')
 
     static initList = [DEMO_LINK1, DEMO_LINK2, DEMO_LINK3]
 }

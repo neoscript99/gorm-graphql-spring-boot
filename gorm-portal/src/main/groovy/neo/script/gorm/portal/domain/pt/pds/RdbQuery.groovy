@@ -1,4 +1,4 @@
-package neo.script.gorm.portal.domain.pt.ds
+package neo.script.gorm.portal.domain.pt.pds
 
 import grails.gorm.annotation.Entity
 import groovy.transform.EqualsAndHashCode
@@ -11,7 +11,7 @@ import neo.script.gorm.general.initializer.InitializeDomian
 @ToString(includePackage = false, includes = 'id, lastUpdated')
 @EqualsAndHashCode(includes = 'id')
 @InitializeDomian(profiles = 'dev', depends = RdbServer)
-class RdbQuery  extends PortletDs {
+class RdbQuery  extends PortletDataSource {
 
     RdbServer db
     String sql

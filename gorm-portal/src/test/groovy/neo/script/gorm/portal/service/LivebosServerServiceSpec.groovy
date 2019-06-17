@@ -1,7 +1,7 @@
 package neo.script.gorm.portal.service
 
-import neo.script.gorm.portal.domain.pt.ds.LivebosQuery
-import neo.script.gorm.portal.domain.pt.ds.LivebosServer
+import neo.script.gorm.portal.domain.pt.pds.LivebosQuery
+import neo.script.gorm.portal.domain.pt.pds.LivebosServer
 import neo.script.util.JsonUtil
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -12,8 +12,8 @@ import spock.lang.Specification
 
 import java.nio.charset.StandardCharsets
 
-class LiveServerServiceSpec extends Specification {
-    static private Logger log = LoggerFactory.getLogger(LiveServerServiceSpec.class)
+class LivebosServerServiceSpec extends Specification {
+    static private Logger log = LoggerFactory.getLogger(LivebosServerServiceSpec.class)
 
     def restTemplateTest() {
         given:
@@ -25,7 +25,7 @@ class LiveServerServiceSpec extends Specification {
         //不能直接用restTemplate.getForObject(url, LoginRes.class, it.restUser, it.restPassword)
         //该服务不接受Accept header [application/json, application/*+json]
         def result = restTemplate.getForObject(it.serverRoot+it.restPath + it.loginUri, String.class, it.restUser, it.restPassword)
-        LiveServerService.LoginRes loginRes = JsonUtil.fromJson(result, LiveServerService.LoginRes.class);
+        LivebosServerService.LoginRes loginRes = JsonUtil.fromJson(result, LivebosServerService.LoginRes.class);
         if (loginRes.result == 1) {
             log.info('Livebos登入成功：{}', loginRes)
             it.sessionId = loginRes.sessionId
@@ -38,13 +38,13 @@ class LiveServerServiceSpec extends Specification {
 
     def 'livebos service test'() {
         given:
-        def liveServer = LivebosServer.DEMO_SERVER;
-        def lss = new LiveServerService()
+        def livebosServer = LivebosServer.DEMO_SERVER;
+        def lss = new LivebosServerService()
         def loginRes = lss.userLogin(LivebosServer.DEMO_SERVER)
-        liveServer.sessionId = loginRes.sessionId
+        livebosServer.sessionId = loginRes.sessionId
 
-        log.info(lss.getUserInfo(liveServer, 'admin'))
-        log.info(lss.queryNotices(liveServer, 'admin', '0'))
+        log.info(lss.getUserInfo(livebosServer, 'admin'))
+        log.info(lss.queryNotices(livebosServer, 'admin', '0'))
         log.info(lss.objectQuery(LivebosQuery.USER_LINK))
         expect:
         true

@@ -1,4 +1,4 @@
-package neo.script.gorm.portal.domain.pt.ds
+package neo.script.gorm.portal.domain.pt.pds
 
 import grails.gorm.annotation.Entity
 import groovy.transform.EqualsAndHashCode
@@ -9,7 +9,7 @@ import groovy.transform.TupleConstructor
 @TupleConstructor(excludes = 'id, dateCreated, lastUpdated, version')
 @ToString(includePackage = false, includes = 'dsName')
 @EqualsAndHashCode(includes = 'id')
-class PortletDs {
+class PortletDataSource {
     String id
     String dsName
     String type

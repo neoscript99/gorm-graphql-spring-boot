@@ -5,13 +5,13 @@ import PortletTable from './PortletTable';
 import { Card, Icon } from 'antd'
 import PortletListView from './PortletListView';
 
-class PortletSwitch extends React.Component<{ portlet: Entity, ds: any }> {
-  getPortlet(portlet: Entity, ds: any): ReactNode {
+class PortletSwitch extends React.Component<{ portlet: Entity }> {
+  getPortlet(portlet: Entity): ReactNode {
     switch (portlet.type) {
       case 'PortletLink':
         return <PortletLink portlet={portlet} />
       case 'PortletTable':
-        return <PortletTable portlet={portlet} ds={ds} />
+        return <PortletTable portlet={portlet} />
       case 'PortletListView':
         return <PortletListView portlet={portlet} />
       default:
@@ -28,10 +28,10 @@ class PortletSwitch extends React.Component<{ portlet: Entity, ds: any }> {
   }
 
   render() {
-    const { portlet, ds } = this.props;
+    const { portlet } = this.props;
     return <div>
       <a id={portlet.id} />
-      {this.getPortlet(portlet, ds)}
+      {this.getPortlet(portlet)}
     </div>
   }
 }

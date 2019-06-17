@@ -3,32 +3,32 @@ package neo.script.gorm.portal.graphql.mapping
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import neo.script.gorm.graphql.entity.GraphQLMappingFlag
-import neo.script.gorm.portal.domain.pt.ds.LivebosServer
-import neo.script.gorm.portal.service.LiveServerService
+import neo.script.gorm.portal.domain.pt.pds.LivebosServer
+import neo.script.gorm.portal.service.LivebosServerService
 import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
 @GraphQLMappingFlag(LivebosServer)
-class LiveServerMapping extends GraphQLMapping {
+class LivebosServerMapping extends GraphQLMapping {
     @Autowired
-    LiveServerService liveServerService
+    LivebosServerService livebosServerService
 
-    LiveServerMapping() {
-        query('liveGetUserInfo', String) {
-            argument('liveServerId', String)
+    LivebosServerMapping() {
+        query('livebosGetUserInfo', String) {
+            argument('livebosServerId', String)
             argument('userId', String)
             dataFetcher(new GetUserInfoDataFetcher())
         }
-        query('liveQueryNotices', String) {
-            argument('liveServerId', String)
+        query('livebosQueryNotices', String) {
+            argument('livebosServerId', String)
             argument('userId', String)
             argument('type', String)
             dataFetcher(new QueryNoticesDataFetcher())
         }
-        query('liveObjectQuery', String) {
-            argument('liveQueryId', String)
+        query('livebosObjectQuery', String) {
+            argument('livebosQueryId', String)
             dataFetcher(new ObjectQueryDataFetcher())
         }
     }
@@ -37,8 +37,8 @@ class LiveServerMapping extends GraphQLMapping {
     class GetUserInfoDataFetcher implements DataFetcher {
         @Override
         Object get(DataFetchingEnvironment environment) {
-            return liveServerService.getUserInfo(
-                    environment.<String> getArgument('liveServerId'),
+            return livebosServerService.getUserInfo(
+                    environment.<String> getArgument('livebosServerId'),
                     environment.<String> getArgument('userId'))
         }
     }
@@ -47,8 +47,8 @@ class LiveServerMapping extends GraphQLMapping {
     class QueryNoticesDataFetcher implements DataFetcher {
         @Override
         Object get(DataFetchingEnvironment environment) {
-            return liveServerService.queryNotices(
-                    environment.<String> getArgument('liveServerId'),
+            return livebosServerService.queryNotices(
+                    environment.<String> getArgument('livebosServerId'),
                     environment.<String> getArgument('userId'),
                     environment.<String> getArgument('type'))
         }
@@ -57,8 +57,8 @@ class LiveServerMapping extends GraphQLMapping {
     class ObjectQueryDataFetcher implements DataFetcher {
         @Override
         Object get(DataFetchingEnvironment environment) {
-            return liveServerService.objectQuery(
-                    environment.<String> getArgument('liveQueryId'))
+            return livebosServerService.objectQuery(
+                    environment.<String> getArgument('livebosQueryId'))
         }
     }
 }

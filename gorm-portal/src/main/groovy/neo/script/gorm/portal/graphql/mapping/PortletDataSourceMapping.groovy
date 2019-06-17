@@ -3,21 +3,21 @@ package neo.script.gorm.portal.graphql.mapping
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import neo.script.gorm.graphql.entity.GraphQLMappingFlag
-import neo.script.gorm.portal.domain.pt.ds.PortletDs
-import neo.script.gorm.portal.service.PortletDsService
+import neo.script.gorm.portal.domain.pt.pds.PortletDataSource
+import neo.script.gorm.portal.service.PortletDataSourceService
 import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
-@GraphQLMappingFlag(PortletDs)
-class PortletDsMapping extends GraphQLMapping {
+@GraphQLMappingFlag(PortletDataSource)
+class PortletDataSourceMapping extends GraphQLMapping {
     @Autowired
-    PortletDsService portletDsService
+    PortletDataSourceService portletDataSourceService
 
-    PortletDsMapping() {
-        query('portletData', [String]) {
-            argument('dsId', String)
+    PortletDataSourceMapping() {
+        query('getPortletData', [String]) {
+            argument('dataSourceId', String)
             dataFetcher(new GetDataFetcher())
         }
     }
@@ -26,7 +26,7 @@ class PortletDsMapping extends GraphQLMapping {
     class GetDataFetcher implements DataFetcher {
         @Override
         Object get(DataFetchingEnvironment environment) {
-            return portletDsService.getData(environment.getArgument('dsId'))
+            return portletDataSourceService.getData(environment.getArgument('dataSourceId'))
         }
     }
 }

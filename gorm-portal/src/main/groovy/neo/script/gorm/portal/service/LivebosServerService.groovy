@@ -2,8 +2,8 @@ package neo.script.gorm.portal.service
 
 import groovy.transform.ToString
 import neo.script.gorm.general.service.AbstractService
-import neo.script.gorm.portal.domain.pt.ds.LivebosQuery
-import neo.script.gorm.portal.domain.pt.ds.LivebosServer
+import neo.script.gorm.portal.domain.pt.pds.LivebosQuery
+import neo.script.gorm.portal.domain.pt.pds.LivebosServer
 import neo.script.util.JsonUtil
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.http.converter.StringHttpMessageConverter
@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate
 import java.nio.charset.StandardCharsets
 
 @Service
-class LiveServerService extends AbstractService<LivebosServer> {
+class LivebosServerService extends AbstractService<LivebosServer> {
     StringHttpMessageConverter m = new StringHttpMessageConverter(StandardCharsets.UTF_8);
     RestTemplate restTemplate = new RestTemplateBuilder()
             .additionalMessageConverters(m)
@@ -36,51 +36,51 @@ class LiveServerService extends AbstractService<LivebosServer> {
         }
     }
 
-    def userLogin(LivebosServer liveServer) {
-        def url = liveServer.serverRoot + liveServer.restPath + liveServer.loginUri
+    def userLogin(LivebosServer livebosServer) {
+        def url = livebosServer.serverRoot + livebosServer.restPath + livebosServer.loginUri
         //不能直接用restTemplate.getForObject(url, LoginRes.class, it.restUser, it.restPassword)
         //该服务不接受Accept header [application/json, application/*+json]
-        def result = restTemplate.getForObject(url, String.class, liveServer.restUser, liveServer.restPassword)
+        def result = restTemplate.getForObject(url, String.class, livebosServer.restUser, livebosServer.restPassword)
         return JsonUtil.fromJson(result, LoginRes.class);
     }
 
-    def getUserInfo(String liveServerId, String userId) {
-        getUserInfo(get(liveServerId), userId)
+    def getUserInfo(String livebosServerId, String userId) {
+        getUserInfo(get(livebosServerId), userId)
     }
 
-    def getUserInfo(LivebosServer liveServer, String userId) {
-        def url = liveServer.serverRoot + liveServer.restPath + liveServer.userInfoUri
-        return restTemplate.getForObject(url, String.class, userId, liveServer.sessionId)
+    def getUserInfo(LivebosServer livebosServer, String userId) {
+        def url = livebosServer.serverRoot + livebosServer.restPath + livebosServer.userInfoUri
+        return restTemplate.getForObject(url, String.class, userId, livebosServer.sessionId)
     }
 
 
-    def queryNotices(String liveServerId, String userId, String type) {
-        queryNotices(get(liveServerId), userId, type)
+    def queryNotices(String livebosServerId, String userId, String type) {
+        queryNotices(get(livebosServerId), userId, type)
     }
 
-    def queryNotices(LivebosServer liveServer, String userId, String type) {
-        def url = liveServer.serverRoot + liveServer.restPath + liveServer.noticeUri
-        return restTemplate.getForObject(url, String.class, userId, liveServer.sessionId, type)
+    def queryNotices(LivebosServer livebosServer, String userId, String type) {
+        def url = livebosServer.serverRoot + livebosServer.restPath + livebosServer.noticeUri
+        return restTemplate.getForObject(url, String.class, userId, livebosServer.sessionId, type)
     }
 
-    def objectQuery(String liveQueryId) {
-        objectQuery(generalRepository.get(LivebosQuery, liveQueryId))
+    def objectQuery(String livebosQueryId) {
+        objectQuery(generalRepository.get(LivebosQuery, livebosQueryId))
     }
 
-    def objectQuery(LivebosQuery liveQuery) {
-        def liveServer = liveQuery.liveServer
-        def url = liveServer.serverRoot + liveServer.restPath + liveServer.objectQueryUri
-        def requestData = [objectName : liveQuery.objectName,
-                           condition  : liveQuery.condition,
+    def objectQuery(LivebosQuery livebosQuery) {
+        def livebosServer = livebosQuery.livebosServer
+        def url = livebosServer.serverRoot + livebosServer.restPath + livebosServer.objectQueryUri
+        def requestData = [objectName : livebosQuery.objectName,
+                           condition  : livebosQuery.condition,
                            queryOption: [
-                                   valueOption: liveQuery.valueOption,
-                                   batchNo    : liveQuery.batchNo,
-                                   batchSize  : liveQuery.batchSize,
-                                   queryCount : liveQuery.queryCount
+                                   valueOption: livebosQuery.valueOption,
+                                   batchNo    : livebosQuery.batchNo,
+                                   batchSize  : livebosQuery.batchSize,
+                                   queryCount : livebosQuery.queryCount
                            ]]
 
         MultiValueMap<String, Object> parts = new LinkedMultiValueMap<String, Object>();
-        parts.add('sessionId', liveServer.sessionId)
+        parts.add('sessionId', livebosServer.sessionId)
         parts.add('requestData', requestData)
 
         return restTemplate.postForObject(url, parts, String.class)

@@ -1,4 +1,4 @@
-package neo.script.gorm.portal.domain.pt.ds
+package neo.script.gorm.portal.domain.pt.pds
 
 import grails.gorm.annotation.Entity
 import groovy.transform.EqualsAndHashCode
