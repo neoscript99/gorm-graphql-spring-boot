@@ -22,18 +22,25 @@ export interface PortletState {
 
 abstract class Portlet<P extends PortletProps = PortletProps, S extends PortletState = PortletState> extends Component<P, S> {
 
-  abstract get portletService(): DomainService<MobxDomainStore>;
+  abstract get portletService(): DomainService<MobxDomainStore> | null ;
 
   async componentDidMount() {
-    const portlet = await this.portletService.get(this.props.portlet.id)
+    const portlet = this.portletService
+      ? await this.portletService.get(this.props.portlet.id)
+      : this.props.portlet
 
     if (portlet.ds && portlet.ds.type === 'LivebosQuery') {
       //子类信息，需要单独获取
-      portlet.ds = await livebosQueryService.get(portlet.ds.id)
-      const livebosObject: LivebosObject = await livebosServerService.objectQuery(portlet.ds.id)
-      this.setState({ portlet, livebosObject })
-    }
-    this.setState({ portlet })
+      this.livebosObjectQuery(portlet)
+    } else
+      this.setState({ portlet })
+  }
+
+  async livebosObjectQuery(portlet: Entity) {
+    portlet.ds = await livebosQueryService.get(portlet.ds.id)
+    const livebosObject: LivebosObject = await livebosServerService.objectQuery(portlet.ds.id)
+    console.debug('livebosObjectQuery: ', livebosObject);
+    this.setState({ portlet, livebosObject })
   }
 }
 

@@ -15,10 +15,10 @@ class LivebosServer {
     String id
     String serverName
     String serverRoot
-    String restPath
     String restUser
     String restPassword
     Boolean enabled = true
+    String restPath = '/service/LBREST'
     String loginUri = '/userService/login?userId={userId}&password={password}'
     String userInfoUri = '/userService/getUserInfo?userId={userId}&sessionId={sessionId}'
     String noticeUri = '/messageCenter/queryNotices?userId={userId}&sessionId={sessionId}&type={type}'
@@ -42,7 +42,6 @@ class LivebosServer {
     static LivebosServer DEMO_SERVER =
             new LivebosServer('部门Livebpm环境',
                     'http://114.115.153.164:7070',
-                    '/service/LBREST',
                     'rest', '000000')
     static initList = [DEMO_SERVER]
 }

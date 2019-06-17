@@ -5,7 +5,9 @@ import { portalService, userService } from '../services';
 import { Link, Redirect } from 'react-router-dom';
 import PortalRows from '../components/portal/PortalRows';
 import PortalSider from '../components/portal/PortalSider';
+import { PortletMap } from '../components/portal/PortletSwitch';
 
+const customerPortletMap: PortletMap = {}
 const {
   Header, Content, Footer
 } = Layout
@@ -42,7 +44,8 @@ class Portal extends React.Component {
         <Layout>
           {portalStore.currentItem && <PortalSider portal={portalStore.currentItem} />}
           <Content>
-            {portalStore.currentItem && <PortalRows portal={portalStore.currentItem} />}
+            {portalStore.currentItem &&
+            <PortalRows portal={portalStore.currentItem} customerPortletMap={customerPortletMap} />}
           </Content>
         </Layout>
         <Footer className="portal_layout"

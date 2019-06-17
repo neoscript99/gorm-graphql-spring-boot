@@ -8,16 +8,12 @@ import hIcon1 from '../asset/img/h-icon1.png'
 import hIcon2 from '../asset/img/h-icon2.png'
 import hIcon3 from '../asset/img/h-icon3.png'
 import inform from '../asset/img/inform.png'
-import mail from '../asset/img/mail.png'
-import icon1 from '../asset/img/icon1.png'
-import icon2 from '../asset/img/icon2.png'
-import icon3 from '../asset/img/icon3.png'
-import icon4 from '../asset/img/icon4.png'
-import icon5 from '../asset/img/icon5.png'
-import icon6 from '../asset/img/icon6.png'
-import icon7 from '../asset/img/icon7.png'
 import { portalService } from '../services';
 import PortalRows from '../components/portal/PortalRows';
+import ContactSearch from './portlet/ContactSearch';
+import { PortletMap } from '../components/portal/PortletSwitch';
+
+const customerPortletMap: PortletMap = { ContactSearch }
 
 const {
   Header, Content
@@ -73,7 +69,7 @@ class LuqiaoPortal extends Component {
         <Content style={{ background: '#f4f4f4', padding: '0.5rem' }}>
           {portalService.store.allList && portalService.store.allList
             .filter(p => (p.portalCode as string).startsWith('luqiao'))
-            .map(p => <PortalRows key={p.id} portal={p} />)}
+            .map(p => <PortalRows key={p.id} portal={p} customerPortletMap={customerPortletMap} />)}
         </Content>
       </Layout>
     );
