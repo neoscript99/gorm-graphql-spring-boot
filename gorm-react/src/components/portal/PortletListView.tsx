@@ -1,4 +1,6 @@
 import React from 'react';
+import urlTemplate from 'url-template'
+
 import Portlet from './Portlet';
 import { DomainService, Entity, MobxDomainStore } from 'oo-graphql-service';
 import { portletListViewService } from '../../services';
@@ -9,38 +11,57 @@ import { ColumnProps } from 'antd/lib/table';
 
 class PortletListView extends Portlet {
   render() {
-    if (!this.state)
+    if (!(this.state && this.state.data))
       return null;
+    const { inTab } = this.props;
+    const { portlet, data } = this.state
+    const { portletName, extraLink } = this.state.portlet;
 
+    const extraLinkA = extraLink && <a href={extraLink} target='_blank'>更多</a>;
+    const Content = <Table dataSource={data} columns={this.getColumns(portlet)}
+                           rowKey='ID' pagination={false} showHeader={false} size='middle' bordered={false}
+                           footer={inTab ? (() => <div style={{
+                             textAlign: 'right',
+                             backgroundColor: 'inherit'
+                           }}>{extraLinkA}</div>) : undefined} />
+    return inTab ? Content :
+      <Card title={portletName}
+            extra={extraLinkA}>
+        {Content}
+      </Card>
+  }
+
+  private getColumns(portlet: Entity) {
     const {
-      portlet: {
-        portletName, titleFields, cateField, dateField, extraLink, fromDateFormat, toDateFormat,
-        ds: { objectName, livebosServer: { serverRoot } }
-      },
-      livebosObject: { data }
-    } = this.state
+      titleFields, cateField, dateField, fromDateFormat, titleLink, toDateFormat
+    } = portlet;
+    const linkTemplate = urlTemplate.parse(titleLink)
     const columns: ColumnProps<Entity>[] = [
-      { title: 'category', dataIndex: cateField, render: (text: string) => `[${text}]` },
+      {
+        title: 'category',
+        dataIndex: cateField,
+        render: (text: string) => `[${text}]`,
+        fixed: 'left'
+      },
       {
         title: 'title',
         key: 'titleFields',
         render: (text: string, record: any) =>
-          (titleFields as string).split(',')
-            .map(tt => record[tt])
-            .join('-')
+          <a href={linkTemplate.expand(record)} target="_blank">
+            {(titleFields as string).split(',')
+              .map(tt => record[tt])
+              .join('-')}
+          </a>
       },
       {
         title: 'date',
         dataIndex: dateField,
         align: 'right',
-        render: dateStringConvert.bind(null, fromDateFormat, toDateFormat)
+        render: dateStringConvert.bind(null, fromDateFormat, toDateFormat),
+        fixed: 'right'
       }
     ]
-    return <Card title={portletName}
-                 extra={<a href={extraLink || `${serverRoot}/UIProcessor?Table=${objectName}`} target='_blank'>更多</a>}>
-      <Table dataSource={data} columns={columns}
-             rowKey='ID' pagination={false} showHeader={false} size='middle' bordered={false} />
-    </Card>
+    return columns.filter(col => cateField || col.title !== 'category');
   }
 
   get portletService(): DomainService<MobxDomainStore> {

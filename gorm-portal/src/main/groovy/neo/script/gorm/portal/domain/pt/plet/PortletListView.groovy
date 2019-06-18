@@ -17,6 +17,7 @@ class PortletListView extends Portlet {
     String cateField
     String dateField
     String extraLink
+    String titleLink
     String iconField
     String rowKey = 'ID'
     String fromDateFormat = 'YYYY-MM-DD HH:mm:ss'
@@ -26,7 +27,8 @@ class PortletListView extends Portlet {
         cateField nullable: true
         iconField nullable: true
         dateField nullable: true
-        extraLink nullable: true
+        extraLink nullable: true, maxSize: 128
+        titleLink nullable: true, maxSize: 128
         fromDateFormat nullable: true
         toDateFormat nullable: true
     }

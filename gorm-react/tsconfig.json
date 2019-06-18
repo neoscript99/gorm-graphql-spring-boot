@@ -20,7 +20,8 @@
     "noEmit": true,
     "jsx": "preserve",
     "experimentalDecorators": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "noImplicitAny": false
   },
   "include": [
     "src"

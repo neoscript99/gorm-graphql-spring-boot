@@ -12,7 +12,8 @@
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
-    "typescript": "3.3.4000"
+    "typescript": "3.3.4000",
+    "url-template": "^2.0.8"
   },
   "devDependencies": {
     "@types/graphql": "^14.2.0",

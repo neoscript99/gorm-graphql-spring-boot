@@ -43,7 +43,7 @@ class Portal extends React.Component {
         </Header>
         <Layout>
           {portalStore.currentItem && <PortalSider portal={portalStore.currentItem} />}
-          <Content>
+          <Content style={{ padding: '0.5rem' }}>
             {portalStore.currentItem &&
             <PortalRows portal={portalStore.currentItem} customerPortletMap={customerPortletMap} />}
           </Content>

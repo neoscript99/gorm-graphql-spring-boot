@@ -24,7 +24,7 @@ class LivebosServerService extends AbstractService<LivebosServer> {
             .additionalMessageConverters(new AllEncompassingFormHttpMessageConverter())
             .build();
 
-    @Scheduled(fixedDelay = 60000000L, initialDelay = 1000L)
+    @Scheduled(fixedDelay = 600000L, initialDelay = 5000L)
     public void refershSessionId() {
         listEnabled().each {
             def loginRes = userLogin(it)
@@ -50,9 +50,8 @@ class LivebosServerService extends AbstractService<LivebosServer> {
 
     def getUserInfo(LivebosServer livebosServer, String userId) {
         def url = livebosServer.serverRoot + livebosServer.restPath + livebosServer.userInfoUri
-        return restTemplate.getForObject(url, String.class, userId, livebosServer.sessionId)
+        checkResult(restTemplate.getForObject(url, String.class, userId, livebosServer.sessionId), UserInfoRes)
     }
-
 
     def queryNotices(String livebosServerId, String userId, String type) {
         queryNotices(get(livebosServerId), userId, type)
@@ -60,7 +59,7 @@ class LivebosServerService extends AbstractService<LivebosServer> {
 
     def queryNotices(LivebosServer livebosServer, String userId, String type) {
         def url = livebosServer.serverRoot + livebosServer.restPath + livebosServer.noticeUri
-        return restTemplate.getForObject(url, String.class, userId, livebosServer.sessionId, type)
+        checkResult(restTemplate.getForObject(url, String.class, userId, livebosServer.sessionId, type), NoticeRes)
     }
 
     def objectQuery(String livebosQueryId) {
@@ -83,14 +82,80 @@ class LivebosServerService extends AbstractService<LivebosServer> {
         parts.add('sessionId', livebosServer.sessionId)
         parts.add('requestData', requestData)
 
-        return restTemplate.postForObject(url, parts, String.class)
+        checkResult(restTemplate.postForObject(url, parts, String.class), ObjectQueryRes)
+    }
+
+    String checkResult(String resString, Class<? extends LivebosRes> resClass) {
+        LivebosRes res = JsonUtil.fromJson(resString, resClass)
+        if (res.isSessionInvalid())
+            refershSessionId()
+        if (!res.isSuccess())
+            log.error(res.toString())
+        return resString
+    }
+
+    static interface LivebosRes {
+        boolean isSuccess()
+
+        boolean isSessionInvalid()
     }
 
     @ToString(includePackage = false)
-    static class LoginRes {
+    static class LoginRes implements LivebosRes {
         String sessionId
         Integer result //1为成功
         String message
+
+        boolean isSuccess() {
+            result == 1
+        }
+
+        boolean isSessionInvalid() {
+            return false
+        }
+    }
+
+    @ToString(includePackage = false)
+    static class UserInfoRes implements LivebosRes {
+        Integer status
+
+        boolean isSuccess() {
+            status == 1
+        }
+
+        boolean isSessionInvalid() {
+            status == 0
+        }
+    }
+
+    @ToString(includePackage = false)
+    static class NoticeRes implements LivebosRes {
+        Integer workflowCount
+        Integer result
+        String message
+
+        boolean isSuccess() {
+            result == 1
+        }
+
+        boolean isSessionInvalid() {
+            result == -1
+        }
+    }
+
+    @ToString(includePackage = false)
+    static class ObjectQueryRes implements LivebosRes {
+
+        Integer result
+        String message
+
+        boolean isSuccess() {
+            result == 1
+        }
+
+        boolean isSessionInvalid() {
+            result == -2
+        }
     }
 
 }

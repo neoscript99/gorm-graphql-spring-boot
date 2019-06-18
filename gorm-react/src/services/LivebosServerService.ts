@@ -14,7 +14,7 @@ export interface LiveUserInfo {
 }
 
 //{"workflowCount":4,"result":1,"message":"成功"}
-export interface LiveNotice {
+export interface LivebosNotice {
   workflowCount: number
   result: number
   message: string
@@ -58,7 +58,7 @@ export default class LivebosServerService extends DomainService<MobxDomainStore>
       .then(data => JSON.parse(data.data.livebosGetUserInfo))
   }
 
-  queryNotices(livebosServerId: string, userId: string, type: string = '0'): Promise<LiveNotice> {
+  queryNotices(livebosServerId: string, userId: string, type: string = '0'): Promise<LivebosNotice> {
     return this.domainGraphql.apolloClient.query<{ livebosQueryNotices: string }>({
       query: gql`query livebosQueryNotices{
                   livebosQueryNotices(livebosServerId: "${livebosServerId}", userId: "${userId}", type: "${type}")
