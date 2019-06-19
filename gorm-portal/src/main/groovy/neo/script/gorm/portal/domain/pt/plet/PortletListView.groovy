@@ -27,8 +27,8 @@ class PortletListView extends Portlet {
         cateField nullable: true
         iconField nullable: true
         dateField nullable: true
-        extraLink nullable: true, maxSize: 128
-        titleLink nullable: true, maxSize: 128
+        extraLink nullable: true, maxSize: 512
+        titleLink nullable: true, maxSize: 512
         fromDateFormat nullable: true
         toDateFormat nullable: true
     }

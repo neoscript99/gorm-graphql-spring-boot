@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 @Entity
 @ToString(includePackage = false, includes = 'expireTime,lastUpdated')
 @EqualsAndHashCode(includes = 'id')
-@InitializeDomian(profiles = 'dev')
+@InitializeDomian(profiles = ['dev', 'test'])
 class Token {
 
     String id
@@ -40,5 +40,5 @@ class Token {
             id             : 'gorm-dev-token',
             expireTime     : LocalDateTime.of(2021, 1, 1, 1, 1),
             maxRefreshTimes: 10,
-            username           : 'admin'])]
+            username       : 'admin'])]
 }

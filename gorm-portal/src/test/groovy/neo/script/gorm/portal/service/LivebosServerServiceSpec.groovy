@@ -60,7 +60,7 @@ class LivebosServerServiceSpec extends Specification {
         livebosServer.sessionId = loginRes.sessionId
 
         def livebosQuery = new LivebosQuery('公司要闻', 'LivebosQuery', livebosServer,
-                'T_SYS_NewsInfo', "FClass=2", 'DISPLAY')
+                'PROFIT_DAILY', "", 'DISPLAY')
         log.info(lss.objectQuery(livebosQuery))
         expect:
         true

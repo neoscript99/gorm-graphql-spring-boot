@@ -23,7 +23,8 @@ class RdbServer {
 
     static constraints = {
         driverClassName maxSize: 128
-        url maxSize: 128
+        url maxSize: 256
+        testSql maxSize: 256
     }
     static graphql = true
 
