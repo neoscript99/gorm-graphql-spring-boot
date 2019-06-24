@@ -20,7 +20,7 @@ class RdbQuery  extends PortletDataSource {
         db fetch: 'join', lazy: false
     }
     static constraints = {
-        sql maxSize: 1024
+        sql maxSize: 2048
     }
     static graphql = true
 

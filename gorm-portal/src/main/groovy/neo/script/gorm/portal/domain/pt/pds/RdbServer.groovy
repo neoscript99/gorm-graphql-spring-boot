@@ -22,7 +22,7 @@ class RdbServer {
     Date lastUpdated
 
     static constraints = {
-        driverClassName maxSize: 128
+        driverClassName maxSize: 256
         url maxSize: 256
         testSql maxSize: 256
     }

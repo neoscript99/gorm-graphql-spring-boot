@@ -14,7 +14,7 @@ class PortletTable extends Portlet {
     String rowKey
 
     static constraints = {
-        columns maxSize: 512
+        columns maxSize: 2048
     }
     static graphql = true
 

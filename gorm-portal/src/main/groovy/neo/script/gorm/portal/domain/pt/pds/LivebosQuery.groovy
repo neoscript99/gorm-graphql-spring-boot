@@ -30,7 +30,7 @@ class LivebosQuery extends PortletDataSource {
         livebosServer fetch: 'join', lazy: false
     }
     static constraints = {
-        condition blank: true
+        condition blank: true, maxSize: 128
     }
     static graphql = true
     //通讯录，查询1000
