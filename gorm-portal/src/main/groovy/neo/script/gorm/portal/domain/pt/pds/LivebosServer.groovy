@@ -4,13 +4,11 @@ import grails.gorm.annotation.Entity
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import groovy.transform.TupleConstructor
-import neo.script.gorm.general.initializer.InitializeDomian
 
 @Entity
 @TupleConstructor(excludes = 'id, dateCreated, lastUpdated, version')
 @ToString(includePackage = false, includes = 'id, lastUpdated')
 @EqualsAndHashCode(includes = 'id')
-@InitializeDomian(profiles = 'dev')
 class LivebosServer {
     String id
     String serverName
@@ -39,9 +37,4 @@ class LivebosServer {
         sessionId nullable: true, maxSize: 128
     }
     static graphql = true
-    static LivebosServer DEMO_SERVER =
-            new LivebosServer('部门Livebpm环境',
-                    'http://114.115.153.164:7070',
-                    'rest', '000000')
-    static initList = [DEMO_SERVER]
 }

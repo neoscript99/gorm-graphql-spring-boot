@@ -4,13 +4,11 @@ import grails.gorm.annotation.Entity
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import groovy.transform.TupleConstructor
-import neo.script.gorm.general.initializer.InitializeDomian
 
 @Entity
 @TupleConstructor(excludes = 'id, dateCreated, lastUpdated, version')
 @ToString(includePackage = false, includes = 'id, lastUpdated')
 @EqualsAndHashCode(includes = 'id')
-@InitializeDomian(profiles = 'dev', depends = [PortletTab])
 class PortletTabRel {
     String id
 
@@ -27,5 +25,4 @@ class PortletTabRel {
         tab unique: 'portlet'
     }
     static graphql = true
-    static initList = []
 }

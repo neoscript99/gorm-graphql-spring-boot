@@ -23,14 +23,16 @@ class PortalSider extends React.Component<P> {
     const rowRelList = portalRowRelService.store.allList
       .filter(value => value.portal.id === this.props.portal.id)
 
-    const portletList = rowRelList.flatMap(
+    const portletList: Entity[] = []
+    rowRelList.every(
       rowRel => rowRel.row.cols
         .slice()
         .sort((a: Entity, b: Entity) => a.colOrder - b.colOrder)
-        .flatMap((col: Entity) =>
+        .every((col: Entity) =>
           portletColRelService.store.allList
             .filter(colRel => colRel.col.id === col.id)
-            .map(colRel => colRel.portlet))
+            .reduce<Entity[]>((list, colRel) => (list.push(colRel.portlet), list), portletList)
+        )
     )
     return <Sider
       style={{ backgroundColor: '#ffffff', borderTop: 'solid thin #f3f3f3', borderBottom: 'solid thin #f3f3f3' }}>

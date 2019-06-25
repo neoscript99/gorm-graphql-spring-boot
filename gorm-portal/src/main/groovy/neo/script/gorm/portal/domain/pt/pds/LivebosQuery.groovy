@@ -4,13 +4,11 @@ import grails.gorm.annotation.Entity
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import groovy.transform.TupleConstructor
-import neo.script.gorm.general.initializer.InitializeDomian
 
 @Entity
 @TupleConstructor(includeSuperProperties = true, excludes = 'id, dateCreated, lastUpdated, version')
 @ToString(includePackage = false, includes = 'id, lastUpdated')
 @EqualsAndHashCode(includes = 'id')
-@InitializeDomian(profiles = 'dev', depends = LivebosServer)
 class LivebosQuery extends PortletDataSource {
 
     LivebosServer livebosServer
@@ -33,8 +31,4 @@ class LivebosQuery extends PortletDataSource {
         condition blank: true, maxSize: 128
     }
     static graphql = true
-    //通讯录，查询1000
-    static LivebosQuery USER_LINK = new LivebosQuery('通讯录', 'LivebosQuery', LivebosServer.DEMO_SERVER,
-            'tUserLink', '', 'DISPLAY', 1, 1000)
-    static initList = [USER_LINK]
 }

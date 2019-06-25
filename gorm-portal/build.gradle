@@ -3,6 +3,8 @@ dependencies {
     compile project(':gorm-flex')
     compile 'net.unicon.cas:cas-client-autoconfig-support:2.2.0-GA'
     compile 'cn.easyproject:ojdbc6:11.2.0.4'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '6.0.6'
+    compile 'com.ibm.db2:jcc:11.1.4.4'
 }
 
 springBoot {
@@ -14,4 +16,19 @@ bootRun {
     systemProperty 'spring.profiles.active', 'dev'
     systemProperty 'init', 'true'
     systemProperties System.properties
+}
+
+
+task copyReact(type: Copy) {
+    from('../gorm-react/build/') {
+        include '**/*.*'
+    }
+    into 'build/resources/main/static/'
+}
+//先evaluat依赖的工程，才能拿到对应的task yarnBuild
+evaluationDependsOn(":gorm-react")
+def yarnBuild = project(":gorm-react").tasks.yarnBuild
+bootRepackage {
+    copyReact.mustRunAfter(yarnBuild)
+    dependsOn(yarnBuild, copyReact)
 }

@@ -1,4 +1,4 @@
-package neo.script.gorm.portal.config
+package neo.script.gorm.portal.config.dev
 
 import groovy.util.logging.Slf4j
 import neo.script.gorm.general.domain.sys.Menu

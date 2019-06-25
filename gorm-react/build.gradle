@@ -4,21 +4,23 @@ plugins {
 node {
     download = false
 }
-task yarnStart(type: YarnTask) {
-    args = ['start']
-}
 
 task yarnBuild(type: YarnTask) {
     args = ['build']
-}
-
-task copyToPortal(type: Copy) {
-    from('build/') {
-        include '**/*.*'
+    doLast {
+        copy {
+            from "src/utils/config.dev.ts"
+            into "src/utils/"
+            rename 'config.dev.ts', 'config.ts'
+        }
     }
-    into '../gorm-portal/build/resources/main/static/'
 }
 
-task buildAndCopy(type: GradleBuild) {
-    tasks = ['yarnBuild', 'copyToPortal']
+task copyProdConfig(type: Copy) {
+    from "src/utils/config.prod.ts"
+    into "src/utils/"
+
+    rename 'config.prod.ts', 'config.ts'
 }
+
+yarnBuild.dependsOn(copyProdConfig)

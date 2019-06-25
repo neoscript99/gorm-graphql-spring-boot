@@ -2,23 +2,36 @@ import React from 'react'
 import { Menu, Icon, Layout, BackTop, Col, Row } from 'antd'
 import { observer } from 'mobx-react'
 import { portalService, userService } from '../services';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, match, Redirect } from 'react-router-dom';
 import PortalRows from '../components/portal/PortalRows';
 import PortalSider from '../components/portal/PortalSider';
 import { PortletMap } from '../components/portal/PortletSwitch';
+import { Entity } from 'oo-graphql-service';
 
 const customerPortletMap: PortletMap = {}
 const {
   Header, Content, Footer
 } = Layout
 
+interface P {
+  match: match<{ portalCode: string }>
+}
+
 @observer
-class Portal extends React.Component {
+class Portal extends React.Component<P> {
 
   render() {
     const { store: portalStore } = portalService;
+    let portal: Entity | undefined;
+    if (portalStore.allList) {
+      const { portalCode } = this.props.match.params;
+      if (portalCode)
+        portal = portalStore.allList.find(p => p.portalCode === portalCode)
+      else
+        portal = portalStore.allList[0]
+    }
     if (!userService.store.currentItem.id)
-      return (<Redirect to="/login/" />)
+      return (<Redirect to="/login/" push={true} />)
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Header className="portal_layout">
@@ -28,7 +41,7 @@ class Portal extends React.Component {
               portalStore.allList && portalStore.allList.map(portal =>
                 <Menu.Item key={portal.id}>
                   <Icon type={portal.portalIcon} />
-                  <Link to='#' style={{ display: 'inline' }}>{portal.portalName}</Link>
+                  <Link to={`/portal/${portal.portalCode}`} style={{ display: 'inline' }}>{portal.portalName}</Link>
                 </Menu.Item>)
             }
             <Menu.Item key='admin'>
@@ -42,10 +55,9 @@ class Portal extends React.Component {
           </Menu>
         </Header>
         <Layout>
-          {portalStore.currentItem && <PortalSider portal={portalStore.currentItem} />}
+          {portal && <PortalSider portal={portal} />}
           <Content style={{ padding: '0.5rem' }}>
-            {portalStore.currentItem &&
-            <PortalRows portal={portalStore.currentItem} customerPortletMap={customerPortletMap} />}
+            {portal && <PortalRows portal={portal} customerPortletMap={customerPortletMap} />}
           </Content>
         </Layout>
         <Footer className="portal_layout"
@@ -54,7 +66,7 @@ class Portal extends React.Component {
                   justifyContent: 'space-around',
                   alignItems: 'center'
                 }}>
-          <div style={{ marginTop: '0.5rem' }}>顶点软件</div>
+          <div style={{ marginTop: '0.5rem' }}>Gorm-Portal</div>
           <BackTop />
         </Footer>
       </Layout>

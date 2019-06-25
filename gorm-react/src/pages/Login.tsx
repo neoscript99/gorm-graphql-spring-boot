@@ -8,8 +8,12 @@ import { userService } from '../services';
 import { Redirect } from 'react-router';
 import { observer } from 'mobx-react';
 
+interface P extends FormComponentProps<any> {
+  history: History
+}
+
 @observer
-class LoginForm extends Component<FormComponentProps<any>> {
+class LoginForm extends Component<P> {
   handleSubmit(e: FormEvent) {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -26,8 +30,14 @@ class LoginForm extends Component<FormComponentProps<any>> {
    */
   render(): ReactNode {
     const { getFieldDecorator } = this.props.form;
-    if (userService.store.currentItem.id)
-      return (<Redirect to="/" />)
+    if (userService.store.currentItem.id) {
+      //空白页面进入后length是1，chrome是这样
+      if (history.length > 2) {
+        history.back()
+        return null;
+      } else
+        return <Redirect to="/" />
+    }
 
     return (<div className="login-page">
         <div className="form-box l-col-wrap">

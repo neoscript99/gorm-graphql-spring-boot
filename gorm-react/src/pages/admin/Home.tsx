@@ -37,21 +37,21 @@ class Home extends Component<P, { collapsed: boolean }> {
     this.setState({ collapsed })
   }
 
-  render () {
+  render() {
     const pathPrefix = '/admin/'
     const { store: menuStore } = menuService;
     if (!userService.store.currentItem.id)
-      return (<Redirect to="/login/" />)
+      return (<Redirect to="/login/" push={true} />)
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Header className='flex-row'
-          style={{
-            fontWeight: 'bolder',
-            fontSize: '1.5rem',
-            color: 'white',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}>
+                style={{
+                  fontWeight: 'bolder',
+                  fontSize: '1.5rem',
+                  color: 'white',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
           <div><Icon type='tool' /><Divider type="vertical" />系统设置</div>
           <Button type='primary' shape='circle' icon='home' onClick={() => this.props.history.push('/')} />
         </Header>
@@ -80,7 +80,7 @@ class Home extends Component<P, { collapsed: boolean }> {
               </Switch>
             </Content>
             <Footer style={{ textAlign: 'center' }}>
-              羽意软件 ©2019
+              Gorm-React ©2019
             </Footer>
           </Layout>
         </Layout>

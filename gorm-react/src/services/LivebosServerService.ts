@@ -83,10 +83,14 @@ export default class LivebosServerService extends DomainService<MobxDomainStore>
     })
       .then(data => JSON.parse(data.data.livebosObjectQuery) as LivebosObject)
       .then(lb => {
-        const { records, metaData: { colInfo } } = lb;
-        if (records && records.length > 0) {
-          lb.data = records.map(record =>
-            record.reduce((acc, value, idx) => (acc[colInfo[idx].name] = value, acc), {}))
+        if (!lb.metaData)
+          console.error(lb)
+        else {
+          const { records, metaData: { colInfo } } = lb;
+          if (records && records.length > 0) {
+            lb.data = records.map(record =>
+              record.reduce((acc, value, idx) => (acc[colInfo[idx].name] = value, acc), {}))
+          }
         }
         return lb;
       })

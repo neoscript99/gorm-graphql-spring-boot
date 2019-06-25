@@ -41,7 +41,6 @@ function afterLogin(login: LoginInfo) {
   menuService!.getMenuTree(login.token)
 
   portalService.listAll({ criteria: { eq: [['enabled', true]] }, orders: ['seq'] })
-    .then(listResult => portalService.changeCurrentItem(listResult.results[0]))
   //todo 嵌套属性排序不成功，可能是DetachedCriteria的问题，原来的AbstractHibernateCriteriaBuilder应该是可以的
   portalRowRelService.listAll({ orders: ['portal.seq', 'rowOrder'] })
   portletColRelService.listAll({orders:['portletOrder']})

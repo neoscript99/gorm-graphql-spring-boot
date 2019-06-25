@@ -1,6 +1,6 @@
 
 const config = {
-  graphqlUri: 'http://localhost:8080/graphql',
+  graphqlUri: '/graphql',
   dateFormat: 'MM-DD',
   timeFormat: 'YYYY-MM-DD HH:mm'
 }

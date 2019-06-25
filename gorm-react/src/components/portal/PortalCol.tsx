@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { clearEntity } from '../../utils/myutils';
 import { Col } from 'antd';
 import { Entity } from 'oo-graphql-service';
 import { portletColRelService } from '../../services';
@@ -19,8 +18,7 @@ class PortalCol extends Component<P> {
       return null;
     const { col, customerPortletMap } = this.props;
     return (
-      <Col {...clearEntity(col, 'colName', 'colOrder', 'colOffset', 'row', 'style')} order={col.colOrder}
-           offset={col.colOffset} style={JSON.parse(col.style)}>
+      <Col {...JSON.parse(col.exColProps)} style={JSON.parse(col.style)} order={col.colOrder} span={col.span}>
         {portletColRelService.store.allList.filter(rel => rel.col.id === col.id)
           .map(rel =>
             <PortletSwitch key={rel.portlet.id} portlet={rel.portlet} portletMap={customerPortletMap} />)}

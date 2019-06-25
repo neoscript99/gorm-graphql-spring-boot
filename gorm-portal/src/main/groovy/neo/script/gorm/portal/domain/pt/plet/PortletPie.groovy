@@ -16,9 +16,5 @@ class PortletPie extends Portlet {
 
     static DEMO_PIE1 = new PortletPie('各支行存款占比饼图', 'PortletPie', null, 'year')
     static DEMO_PIE2 = new PortletPie('贷款发放按月分析', 'PortletRise', null, 'year')
-    static DEMO_PIE3 = new PortletPie('利率曲线', 'PortletLine', null, 'year')
-    static DEMO_PIE4 = new PortletPie('存款按月分析', 'PortletRise', null, 'year')
-    static DEMO_PIE5 = new PortletPie('经济资本按月分析', 'PortletRise', null, 'year')
-    static DEMO_PIE6 = new PortletPie('客户经理业绩雷达图', 'PortletRadar', null, 'year')
-    static initList = [DEMO_PIE1, DEMO_PIE2, DEMO_PIE3, DEMO_PIE4, DEMO_PIE5, DEMO_PIE6]
+    static initList = [DEMO_PIE1, DEMO_PIE2]
 }

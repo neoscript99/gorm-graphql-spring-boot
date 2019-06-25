@@ -4,6 +4,7 @@ import DomainService from 'oo-graphql-service/lib/DomainService';
 import MobxDomainStore from 'oo-graphql-service/lib/mobx/MobxDomainStore';
 import { livebosQueryService, livebosServerService, portletDsService } from '../../services';
 import { LivebosObject } from '../../services/LivebosServerService';
+import { ColumnProps } from 'antd/lib/table';
 
 export interface PortletProps {
   //props中只有基类的基础信息，扩展信息还需单独获得
@@ -16,6 +17,7 @@ export interface PortletProps {
 export interface PortletState {
   //state中包含扩展信息
   portlet: Entity
+  columns: ColumnProps<Entity>[]
   data: any
 
   [key: string]: any
@@ -34,7 +36,7 @@ abstract class Portlet<P extends PortletProps = PortletProps, S extends PortletS
      * state.portlet是实现类包含所有信息，props.portlet只有基类信息
      * @see neo.script.gorm.portal.domain.pt.plet.Portlet
      */
-    this.setState({ portlet })
+    this.setState({ portlet, columns: portlet.columns && JSON.parse(portlet.columns) })
     //根据数据源类型，获取对应数据，保存到state.data
     if (portlet.ds && portlet.ds.type === 'LivebosQuery')
       this.livebosObjectQuery(portlet)
@@ -52,7 +54,7 @@ abstract class Portlet<P extends PortletProps = PortletProps, S extends PortletS
 
   async rdbQuery(portlet: Entity) {
     const jsonList = await portletDsService.getData(portlet.ds.id)
-    this.setState({ columns: JSON.parse(portlet.columns), data: jsonList.map(json => JSON.parse(json)) })
+    this.setState({ data: jsonList.map(json => JSON.parse(json)) })
   }
 }
 

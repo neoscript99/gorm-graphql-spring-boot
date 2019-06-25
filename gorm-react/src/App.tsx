@@ -4,7 +4,6 @@ import Home from './pages/admin/Home'
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import Login, { Logout } from './pages/Login';
 import Portal from './pages/Portal';
-import LuqiaoPortal from './pages/LuqiaoPortal';
 
 class App extends Component {
   render() {
@@ -14,8 +13,8 @@ class App extends Component {
           <Route path="/admin/" component={Home} />
           <Route path="/login/" component={Login} />
           <Route path="/logout/" component={Logout} />
-          <Route path="/portal" component={Portal} />
-          <Route path="/" component={LuqiaoPortal} />
+          <Route path="/portal/:portalCode" component={Portal} />
+          <Route component={Portal} />
         </Switch>
       </Router>
     )
