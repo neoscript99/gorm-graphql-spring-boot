@@ -21,7 +21,7 @@ import org.springframework.core.annotation.Order
 class LivebosPortalInitializer extends AbstractDataInitializer implements DataInitializer {
     @Override
     boolean isInited() {
-        return generalRepository.list(Portal, [eq: [['portalCode', 'luqiao']]])
+        return generalRepository.list(Portal, [eq: [['portalCode', 'livebos']]])
     }
 
     @Override
