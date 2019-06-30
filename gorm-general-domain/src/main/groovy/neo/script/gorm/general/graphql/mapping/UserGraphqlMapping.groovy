@@ -7,6 +7,7 @@ import neo.script.gorm.general.service.TokenService
 import neo.script.gorm.general.service.UserService
 import neo.script.gorm.graphql.entity.GraphQLMappingFlag
 import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
+import org.jasig.cas.client.util.AssertionHolder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -32,6 +33,16 @@ class UserGraphqlMapping extends GraphQLMapping {
                 field('error', String)
             }
         }
+        mutation('casLogin', 'CasLoginInfo') {
+            description 'Login system use cas filter.'
+            dataFetcher(new CasLoginDataFetcher())
+            returns {
+                field('success', Boolean)
+                field('token', String)
+                field('user', String)
+                field('error', String)
+            }
+        }
         mutation('logout', 'LoginOutInfo') {
             description 'Logout'
             argument('token', String)
@@ -41,6 +52,19 @@ class UserGraphqlMapping extends GraphQLMapping {
                 field('success', Boolean)
                 field('error', String)
             }
+        }
+    }
+
+    class CasLoginDataFetcher implements DataFetcher {
+        @Override
+        Object get(DataFetchingEnvironment environment) {
+            if (AssertionHolder.assertion)
+                [success: true,
+                 user   : AssertionHolder.assertion.principal.name,
+                 token  : tokenService.createToken(AssertionHolder.assertion.principal.name, 'cas').id]
+            else
+                [success: false,
+                 error  : '未登录CAS']
         }
     }
 

@@ -12,10 +12,10 @@ import LivebosServerService from './LivebosServerService';
 
 const uri = config.graphqlUri;
 //用户登录后更新token
-export const graphqlVars = { token: '' }//{ token: 'gorm-dev-token' }
+export const graphqlVars = { token: '' }
 
 
-export const apolloClient = createApolloClient(uri)
+export const apolloClient = createApolloClient({ uri, credentials: 'include' })
 export const domainGraphql: DomainGraphql = new DomainGraphql(apolloClient, graphqlVars);
 
 export const paramService = new DomainService('param', MobxDomainStore, domainGraphql);
@@ -43,9 +43,12 @@ function afterLogin(login: LoginInfo) {
   portalService.listAll({ criteria: { eq: [['enabled', true]] }, orders: ['seq'] })
   //todo 嵌套属性排序不成功，可能是DetachedCriteria的问题，原来的AbstractHibernateCriteriaBuilder应该是可以的
   portalRowRelService.listAll({ orders: ['portal.seq', 'rowOrder'] })
-  portletColRelService.listAll({orders:['portletOrder']})
+  portletColRelService.listAll({ orders: ['portletOrder'] })
 }
 
 export const userService = new UserService(afterLogin, domainGraphql);
-userService.tryLocalLogin();
+if (config.env === 'dev')
+  userService.devLogin('admin', 'gorm-dev-token');
+else
+  userService.tryLocalLogin();
 

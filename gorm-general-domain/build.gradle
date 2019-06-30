@@ -6,6 +6,7 @@ dependencies {
     compile group: 'com.h2database', name: 'h2'
     compile 'org.apache.tomcat:tomcat-jdbc'
     compile group: 'org.hibernate', name: 'hibernate-java8'
+    compile 'net.unicon.cas:cas-client-autoconfig-support:2.2.0-GA'
 }
 
 springBoot {

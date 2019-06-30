@@ -40,7 +40,7 @@ class Home extends Component<P, { collapsed: boolean }> {
   render() {
     const pathPrefix = '/admin/'
     const { store: menuStore } = menuService;
-    if (!userService.store.currentItem.id)
+    if (!userService.store.currentItem.account)
       return (<Redirect to="/login/" push={true} />)
     return (
       <Layout style={{ minHeight: '100vh' }}>

@@ -15,6 +15,7 @@ class ExecutionAuthorizationImpl implements ExecutionAuthorization {
     boolean isAuthorized(InstrumentationExecutionParameters parameters) {
         (graphiqlEnabled
                 || parameters.operation == 'login'
+                || parameters.operation == 'calLogin'
                 || parameters.variables.token)
     }
 }

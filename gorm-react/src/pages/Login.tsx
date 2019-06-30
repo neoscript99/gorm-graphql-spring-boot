@@ -30,7 +30,7 @@ class LoginForm extends Component<P> {
    */
   render(): ReactNode {
     const { getFieldDecorator } = this.props.form;
-    if (userService.store.currentItem.id) {
+    if (userService.store.currentItem.account) {
       //空白页面进入后length是1，chrome是这样
       if (history.length > 2) {
         history.back()

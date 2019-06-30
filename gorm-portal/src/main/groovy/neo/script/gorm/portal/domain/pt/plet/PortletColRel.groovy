@@ -31,7 +31,10 @@ class PortletColRel {
             new PortletColRel(PortalCol.DEMO_ROW1_COL1, PortletLink.DEMO_LINK1, 1),
             new PortletColRel(PortalCol.DEMO_ROW1_COL1, PortletLink.DEMO_LINK2, 2),
             new PortletColRel(PortalCol.DEMO_ROW1_COL1, PortletLink.DEMO_LINK3, 3),
+            new PortletColRel(PortalCol.DEMO_ROW2_COL1, PortletTable.DEMO_TABLE1, 1),
             new PortletColRel(PortalCol.DEMO_ROW2_COL2, PortletPie.DEMO_PIE1, 1),
-            new PortletColRel(PortalCol.DEMO_ROW2_COL2, PortletPie.DEMO_PIE2, 2)
+            new PortletColRel(PortalCol.DEMO_ROW2_COL2, PortletPie.DEMO_PIE2, 2),
+            new PortletColRel(PortalCol.DEMO_ROW2_COL2, PortletTable.DEMO_TABLE2, 3),
+            new PortletColRel(PortalCol.DEMO_ROW2_COL3, PortletListView.USER_LINK_LIST, 1),
     ]
 }

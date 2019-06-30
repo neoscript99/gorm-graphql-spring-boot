@@ -30,7 +30,7 @@ class Portal extends React.Component<P> {
       else
         portal = portalStore.allList[0]
     }
-    if (!userService.store.currentItem.id)
+    if (!userService.store.currentItem.account)
       return (<Redirect to="/login/" push={true} />)
     return (
       <Layout style={{ minHeight: '100vh' }}>

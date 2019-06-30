@@ -1,4 +1,4 @@
-token.expire.minutes: 10
+token.expire.minutes: 600
 token.expire.maxRefreshTimes: 100
 graphiql.enabled: true
 
