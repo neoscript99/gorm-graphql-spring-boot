@@ -43,11 +43,13 @@ class PortalCol {
         exColProps maxSize: 512
     }
     static graphql = true
-    static PortalCol DEMO_ROW1_COL1 = new PortalCol('DEMO_ROW1_COL1', PortalRow.DEMO_ROW1, 1, 24)
+    static PortalCol DEMO_ROW1_COL1 = new PortalCol('DEMO_ROW1_COL1', PortalRow.DEMO_ROW1, 1, 8)
+    static PortalCol DEMO_ROW1_COL2 = new PortalCol('DEMO_ROW1_COL2', PortalRow.DEMO_ROW1, 2, 8)
+    static PortalCol DEMO_ROW1_COL3 = new PortalCol('DEMO_ROW1_COL3', PortalRow.DEMO_ROW1, 3, 8)
     static PortalCol DEMO_ROW2_COL1 = new PortalCol('DEMO_ROW2_COL1', PortalRow.DEMO_ROW2, 1, 6, Consts.STYLE_FLEX_COL)
     static PortalCol DEMO_ROW2_COL2 = new PortalCol('DEMO_ROW2_COL2', PortalRow.DEMO_ROW2, 2, 12, Consts.STYLE_FLEX_COL)
     static PortalCol DEMO_ROW2_COL3 = new PortalCol('DEMO_ROW2_COL3', PortalRow.DEMO_ROW2, 3, 6, Consts.STYLE_FLEX_COL)
 
 
-    static initList = [DEMO_ROW1_COL1, DEMO_ROW2_COL1, DEMO_ROW2_COL2, DEMO_ROW2_COL3]
+    static initList = [DEMO_ROW1_COL1, DEMO_ROW1_COL2, DEMO_ROW1_COL3, DEMO_ROW2_COL1, DEMO_ROW2_COL2, DEMO_ROW2_COL3]
 }

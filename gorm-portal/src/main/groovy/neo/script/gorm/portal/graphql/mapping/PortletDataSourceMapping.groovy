@@ -16,7 +16,7 @@ class PortletDataSourceMapping extends GraphQLMapping {
     PortletDataSourceService portletDataSourceService
 
     PortletDataSourceMapping() {
-        query('getPortletData', [String]) {
+        query('getPortletData', String) {
             argument('dataSourceId', String)
             dataFetcher(new GetDataFetcher())
         }
@@ -26,7 +26,7 @@ class PortletDataSourceMapping extends GraphQLMapping {
     class GetDataFetcher implements DataFetcher {
         @Override
         Object get(DataFetchingEnvironment environment) {
-            return portletDataSourceService.getData(environment.getArgument('dataSourceId'))
+            return portletDataSourceService.getJsonData(environment.getArgument('dataSourceId'))
         }
     }
 }

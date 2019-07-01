@@ -1,7 +1,6 @@
-import { domainGraphql, livebosServerService } from '../services';
+import { livebosQueryService, livebosServerService, portletDsService } from '../services';
 
 import { graphqlVars } from '../services';
-import { DomainService, MobxDomainStore } from 'oo-graphql-service';
 
 graphqlVars.token = 'gorm-dev-token'
 describe('livebos tests', () => {
@@ -24,12 +23,11 @@ describe('livebos tests', () => {
 
 
   it('livebos object query test', async () => {
-    const livebosQueryService = new DomainService('livebosQuery', MobxDomainStore, domainGraphql);
     const livebosQuery = await livebosQueryService.findFirst({})
     console.log(livebosQuery);
     expect(livebosQuery)
       .toBeTruthy()
-    const result = await livebosServerService.objectQuery(livebosQuery.id as string);
+    const result = await portletDsService.getData(livebosQuery);
     console.log(result.data);
     expect(result.count)
       .toBeGreaterThan(0)

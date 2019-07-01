@@ -33,7 +33,7 @@ export const portletListViewService = new DomainService('portletListView', MobxD
 export const rdbServerService = new DomainService('rdbServer', MobxDomainStore, domainGraphql);
 export const rdbQueryService = new DomainService('rdbQuery', MobxDomainStore, domainGraphql);
 export const livebosServerService = new LivebosServerService('livebosServer', MobxDomainStore, domainGraphql);
-export const livebosQueryService = new LivebosServerService('livebosQuery', MobxDomainStore, domainGraphql);
+export const livebosQueryService = new DomainService('livebosQuery', MobxDomainStore, domainGraphql);
 export const menuService = new MenuService(domainGraphql);
 
 function afterLogin(login: LoginInfo) {

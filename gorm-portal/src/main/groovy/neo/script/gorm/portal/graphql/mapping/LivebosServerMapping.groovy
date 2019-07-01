@@ -27,12 +27,7 @@ class LivebosServerMapping extends GraphQLMapping {
             argument('type', String)
             dataFetcher(new QueryNoticesDataFetcher())
         }
-        query('livebosObjectQuery', String) {
-            argument('livebosQueryId', String)
-            dataFetcher(new ObjectQueryDataFetcher())
-        }
     }
-
 
     class GetUserInfoDataFetcher implements DataFetcher {
         @Override
@@ -43,7 +38,6 @@ class LivebosServerMapping extends GraphQLMapping {
         }
     }
 
-
     class QueryNoticesDataFetcher implements DataFetcher {
         @Override
         Object get(DataFetchingEnvironment environment) {
@@ -51,14 +45,6 @@ class LivebosServerMapping extends GraphQLMapping {
                     environment.<String> getArgument('livebosServerId'),
                     environment.<String> getArgument('userId'),
                     environment.<String> getArgument('type'))
-        }
-    }
-
-    class ObjectQueryDataFetcher implements DataFetcher {
-        @Override
-        Object get(DataFetchingEnvironment environment) {
-            return livebosServerService.objectQuery(
-                    environment.<String> getArgument('livebosQueryId'))
         }
     }
 }

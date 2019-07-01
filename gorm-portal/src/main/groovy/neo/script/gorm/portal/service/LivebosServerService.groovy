@@ -66,11 +66,17 @@ class LivebosServerService extends AbstractService<LivebosServer> {
         objectQuery(generalRepository.get(LivebosQuery, livebosQueryId))
     }
 
-    def objectQuery(LivebosQuery livebosQuery) {
+    /**
+     * 默认用livebosQuery.condition做查询条件，如果有参数需要带入，可自行处理下
+     * @param livebosQuery
+     * @param condition
+     * @return
+     */
+    def objectQuery(LivebosQuery livebosQuery, String condition = null) {
         def livebosServer = livebosQuery.livebosServer
         def url = livebosServer.serverRoot + livebosServer.restPath + livebosServer.objectQueryUri
         def requestData = [objectName : livebosQuery.objectName,
-                           condition  : livebosQuery.condition,
+                           condition  : condition ?: livebosQuery.condition,
                            queryOption: [
                                    valueOption: livebosQuery.valueOption,
                                    batchNo    : livebosQuery.batchNo,
@@ -82,7 +88,7 @@ class LivebosServerService extends AbstractService<LivebosServer> {
         parts.add('sessionId', livebosServer.sessionId)
         parts.add('requestData', requestData)
 
-        checkResult(restTemplate.postForObject(url, parts, String.class), ObjectQueryRes)
+        return checkResult(restTemplate.postForObject(url, parts, String.class), ObjectQueryRes)
     }
 
     String checkResult(String resString, Class<? extends LivebosRes> resClass) {

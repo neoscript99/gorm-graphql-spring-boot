@@ -28,7 +28,7 @@ class RdbServer {
     }
     static graphql = true
 
-    static RdbServer SCOTT = new RdbServer([
+    static RdbServer DEMO_ORA = new RdbServer([
             dbName         : 'OA数据库',
             driverClassName: 'oracle.jdbc.OracleDriver',
             url            : 'jdbc:oracle:thin:@114.115.153.164:1521:orcl',
@@ -36,6 +36,13 @@ class RdbServer {
             password       : 'tiger',
             testSql        : 'select 1 from dual'
     ])
-
-    static initList = [SCOTT]
+    static RdbServer DEMO_DB2 = new RdbServer([
+            dbName         : 'DB2数据库',
+            driverClassName: 'com.ibm.db2.jcc.DB2Driver',
+            url            : 'jdbc:db2://114.115.146.122:60000/DSC:currentSchema=LIVEBOS;',
+            username       : 'tymh',
+            password       : '000000',
+            testSql        : 'SELECT current date FROM sysibm.sysdummy1'
+    ])
+    static initList = [DEMO_ORA, DEMO_DB2]
 }

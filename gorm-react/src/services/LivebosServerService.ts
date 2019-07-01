@@ -70,29 +70,17 @@ export default class LivebosServerService extends DomainService<MobxDomainStore>
     })
       .then(data => JSON.parse(data.data.livebosQueryNotices))
   }
+}
 
-  objectQuery(livebosQueryId: string): Promise<LivebosObject> {
-    return this.domainGraphql.apolloClient.query<{ livebosObjectQuery: string }>({
-      query: gql`query livebosObjectQuery{
-                  livebosObjectQuery(livebosQueryId: "${livebosQueryId}")
-                }`,
-      fetchPolicy: 'no-cache',
-      variables: {
-        ...this.domainGraphql.defaultVariables
-      }
-    })
-      .then(data => JSON.parse(data.data.livebosObjectQuery) as LivebosObject)
-      .then(lb => {
-        if (!lb.metaData)
-          console.error(lb)
-        else {
-          const { records, metaData: { colInfo } } = lb;
-          if (records && records.length > 0) {
-            lb.data = records.map(record =>
-              record.reduce((acc, value, idx) => (acc[colInfo[idx].name] = value, acc), {}))
-          }
-        }
-        return lb;
-      })
+export function transLivebosData(lb: LivebosObject) {
+  if (!lb.metaData)
+    console.error(lb)
+  else {
+    const { records, metaData: { colInfo } } = lb;
+    if (records && records.length > 0) {
+      lb.data = records.map(record =>
+        record.reduce((acc, value, idx) => (acc[colInfo[idx].name] = value, acc), {}))
+    }
   }
+  return lb;
 }
