@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Entity } from 'oo-graphql-service';
 import DomainService from 'oo-graphql-service/lib/DomainService';
 import MobxDomainStore from 'oo-graphql-service/lib/mobx/MobxDomainStore';
-import {  portletDsService } from '../../services';
+import { portletDsService } from '../../services';
 import { ColumnProps } from 'antd/lib/table';
 
 export interface PortletProps {
@@ -36,7 +36,11 @@ abstract class Portlet<P extends PortletProps = PortletProps, S extends PortletS
      * @see neo.script.gorm.portal.domain.pt.plet.Portlet
      */
     const result = portlet.ds && (await portletDsService.getData(portlet.ds))
-    this.setState({ portlet, columns: portlet.columns && JSON.parse(portlet.columns), data: result.data })
+    this.setState({
+      portlet,
+      columns: portlet.columns && JSON.parse(portlet.columns),
+      data: result && result.data
+    })
   }
 
 }

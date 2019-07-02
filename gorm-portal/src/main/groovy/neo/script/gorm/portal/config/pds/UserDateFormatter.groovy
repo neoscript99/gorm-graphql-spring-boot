@@ -17,7 +17,7 @@ class UserDateFormatter extends QueryFormatter {
     String format(String query) {
         def valueMap = new HashMap()
         if (TokenHolder.token)
-            valueMap.put('user', TokenHolder.token.username)
+            valueMap.put('username', TokenHolder.token.username)
 
         def localDate = LocalDate.now()
         valueMap.put('today', localDate.toString())

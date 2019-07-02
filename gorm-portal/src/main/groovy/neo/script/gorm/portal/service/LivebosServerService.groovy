@@ -62,10 +62,6 @@ class LivebosServerService extends AbstractService<LivebosServer> {
         checkResult(restTemplate.getForObject(url, String.class, userId, livebosServer.sessionId, type), NoticeRes)
     }
 
-    def objectQuery(String livebosQueryId) {
-        objectQuery(generalRepository.get(LivebosQuery, livebosQueryId))
-    }
-
     /**
      * 默认用livebosQuery.condition做查询条件，如果有参数需要带入，可自行处理下
      * @param livebosQuery
@@ -89,6 +85,21 @@ class LivebosServerService extends AbstractService<LivebosServer> {
         parts.add('requestData', requestData)
 
         return checkResult(restTemplate.postForObject(url, parts, String.class), ObjectQueryRes)
+    }
+
+    LivebosObject objectQueryParse(LivebosQuery livebosQuery, String condition = null) {
+        def lb = JsonUtil.fromJson(objectQuery(livebosQuery, condition), LivebosObject)
+        if (lb.records && lb.records.size() > 0) {
+            def colInfo = lb.metaData.colInfo
+            lb.data = lb.records.collect { record ->
+                def map = [:]
+                record.eachWithIndex { value, int idx ->
+                    map.put(colInfo.get(idx).name, value)
+                }
+                return map
+            }
+        }
+        return lb
     }
 
     String checkResult(String resString, Class<? extends LivebosRes> resClass) {
@@ -164,4 +175,28 @@ class LivebosServerService extends AbstractService<LivebosServer> {
         }
     }
 
+    @ToString(includePackage = false)
+    static class LivebosObjectColInfo {
+        String name
+        String label
+        Integer type
+        Integer length
+        Integer scale
+    }
+
+    @ToString(includePackage = false)
+    static class LivebosObjectMetaData {
+        Integer colCount
+        List<LivebosObjectColInfo> colInfo
+    }
+
+    @ToString(includePackage = false)
+    static class LivebosObject extends ObjectQueryRes {
+        String queryId
+        Boolean hasMore
+        Integer count
+        LivebosObjectMetaData metaData
+        List<List> records
+        List data
+    }
 }

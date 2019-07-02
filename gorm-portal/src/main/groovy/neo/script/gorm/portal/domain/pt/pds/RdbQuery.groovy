@@ -26,7 +26,7 @@ class RdbQuery extends PortletDataSource {
 
     static RdbQuery DEMO_ORA_EMP_LIST = new RdbQuery('员工列表', 'RdbQuery', RdbServer.DEMO_ORA,
             '''select empno,ename,job,mgr,to_char(hiredate,'yyyy-mm-dd') hiredate,sal,comm,deptno from emp 
-where to_char(hiredate,'yyyy-mm-dd') < '${yesterday}' and ename <> '${user}' ''')
+where to_char(hiredate,'yyyy-mm-dd') < '${yesterday}' and ename <> '${username}' ''')
     static RdbQuery DEMO_ORA_DEPT_LIST = new RdbQuery('部门列表', 'RdbQuery', RdbServer.DEMO_ORA,
             'select deptno, dname, loc from dept')
 

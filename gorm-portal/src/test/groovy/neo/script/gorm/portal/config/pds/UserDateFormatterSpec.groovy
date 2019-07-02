@@ -10,7 +10,7 @@ class UserDateFormatterSpec extends Specification {
         TokenHolder.token = new Token([username: 'admin'])
 
         UserDateFormatter udf = new UserDateFormatter();
-        def query = '''select * from emp where emp_id='${user}' and last_updated='${yesterday}' #${today} ${last_month} ${last_year}'''
+        def query = '''select * from emp where emp_id='${username}' and last_updated='${yesterday}' #${today} ${last_month} ${last_year}'''
         def res = udf.format(query)
         println(res)
         expect:
