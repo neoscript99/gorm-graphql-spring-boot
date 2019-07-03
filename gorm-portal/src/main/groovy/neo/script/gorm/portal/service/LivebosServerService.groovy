@@ -53,6 +53,11 @@ class LivebosServerService extends AbstractService<LivebosServer> {
         checkResult(restTemplate.getForObject(url, String.class, userId, livebosServer.sessionId), UserInfoRes)
     }
 
+
+    UserInfoFull getUserInfoParse(LivebosServer livebosServer, String userId) {
+        return JsonUtil.fromJson(getUserInfo(livebosServer, userId), UserInfoFull)
+    }
+
     def queryNotices(String livebosServerId, String userId, String type) {
         queryNotices(get(livebosServerId), userId, type)
     }
@@ -132,6 +137,9 @@ class LivebosServerService extends AbstractService<LivebosServer> {
         }
     }
 
+    /**
+     * 仅查看结果状态
+     */
     @ToString(includePackage = false)
     static class UserInfoRes implements LivebosRes {
         Integer status
@@ -143,6 +151,20 @@ class LivebosServerService extends AbstractService<LivebosServer> {
         boolean isSessionInvalid() {
             status == 0
         }
+    }
+
+    /**
+     * 全部信息，后台有用的时候解析
+     * {"id":0,"loginId":"admin","name":"管理员","lastLogin":"2019-07-02 16:48:48","grade":0,"status":1,"orgId":0}
+     */
+    @ToString(includePackage = false)
+    static class UserInfoFull extends UserInfoRes {
+        Integer id
+        String loginId
+        String name
+        String lastLogin
+        Integer grade
+        Integer orgId
     }
 
     @ToString(includePackage = false)

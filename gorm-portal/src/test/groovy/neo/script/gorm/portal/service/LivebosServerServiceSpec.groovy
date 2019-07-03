@@ -51,6 +51,7 @@ class LivebosServerServiceSpec extends Specification {
         livebosServer.sessionId = loginRes.sessionId
 
         log.info(lss.getUserInfo(livebosServer, 'admin'))
+        log.info(lss.getUserInfoParse(livebosServer, 'admin').toString())
         log.info(lss.queryNotices(livebosServer, 'admin', '0'))
         log.info(lss.objectQuery(USER_LINK))
         expect:
