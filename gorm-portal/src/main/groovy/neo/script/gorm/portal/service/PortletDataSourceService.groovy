@@ -36,7 +36,11 @@ class PortletDataSourceService extends AbstractService<PortletDataSource> {
 
     String getLivebosData(String dataSourceId) {
         LivebosQuery query = generalRepository.get(LivebosQuery, dataSourceId)
-        return livebosServerService.objectQuery(query, formatQuery(query.condition))
+        query.condition = formatQuery(query.condition)
+        if (query.params)
+            query.params = formatQuery(query.params)
+        query.discard()
+        return livebosServerService.objectQuery(query)
     }
 
     String formatQuery(String query) {

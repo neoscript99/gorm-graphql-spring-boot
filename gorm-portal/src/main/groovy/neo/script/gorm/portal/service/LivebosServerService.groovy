@@ -73,17 +73,19 @@ class LivebosServerService extends AbstractService<LivebosServer> {
      * @param condition
      * @return
      */
-    def objectQuery(LivebosQuery livebosQuery, String condition = null) {
+    def objectQuery(LivebosQuery livebosQuery) {
         def livebosServer = livebosQuery.livebosServer
         def url = livebosServer.serverRoot + livebosServer.restPath + livebosServer.objectQueryUri
         def requestData = [objectName : livebosQuery.objectName,
-                           condition  : condition ?: livebosQuery.condition,
+                           condition  : livebosQuery.condition,
                            queryOption: [
                                    valueOption: livebosQuery.valueOption,
                                    batchNo    : livebosQuery.batchNo,
                                    batchSize  : livebosQuery.batchSize,
                                    queryCount : livebosQuery.queryCount
                            ]]
+        if (livebosQuery.params)
+            requestData.params = JsonUtil.fromJson(livebosQuery.params, Map)
 
         MultiValueMap<String, Object> parts = new LinkedMultiValueMap<String, Object>();
         parts.add('sessionId', livebosServer.sessionId)
@@ -92,8 +94,8 @@ class LivebosServerService extends AbstractService<LivebosServer> {
         return checkResult(restTemplate.postForObject(url, parts, String.class), ObjectQueryRes)
     }
 
-    LivebosObject objectQueryParse(LivebosQuery livebosQuery, String condition = null) {
-        def lb = JsonUtil.fromJson(objectQuery(livebosQuery, condition), LivebosObject)
+    LivebosObject objectQueryParse(LivebosQuery livebosQuery) {
+        def lb = JsonUtil.fromJson(objectQuery(livebosQuery), LivebosObject)
         if (lb.records && lb.records.size() > 0) {
             def colInfo = lb.metaData.colInfo
             lb.data = lb.records.collect { record ->
@@ -155,8 +157,7 @@ class LivebosServerService extends AbstractService<LivebosServer> {
 
     /**
      * 全部信息，后台有用的时候解析
-     * {"id":0,"loginId":"admin","name":"管理员","lastLogin":"2019-07-02 16:48:48","grade":0,"status":1,"orgId":0}
-     */
+     *{"id":0,"loginId":"admin","name":"管理员","lastLogin":"2019-07-02 16:48:48","grade":0,"status":1,"orgId":0}*/
     @ToString(includePackage = false)
     static class UserInfoFull extends UserInfoRes {
         Integer id

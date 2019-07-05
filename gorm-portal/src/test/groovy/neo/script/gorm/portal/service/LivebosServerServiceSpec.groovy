@@ -20,7 +20,7 @@ class LivebosServerServiceSpec extends Specification {
                     'rest', '000000')
 
     static LivebosQuery USER_LINK = new LivebosQuery('通讯录', 'LivebosQuery', DEMO_SERVER,
-            'tUserLink', '', 'DISPLAY', 1, 1000)
+            'tUserLink', null, '', 'DISPLAY', 1, 1000)
 
     def restTemplateTest() {
         given:
@@ -68,7 +68,7 @@ class LivebosServerServiceSpec extends Specification {
         livebosServer.sessionId = loginRes.sessionId
 
         def livebosQuery = new LivebosQuery('公司要闻', 'LivebosQuery', livebosServer,
-                'tUser', "", 'DISPLAY')
+                'tUser', null, "", 'DISPLAY')
         log.info(lss.objectQuery(livebosQuery))
         log.info(lss.objectQueryParse(livebosQuery).toString())
         expect:
@@ -84,5 +84,27 @@ class LivebosServerServiceSpec extends Specification {
         log.info(lss.objectQuery(USER_LINK))
         expect:
         true
+    }
+
+    def 'livebos viewObjectQuery test'() {
+        given:
+        def livebosServer = new LivebosServer('路桥LivebosServer',
+                'http://114.115.153.164:7070',
+                'rest', '000000')
+        def lss = new LivebosServerService()
+        def loginRes = lss.userLogin(DEMO_SERVER)
+        livebosServer.sessionId = loginRes.sessionId
+
+        def db1 = new LivebosQuery('督办', 'LivebosQuery', livebosServer,
+                'XUXB_Query_DB', '{ "PUid":0 }', "", 'DISPLAY')
+        def db2 = new LivebosQuery('督办', 'LivebosQuery', livebosServer,
+                'XUXB_DB', null,
+                'F_DQZXR = 0 or F_FQR = 0 ', 'DISPLAY')
+        log.info("督办视图：{}", lss.objectQuery(db1))
+        //含or关键字为非法字符
+        log.info("督办实体：{}", lss.objectQuery(db2))
+        expect:
+        true
+
     }
 }

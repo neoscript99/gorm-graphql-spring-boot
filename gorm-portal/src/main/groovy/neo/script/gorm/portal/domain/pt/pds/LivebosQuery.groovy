@@ -15,6 +15,9 @@ class LivebosQuery extends PortletDataSource {
 
     LivebosServer livebosServer
     String objectName   //对象名,
+    /**
+     * 查询对象的参数，键值对如：{ "PUid":0 }*/
+    String params
     String condition = ''   //ID>0 查询条件,
     /**queryOption start**/
     //值输出(针对内部对象,多值对象,字典)DISPLAY|VALUE|BOTH
@@ -30,11 +33,12 @@ class LivebosQuery extends PortletDataSource {
         livebosServer fetch: 'join', lazy: false
     }
     static constraints = {
-        condition blank: true, maxSize: 128
+        params nullable: true, maxSize: 128
+        condition blank: true, maxSize: 256
     }
     static graphql = true
     //通讯录，查询1000
     static LivebosQuery USER_LINK = new LivebosQuery('通讯录', 'LivebosQuery', LivebosServer.DEMO_SERVER,
-            'tUserLink', '', 'DISPLAY', 1, 1000)
+            'tUserLink', null, '', 'DISPLAY', 1, 1000)
     static initList = [USER_LINK]
 }

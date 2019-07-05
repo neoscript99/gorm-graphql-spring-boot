@@ -15,11 +15,11 @@ class PortletListView extends Portlet {
       return null;
     const { inTab } = this.props;
     const { portlet, data } = this.state
-    const { portletName, extraLink } = this.state.portlet;
+    const { portletName,rowKey, extraLink } = this.state.portlet;
 
     const extraLinkA = extraLink && <a href={extraLink} target='_blank'>更多</a>;
     const Content = <Table dataSource={data} columns={this.getColumns(portlet)}
-                           rowKey='ID' pagination={false} showHeader={false} size='middle' bordered={false}
+                           rowKey={rowKey} pagination={false} showHeader={false} size='middle' bordered={false}
                            footer={inTab ? (() => <div style={{
                              textAlign: 'right',
                              backgroundColor: 'inherit'
