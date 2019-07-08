@@ -30,6 +30,7 @@ export const portletTableService = new DomainService('portletTable', MobxDomainS
 export const portletTabRelService = new DomainService('portletTabRel', MobxDomainStore, domainGraphql);
 export const portletDsService = new PortletDataSourceService('portletDataSource', MobxDomainStore, domainGraphql);
 export const portletListViewService = new DomainService('portletListView', MobxDomainStore, domainGraphql);
+export const portletCalendarService = new DomainService('portletCalendar', MobxDomainStore, domainGraphql);
 export const rdbServerService = new DomainService('rdbServer', MobxDomainStore, domainGraphql);
 export const rdbQueryService = new DomainService('rdbQuery', MobxDomainStore, domainGraphql);
 export const livebosServerService = new LivebosServerService('livebosServer', MobxDomainStore, domainGraphql);

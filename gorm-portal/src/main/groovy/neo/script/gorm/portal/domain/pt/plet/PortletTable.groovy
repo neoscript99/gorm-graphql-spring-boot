@@ -12,6 +12,7 @@ class PortletTable extends Portlet {
 
     String columns
     String rowKey
+    Integer pageSize = 6
 
     static constraints = {
         columns maxSize: 2048
