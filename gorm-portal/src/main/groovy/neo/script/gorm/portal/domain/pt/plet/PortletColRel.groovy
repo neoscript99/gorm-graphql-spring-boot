@@ -6,6 +6,7 @@ import groovy.transform.ToString
 import groovy.transform.TupleConstructor
 import neo.script.gorm.general.initializer.InitializeDomian
 import neo.script.gorm.portal.domain.pt.PortalCol
+import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 
 @Entity
 @TupleConstructor(excludes = 'id, dateCreated, lastUpdated, version')
@@ -26,7 +27,12 @@ class PortletColRel {
         col fetch: 'join', lazy: false
         portlet fetch: 'join', lazy: false
     }
-    static graphql = true
+    static graphql = GraphQLMapping.build {
+        description('组件和展示列的关联关系（多对多）')
+        property('col') { description('展示列') }
+        property('portlet') { description('Portlet组件') }
+        property('portletOrder') { description('组件序号') }
+    }
     static initList = [
             new PortletColRel(PortalCol.DEMO_ROW1_COL1, PortletLink.DEMO_LINK1, 1),
             new PortletColRel(PortalCol.DEMO_ROW1_COL2, PortletLink.DEMO_LINK2, 2),

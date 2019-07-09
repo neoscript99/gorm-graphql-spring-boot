@@ -4,6 +4,7 @@ import grails.gorm.annotation.Entity
 import groovy.transform.TupleConstructor
 import neo.script.gorm.general.initializer.InitializeDomian
 import neo.script.gorm.portal.domain.pt.PortalCol
+import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 
 @Entity
 @TupleConstructor(includeSuperProperties = true, excludes = 'id, dateCreated, lastUpdated, version')
@@ -16,7 +17,11 @@ class PortletLink extends Portlet {
     static constraints = {
         imageUrl nullable: true, maxSize: 256
     }
-    static graphql = true
+    static graphql = GraphQLMapping.build {
+        description('链接组件')
+        property('linkUrl') { description('链接地址') }
+        property('imageUrl') { description('链接图片') }
+    }
 
     static DEMO_LINK1 = new PortletLink('OA系统', 'PortletLink', null, 'http://www.bing.com')
     static DEMO_LINK2 = new PortletLink('绩效考核系统', 'PortletLink', null, 'http://www.qq.com')

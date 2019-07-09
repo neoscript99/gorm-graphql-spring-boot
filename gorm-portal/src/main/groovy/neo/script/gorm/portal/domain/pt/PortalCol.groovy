@@ -6,6 +6,7 @@ import groovy.transform.ToString
 import groovy.transform.TupleConstructor
 import neo.script.gorm.general.initializer.InitializeDomian
 import neo.script.gorm.portal.util.Consts
+import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 
 @Entity
 @TupleConstructor(excludes = 'id, dateCreated, lastUpdated, version')
@@ -42,7 +43,16 @@ class PortalCol {
         style maxSize: 1024
         exColProps maxSize: 512
     }
-    static graphql = true
+    static graphql = GraphQLMapping.build {
+        description('门户展示列（一行包含多列）')
+        property('colName') { description('列名') }
+        property('row') { description('所属的展示行') }
+        property('colOrder') { description('列序号') }
+        property('span') { description('栅格占位格数（一行共24格），为 0 时相当于 display: none') }
+        property('style') { description('自定义css') }
+        property('exColProps') { description('其它属性，参考https://ant.design/components/grid-cn/#Col') }
+    }
+
     static PortalCol DEMO_ROW1_COL1 = new PortalCol('DEMO_ROW1_COL1', PortalRow.DEMO_ROW1, 1, 8)
     static PortalCol DEMO_ROW1_COL2 = new PortalCol('DEMO_ROW1_COL2', PortalRow.DEMO_ROW1, 2, 8)
     static PortalCol DEMO_ROW1_COL3 = new PortalCol('DEMO_ROW1_COL3', PortalRow.DEMO_ROW1, 3, 8)

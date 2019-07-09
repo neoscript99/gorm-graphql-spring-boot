@@ -16,6 +16,9 @@ class PortletDataSourceMapping extends GraphQLMapping {
     PortletDataSourceService portletDataSourceService
 
     PortletDataSourceMapping() {
+        description('Portlet数据源')
+        property('dsName') { description('数据源名称') }
+        property('type') { description('数据源类型，包括：LivebosQuery、RdbQuery') }
         query('getPortletData', String) {
             argument('dataSourceId', String)
             dataFetcher(new GetDataFetcher())

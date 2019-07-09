@@ -5,6 +5,7 @@ import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import groovy.transform.TupleConstructor
 import neo.script.gorm.general.initializer.InitializeDomian
+import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 
 @Entity
 @TupleConstructor(includeSuperProperties = true, excludes = 'id, dateCreated, lastUpdated, version')
@@ -22,7 +23,9 @@ class RdbQuery extends PortletDataSource {
     static constraints = {
         sql maxSize: 2048
     }
-    static graphql = true
+    static graphql = GraphQLMapping.build {
+        description('关系数据库查询')
+    }
 
     static RdbQuery DEMO_ORA_EMP_LIST = new RdbQuery('员工列表', 'RdbQuery', RdbServer.DEMO_ORA,
             '''select empno,ename,job,mgr,to_char(hiredate,'yyyy-mm-dd') hiredate,sal,comm,deptno from emp 

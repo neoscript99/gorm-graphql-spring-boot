@@ -6,6 +6,7 @@ import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import groovy.transform.TupleConstructor
 import neo.script.gorm.general.initializer.InitializeDomian
+import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 
 @Entity
 @TupleConstructor(excludes = 'id, dateCreated, lastUpdated')
@@ -27,7 +28,13 @@ class Portal {
     }
     static constraints = {
     }
-    static graphql = true
+    static graphql = GraphQLMapping.build {
+        description('门户')
+        property('portalName') { description('门户名') }
+        property('portalCode') { description('门户代码') }
+        property('portalIcon') { description('门户图标') }
+        property('seq') { description('门户排序号') }
+    }
 
     static Portal PERSONAL_PORTAL = new Portal('个人门户', 'personal', 'user', 1)
     static initList = [

@@ -7,6 +7,7 @@ import groovy.transform.TupleConstructor
 import neo.script.gorm.general.initializer.InitializeDomian
 import neo.script.gorm.portal.domain.pt.pds.LivebosQuery
 import neo.script.gorm.portal.domain.pt.pds.LivebosServer
+import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 
 @Entity
 @TupleConstructor(includeSuperProperties = true, excludes = 'id, dateCreated, lastUpdated, version')
@@ -33,7 +34,18 @@ class PortletListView extends Portlet {
         fromDateFormat nullable: true
         toDateFormat nullable: true
     }
-    static graphql = true
+    static graphql = GraphQLMapping.build {
+        description('列表组件')
+        property('titleFields') { description('标题字段') }
+        property('cateField') { description('分类字段') }
+        property('dateField') { description('日期字段') }
+        property('extraLink') { description('更多链接地址') }
+        property('titleLink') { description('标题链接地址') }
+        property('iconField') { description('图标字段') }
+        property('rowKey') { description('ID字段') }
+        property('fromDateFormat') { description('日期原格式') }
+        property('toDateFormat') { description('日期转换格式') }
+    }
 
     static USER_LINK_LIST = new PortletListView('通讯录', 'PortletListView', LivebosQuery.USER_LINK,
             "Name,UserID", 'Grade', 'ChgPwdTime',

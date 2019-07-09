@@ -5,6 +5,7 @@ import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import groovy.transform.TupleConstructor
 import neo.script.gorm.portal.domain.pt.pds.PortletDataSource
+import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 
 @Entity
 @TupleConstructor(excludes = 'id, dateCreated, lastUpdated, version')
@@ -27,5 +28,10 @@ class Portlet {
         ds nullable: true
     }
 
-    static graphql = true
+    static graphql = GraphQLMapping.build {
+        description('Portlet组件基类')
+        property('portletName') { description('组件名') }
+        property('type') { description('组件类型') }
+        property('ds') { description('数据源') }
+    }
 }

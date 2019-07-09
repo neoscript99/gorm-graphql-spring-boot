@@ -5,6 +5,7 @@ import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import groovy.transform.TupleConstructor
 import neo.script.gorm.general.initializer.InitializeDomian
+import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 
 @Entity
 @TupleConstructor(excludes = 'id, dateCreated, lastUpdated, version')
@@ -33,7 +34,15 @@ class PortalRow {
         justify nullable: true
         type nullable: true
     }
-    static graphql = true
+    static graphql = GraphQLMapping.build {
+        description('门户展示行')
+        property('rowName') { description('行名') }
+        property('gutter') { description('栅格间隔，可以写成像素值或支持响应式的对象写法') }
+        property('align') { description('flex 布局下的垂直对齐方式') }
+        property('justify') { description('flex 布局下的水平排列方式') }
+        property('type') { description('布局模式，可选 flex，现代浏览器下有效') }
+    }
+
     static DEMO_ROW1 = new PortalRow('DEMO_ROW1')
     static DEMO_ROW2 = new PortalRow('DEMO_ROW2')
     static initList = [DEMO_ROW1, DEMO_ROW2]

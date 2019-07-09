@@ -4,6 +4,7 @@ import grails.gorm.annotation.Entity
 import groovy.transform.TupleConstructor
 import neo.script.gorm.general.initializer.InitializeDomian
 import neo.script.gorm.portal.domain.pt.pds.RdbQuery
+import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 
 @Entity
 @TupleConstructor(includeSuperProperties = true, excludes = 'id, dateCreated, lastUpdated, version')
@@ -17,7 +18,12 @@ class PortletTable extends Portlet {
     static constraints = {
         columns maxSize: 2048
     }
-    static graphql = true
+    static graphql = GraphQLMapping.build {
+        description('表格组件')
+        property('columns') { description('列定义') }
+        property('rowKey') { description('ID字段') }
+        property('pageSize') { description('分页大小') }
+    }
 
     static DEMO_TABLE1 = new PortletTable('员工列表', 'PortletTable', RdbQuery.DEMO_ORA_EMP_LIST,
             """[{"title": "员工号", "dataIndex": "EMPNO", "sorter": true }, 

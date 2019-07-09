@@ -4,6 +4,7 @@ import grails.gorm.annotation.Entity
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import groovy.transform.TupleConstructor
+import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 
 @Entity
 @TupleConstructor(includeSuperProperties = true, excludes = 'id, dateCreated, lastUpdated, version')
@@ -18,5 +19,7 @@ class PortletTab extends Portlet {
     }
     static constraints = {
     }
-    static graphql = true
+    static graphql = GraphQLMapping.build {
+        description('TAB页组件（可包含多个普通组件）')
+    }
 }

@@ -16,6 +16,13 @@ class LivebosServerMapping extends GraphQLMapping {
     LivebosServerService livebosServerService
 
     LivebosServerMapping() {
+        description('LiveBOS服务器')
+        property('serverName') { description('服务器名称') }
+        property('serverRoot') { description('HTTP服务跟路径') }
+        property('restUser') { description('远程服务用户名') }
+        property('restPassword') { description('远程服务用户密码') }
+        property('sessionId') { description('远程调用会话ID，自动更新无需初始化') }
+
         query('livebosGetUserInfo', String) {
             argument('livebosServerId', String)
             argument('userId', String)

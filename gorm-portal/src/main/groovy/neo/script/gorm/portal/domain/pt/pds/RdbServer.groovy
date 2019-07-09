@@ -4,6 +4,7 @@ import grails.gorm.annotation.Entity
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import neo.script.gorm.general.initializer.InitializeDomian
+import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 
 @Entity
 @ToString(includePackage = false, includes = 'dbName, id')
@@ -26,7 +27,9 @@ class RdbServer {
         url maxSize: 256
         testSql maxSize: 256
     }
-    static graphql = true
+    static graphql = GraphQLMapping.build {
+        description('关系数据库服务端')
+    }
 
     static RdbServer DEMO_ORA = new RdbServer([
             dbName         : 'OA数据库',
