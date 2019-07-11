@@ -9,7 +9,7 @@ import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 
 @Entity
 @TupleConstructor(includeSuperProperties = true, excludes = 'id, dateCreated, lastUpdated, version')
-@ToString(includePackage = false, includes = 'id, lastUpdated')
+@ToString(includePackage = false, includeNames = true, includes = 'objectName, params, condition')
 @EqualsAndHashCode(includes = 'id')
 @InitializeDomian(profiles = 'dev', depends = LivebosServer)
 class LivebosQuery extends PortletDataSource {

@@ -6,6 +6,7 @@ import neo.script.gorm.general.domain.sys.User
 import neo.script.gorm.general.service.TokenService
 import neo.script.gorm.general.service.UserService
 import neo.script.gorm.graphql.entity.GraphQLMappingFlag
+import net.unicon.cas.client.configuration.CasClientConfigurationProperties
 import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 import org.jasig.cas.client.util.AssertionHolder
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,6 +19,8 @@ class UserGraphqlMapping extends GraphQLMapping {
     UserService userService
     @Autowired
     TokenService tokenService
+    @Autowired
+    CasClientConfigurationProperties configProps;
 
     UserGraphqlMapping() {
         exclude('password')
@@ -39,7 +42,8 @@ class UserGraphqlMapping extends GraphQLMapping {
             returns {
                 field('success', Boolean)
                 field('token', String)
-                field('user', String)
+                field('account', String)
+                field('casServerRoot', String)
                 field('error', String)
             }
         }
@@ -59,9 +63,10 @@ class UserGraphqlMapping extends GraphQLMapping {
         @Override
         Object get(DataFetchingEnvironment environment) {
             if (AssertionHolder.assertion)
-                [success: true,
-                 user   : AssertionHolder.assertion.principal.name,
-                 token  : tokenService.createToken(AssertionHolder.assertion.principal.name, 'cas').id]
+                [success      : true,
+                 account      : AssertionHolder.assertion.principal.name,
+                 casServerRoot: configProps.serverUrlPrefix,
+                 token        : tokenService.createToken(AssertionHolder.assertion.principal.name, 'cas').id]
             else
                 [success: false,
                  error  : '未登录CAS']

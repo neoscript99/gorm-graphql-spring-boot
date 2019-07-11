@@ -50,7 +50,7 @@ class LivebosServerService extends AbstractService<LivebosServer> {
 
     def getUserInfo(LivebosServer livebosServer, String userId) {
         def url = livebosServer.serverRoot + livebosServer.restPath + livebosServer.userInfoUri
-        checkResult(restTemplate.getForObject(url, String.class, userId, livebosServer.sessionId), UserInfoRes)
+        checkResult(restTemplate.getForObject(url, String.class, userId, livebosServer.sessionId), UserInfoRes, "getUserInfo($userId)")
     }
 
 
@@ -64,7 +64,7 @@ class LivebosServerService extends AbstractService<LivebosServer> {
 
     def queryNotices(LivebosServer livebosServer, String userId, String type) {
         def url = livebosServer.serverRoot + livebosServer.restPath + livebosServer.noticeUri
-        checkResult(restTemplate.getForObject(url, String.class, userId, livebosServer.sessionId, type), NoticeRes)
+        checkResult(restTemplate.getForObject(url, String.class, userId, livebosServer.sessionId, type), NoticeRes, "queryNotices($userId, $type)")
     }
 
     /**
@@ -91,7 +91,7 @@ class LivebosServerService extends AbstractService<LivebosServer> {
         parts.add('sessionId', livebosServer.sessionId)
         parts.add('requestData', requestData)
 
-        return checkResult(restTemplate.postForObject(url, parts, String.class), ObjectQueryRes)
+        return checkResult(restTemplate.postForObject(url, parts, String.class), ObjectQueryRes, "objectQuery(${livebosQuery})")
     }
 
     LivebosObject objectQueryParse(LivebosQuery livebosQuery) {
@@ -109,12 +109,12 @@ class LivebosServerService extends AbstractService<LivebosServer> {
         return lb
     }
 
-    String checkResult(String resString, Class<? extends LivebosRes> resClass) {
+    String checkResult(String resString, Class<? extends LivebosRes> resClass, String reqInfo) {
         LivebosRes res = JsonUtil.fromJson(resString, resClass)
         if (res.isSessionInvalid())
             refershSessionId()
         if (!res.isSuccess())
-            log.error(res.toString())
+            log.error('LiveBOS远程调用失败，请求信息：{}，返回信息：{}', reqInfo, resString)
         return resString
     }
 
