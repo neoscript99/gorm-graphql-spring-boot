@@ -19,7 +19,7 @@ class UserGraphqlMapping extends GraphQLMapping {
     UserService userService
     @Autowired
     TokenService tokenService
-    @Autowired
+    @Autowired(required = false)
     CasClientConfigurationProperties configProps;
 
     UserGraphqlMapping() {
