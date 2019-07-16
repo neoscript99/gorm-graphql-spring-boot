@@ -1,12 +1,11 @@
 import React from 'react'
 import { PaginationConfig, TableProps } from 'antd/lib/table';
 import { toPageInfo } from '../utils/myutils';
-import { ListResult } from 'oo-graphql-service/lib/DomainGraphql';
+import { ListResult, Entity } from 'oo-graphql-service';
 import EntityList, { EntityListState } from './EntityList';
-import { Entity } from 'oo-graphql-service';
 import { Tag } from 'antd';
 
-abstract class EntityPageList<P =any, S extends EntityListState= EntityListState>
+abstract class EntityPageList<P = any, S extends EntityListState = EntityListState>
   extends EntityList<P, S> {
 
   pagination: PaginationConfig = {
@@ -21,18 +20,18 @@ abstract class EntityPageList<P =any, S extends EntityListState= EntityListState
     loading: false, pagination: this.pagination
   }
 
-  pageChange (page: number, pageSize?: number): void {
+  pageChange(page: number, pageSize?: number): void {
     this.pagination.current = page;
     this.query()
   }
 
-  pageSizeChange (current: number, size: number): void {
+  pageSizeChange(current: number, size: number): void {
     this.pagination.pageSize = size
     this.pagination.current = 1;
     this.query()
   }
 
-  query (): Promise<ListResult> {
+  query(): Promise<ListResult> {
     const promise = this.domainService.listPage({
       ...this.queryParam,
       pageInfo: toPageInfo(this.pagination)

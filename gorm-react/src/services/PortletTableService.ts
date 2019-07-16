@@ -1,5 +1,4 @@
-import DomainService from 'oo-graphql-service/lib/DomainService';
-import { MobxDomainStore } from 'oo-graphql-service';
+import { MobxDomainStore, DomainService } from 'oo-graphql-service';
 import gql from 'graphql-tag';
 
 export default class PortletTableService extends DomainService<MobxDomainStore> {

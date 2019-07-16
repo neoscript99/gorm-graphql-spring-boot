@@ -1,8 +1,7 @@
-import { DomainGraphql, Entity } from 'oo-graphql-service'
+import { DomainGraphql, DomainService } from 'oo-graphql-service'
 
 import gql from 'graphql-tag';
 import MenuStore, { MenuNode } from '../stores/MenuStore';
-import DomainService from 'oo-graphql-service/lib/DomainService';
 
 export default class MenuService extends DomainService<MenuStore> {
   menuNodeFields: Promise<string>;

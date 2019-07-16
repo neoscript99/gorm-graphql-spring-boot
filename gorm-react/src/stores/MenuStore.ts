@@ -1,6 +1,5 @@
 import { observable } from 'mobx';
-import MobxDomainStore from 'oo-graphql-service/lib/mobx/MobxDomainStore';
-import { Entity } from 'oo-graphql-service';
+import { Entity, MobxDomainStore } from 'oo-graphql-service';
 
 export interface MenuNode {
   menu: Entity;

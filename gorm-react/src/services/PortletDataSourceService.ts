@@ -1,11 +1,12 @@
-import DomainService from 'oo-graphql-service/lib/DomainService';
-import { Entity, MobxDomainStore } from 'oo-graphql-service';
+import { Entity, MobxDomainStore, DomainService } from 'oo-graphql-service';
 import gql from 'graphql-tag';
 import { LivebosObject, transLivebosData } from './LivebosServerService';
 
 export interface DataResult {
-  data: any[] | any
-  [key: string]: any
+  //列表结果
+  dataList?: any[]
+  //单个对象结果
+  dataItem?: any
 }
 
 export default class PortletDataSourceService extends DomainService<MobxDomainStore> {
@@ -24,7 +25,7 @@ export default class PortletDataSourceService extends DomainService<MobxDomainSt
         const jsonData = JSON.parse(data.data.getPortletData);
         if (portletDataSource.type === 'LivebosQuery')
           return transLivebosData(jsonData as LivebosObject)
-        return { data: jsonData }
+        return { dataList: jsonData }
       })
   }
 }

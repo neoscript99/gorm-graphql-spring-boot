@@ -1,4 +1,4 @@
-import { livebosQueryService, livebosServerService, portletDsService } from '../services';
+import { livebosQueryService, livebosServerService, portletDataSourceService } from '../services';
 
 import { graphqlVars } from '../services';
 
@@ -27,7 +27,7 @@ describe('livebos tests', () => {
     console.log(livebosQuery);
     expect(livebosQuery)
       .toBeTruthy()
-    const result = await portletDsService.getData(livebosQuery);
+    const result = await portletDataSourceService.getData(livebosQuery);
     console.log(result.data);
     expect(result.count)
       .toBeGreaterThan(0)

@@ -1,16 +1,17 @@
-import DomainService from 'oo-graphql-service/lib/DomainService';
-import { Entity, MobxDomainStore } from 'oo-graphql-service';
+import { Entity, MobxDomainStore, DomainGraphql, DomainService } from 'oo-graphql-service';
 import gql from 'graphql-tag';
 import { sha256 } from 'js-sha256'
 import { message } from 'antd';
-import DomainGraphql from 'oo-graphql-service/lib/DomainGraphql';
-import config from '../utils/config';
 
 export interface LoginInfo {
   success: boolean
   token: string
-  user: Entity | string
+  user: Entity
   error?: string
+}
+
+export interface AfterLogin {
+  (account: string, token: string): void
 }
 
 const USERNAME_KEY = 'loginUsername'
@@ -18,7 +19,7 @@ const PASSWORD_KEY = 'loginPassword'
 
 export default class UserService extends DomainService<MobxDomainStore> {
 
-  constructor(private afterLogin: (info: LoginInfo) => void, domainGraphql: DomainGraphql) {
+  constructor(private afterLogin: AfterLogin, domainGraphql: DomainGraphql) {
     super('user', MobxDomainStore, domainGraphql);
     this.changeCurrentItem({})
   }
@@ -47,7 +48,7 @@ export default class UserService extends DomainService<MobxDomainStore> {
       .then(data => {
         const login = data.data!.login
         if (login.success) {
-          this.afterLogin(login)
+          this.afterLogin(login.user.account, login.token)
           this.changeCurrentItem(login.user as Entity)
           if (remember)
             this.saveLoginInfoLocal(username, passwordHash)
@@ -60,13 +61,9 @@ export default class UserService extends DomainService<MobxDomainStore> {
   }
 
   tryLocalLogin() {
-    if (config.casLogin) {
-      this.casLogin()
-    } else {
-      const info = this.getLoginInfoLocal()
-      if (info.username && info.password)
-        this.loginHash(info.username, info.password)
-    }
+    const info = this.getLoginInfoLocal()
+    if (info.username && info.password)
+      this.loginHash(info.username, info.password)
   }
 
   saveLoginInfoLocal(username: string, password: string) {
@@ -87,13 +84,13 @@ export default class UserService extends DomainService<MobxDomainStore> {
   }
 
   casLogin(): Promise<LoginInfo> {
-    return this.domainGraphql.apolloClient.mutate<{ casLogin: LoginInfo }>({
+    return this.domainGraphql.apolloClient.mutate<{ casLogin: any }>({
       mutation: gql`mutation casLoginAction {
                       casLogin {
                         success
                         error
                         token
-                        user
+                        account
                       }
                     }`,
       fetchPolicy: 'no-cache',
@@ -104,8 +101,8 @@ export default class UserService extends DomainService<MobxDomainStore> {
       .then(data => {
         const login = data.data!.casLogin
         if (login.success) {
-          this.afterLogin(login)
-          this.changeCurrentItem({ account: login.user })
+          this.afterLogin(login.account, login.token)
+          this.changeCurrentItem(login)
         } else {
           message.info(login.error);
         }
@@ -113,8 +110,8 @@ export default class UserService extends DomainService<MobxDomainStore> {
       })
   }
 
-  devLogin(user: string, token: string) {
-    this.changeCurrentItem({ account: user })
-    this.afterLogin({ user, token, success: true })
+  devLogin(account: string, token: string) {
+    this.changeCurrentItem({ account, token })
+    this.afterLogin(account, token)
   }
 }

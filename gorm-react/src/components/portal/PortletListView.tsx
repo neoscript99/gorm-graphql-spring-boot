@@ -11,22 +11,21 @@ import { ColumnProps } from 'antd/lib/table';
 
 class PortletListView extends Portlet {
   render() {
-    if (!(this.state && this.state.data))
+    if (!(this.state && this.state.portlet))
       return null;
     const { inTab } = this.props;
-    const { portlet, data } = this.state
-    const { portletName,rowKey, extraLink } = this.state.portlet;
+    const { portlet, dataList } = this.state
+    const { portletName, rowKey, extraLink } = this.state.portlet;
 
     const extraLinkA = extraLink && <a href={extraLink} target='_blank'>更多</a>;
-    const Content = <Table dataSource={data} columns={this.getColumns(portlet)}
+    const Content = <Table dataSource={dataList} columns={this.getColumns(portlet)}
                            rowKey={rowKey} pagination={false} showHeader={false} size='middle' bordered={false}
                            footer={inTab ? (() => <div style={{
                              textAlign: 'right',
                              backgroundColor: 'inherit'
                            }}>{extraLinkA}</div>) : undefined} />
     return inTab ? Content :
-      <Card title={portletName}
-            extra={extraLinkA}>
+      <Card title={portletName} extra={extraLinkA}>
         {Content}
       </Card>
   }

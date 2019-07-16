@@ -1,5 +1,4 @@
-import DomainService from 'oo-graphql-service/lib/DomainService';
-import { MobxDomainStore } from 'oo-graphql-service';
+import { MobxDomainStore, DomainService } from 'oo-graphql-service';
 import gql from 'graphql-tag';
 
 //{"id":0,"loginId":"admin","name":"管理员","lastLogin":"2019-06-13 17:46:54","grade":0,"status":1,"orgId":0}
@@ -22,7 +21,7 @@ export interface LivebosNotice {
 
 export interface LivebosObject {
   //最终数据转化到这里
-  data: any[]
+  dataList: any[]
   queryId: string
   hasMore: boolean
   count: number
@@ -78,7 +77,7 @@ export function transLivebosData(lb: LivebosObject) {
   else {
     const { records, metaData: { colInfo } } = lb;
     if (records && records.length > 0) {
-      lb.data = records.map(record =>
+      lb.dataList = records.map(record =>
         record.reduce((acc, value, idx) => (acc[colInfo[idx].name] = value, acc), {}))
     }
   }
