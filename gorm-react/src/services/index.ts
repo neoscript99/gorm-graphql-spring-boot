@@ -2,7 +2,8 @@ import {
   createApolloClient,
   DomainGraphql,
   MobxDomainStore, PortletDataSourceService, LivebosServerService, UserService,
-  DomainService
+  DomainService,
+  PortalRequiredServices
 } from 'oo-graphql-service'
 import config from '../utils/config'
 import MenuService from '../services/MenuService';
@@ -52,3 +53,13 @@ else if (config.casLogin)
 else
   userService.tryLocalLogin();
 
+export const portalServices: PortalRequiredServices = {
+  portletColRelService,
+  portletDataSourceService,
+  portalRowRelService,
+  portletTabRelService,
+  portletCalendarService,
+  portletLinkService,
+  portletTableService,
+  portletListViewService
+}

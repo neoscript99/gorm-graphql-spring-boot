@@ -1,12 +1,9 @@
 import React from 'react'
-import { Menu, Icon, Layout, BackTop, Col, Row } from 'antd'
+import { Menu, Icon, Layout, BackTop } from 'antd'
 import { observer } from 'mobx-react'
-import { portalService, userService } from '../services';
+import { portalService, portalServices, userService } from '../services';
 import { Link, match, Redirect } from 'react-router-dom';
-import PortalRows from '../components/portal/PortalRows';
-import PortalSider from '../components/portal/PortalSider';
-import { PortletMap } from '../components/portal/PortletSwitch';
-import { Entity } from 'oo-graphql-service';
+import { Entity, PortletMap, PortalRows, PortalSider } from 'oo-graphql-service';
 
 const customerPortletMap: PortletMap = {}
 const {
@@ -14,20 +11,19 @@ const {
 } = Layout
 
 interface P {
-  match: match<{ portalCode: string }>
+  match?: match<{ portalCode: string }>
 }
 
 @observer
 class Portal extends React.Component<P> {
-
   render() {
     const { store: portalStore } = portalService;
     let portal: Entity | undefined;
     if (portalStore.allList) {
-      const { portalCode } = this.props.match.params;
-      if (portalCode)
+      if (this.props.match && this.props.match.params.portalCode) {
+        const { portalCode } = this.props.match.params;
         portal = portalStore.allList.find(p => p.portalCode === portalCode)
-      else
+      } else
         portal = portalStore.allList[0]
     }
     if (!userService.store.currentItem.account)
@@ -55,9 +51,9 @@ class Portal extends React.Component<P> {
           </Menu>
         </Header>
         <Layout>
-          {portal && <PortalSider portal={portal} />}
+          {portal && <PortalSider portal={portal} services={portalServices} />}
           <Content style={{ padding: '0.5rem' }}>
-            {portal && <PortalRows portal={portal} customerPortletMap={customerPortletMap} />}
+            {portal && <PortalRows portal={portal} customerPortletMap={customerPortletMap} services={portalServices} />}
           </Content>
         </Layout>
         <Footer className="portal_layout"

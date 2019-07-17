@@ -3,11 +3,7 @@ import { observer } from 'mobx-react';
 import { Table } from 'antd';
 import { paramService } from '../../services'
 import { ColumnProps } from 'antd/lib/table';
-import { commonColumns } from '../../utils/myutils';
-import EntityPageList from '../../components/EntityPageList';
-import MobxDomainStore from 'oo-graphql-service/lib/mobx/MobxDomainStore';
-import DomainService from 'oo-graphql-service/lib/DomainService';
-import { Entity } from 'oo-graphql-service';
+import { Entity, EntityPageList, MobxDomainStore, DomainService, commonColumns } from 'oo-graphql-service';
 
 const { store } = paramService
 const columns: Array<ColumnProps<Entity>> = [

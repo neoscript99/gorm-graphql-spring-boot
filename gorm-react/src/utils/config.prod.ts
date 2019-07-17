@@ -2,8 +2,8 @@ const config = {
   graphqlUri: '/graphql',
   dateFormat: 'MM-DD',
   timeFormat: 'YYYY-MM-DD HH:mm',
-  casLogin: true,
-  env: 'prod'
+  casLogin: false,
+  env: 'dev'
 }
 
 export default config
