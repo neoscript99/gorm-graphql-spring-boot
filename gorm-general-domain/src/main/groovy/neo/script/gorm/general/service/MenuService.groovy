@@ -19,7 +19,11 @@ class MenuService extends AbstractService<Menu> {
     }
 
     MenuNode getRoleTree(Role role) {
-        return generateTree(getMenuByRoles([role]))
+        return getRolesTree([role])
+    }
+
+    MenuNode getRolesTree(List<Role> roleList) {
+        return generateTree(getMenuByRoles(roleList))
     }
 
     MenuNode getFullTree() {

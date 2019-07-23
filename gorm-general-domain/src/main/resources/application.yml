@@ -1,8 +1,11 @@
-token.expire.minutes: 600
-token.expire.maxRefreshTimes: 100
+token:
+  expire.minutes: 600
+  expire.maxRefreshTimes: 100
+
 graphiql.enabled: true
 
 server.port: 8080
+
 spring:
   h2.console:
     enabled: true
@@ -47,3 +50,15 @@ logging:
     graphql.GraphQL: DEBUG
     com.oembedler: DEBUG
     org.dataloader: DEBUG
+
+#@see https://github.com/Unicon/cas-client-autoconfig-support
+gorm.cas:
+  defaultRoles: Public
+  client.enabled: false
+
+cas:
+  server-url-prefix: http://localhost:7007/cas
+  server-login-url: http://localhost:7007/cas/login
+  client-host-url: http://localhost:8080
+  #'CAS3' For CAS3 protocol (default), 'CAS'  For CAS2 protocol, 'SAML' For SAML protocol
+  validation-type: CAS

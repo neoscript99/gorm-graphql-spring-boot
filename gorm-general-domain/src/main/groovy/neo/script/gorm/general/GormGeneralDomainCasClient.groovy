@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 
 @Configuration
-@ConditionalOnProperty(value = "portal.cas.client.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(value = "gorm.cas.client.enabled", havingValue = "true", matchIfMissing = false)
 @Import(CasClientConfiguration.class)
 class GormGeneralDomainCasClient {
 }

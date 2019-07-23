@@ -22,8 +22,8 @@ class Token {
     Integer refreshTimes = 0
     String username
     //用户类型，sys - 后台管理用户，pub - 公网用户
-    String userType = 'sys'
-    String role
+    //String userType = 'sys'
+    String roles
 
     Date dateCreated
     Date lastUpdated
@@ -31,9 +31,8 @@ class Token {
     static mapping = {
         id generator: 'assigned'
     }
+
     static constraints = {
-        username nullable: true
-        role nullable: true
     }
 
     static initList = [new Token([

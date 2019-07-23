@@ -1,6 +1,8 @@
 package neo.script.gorm.general.service
 
+import neo.script.gorm.general.domain.sys.Role
 import neo.script.gorm.general.domain.sys.User
+import neo.script.gorm.general.domain.sys.UserRole
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -33,5 +35,13 @@ class UserService extends AbstractService<User> {
 
     User findByAccount(String account) {
         findFirst([eq: [['account', account]]])
+    }
+
+    List<Role> getUserRoles(def userId) {
+        list([user: [idEq: [userId]]], UserRole)*.role
+    }
+
+    List<Role> getUserRoleCodes(def userId) {
+        (getUserRoles(userId)*.roleCode).join(',')
     }
 }

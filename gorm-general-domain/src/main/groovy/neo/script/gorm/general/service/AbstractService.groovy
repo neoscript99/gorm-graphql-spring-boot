@@ -47,6 +47,16 @@ abstract class AbstractService<T> {
     }
 
     @Transactional(readOnly = true)
+    List<T> findByIds(List idList) {
+        list(['in': [['id', idList]]])
+    }
+
+    @Transactional(readOnly = true)
+    List<T> findByIds(Serializable[] ids) {
+        list(['in': [['id', ids]]])
+    }
+
+    @Transactional(readOnly = true)
     T findFirst(Map param = null) {
         generalRepository.findFirst(domain, param)
     }

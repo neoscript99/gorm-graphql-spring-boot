@@ -5,6 +5,7 @@ import graphql.schema.DataFetchingEnvironment
 import neo.script.gorm.general.domain.sys.Menu
 import neo.script.gorm.general.service.MenuNode
 import neo.script.gorm.general.service.MenuService
+import neo.script.gorm.general.service.RoleService
 import neo.script.gorm.general.service.TokenService
 import neo.script.gorm.general.service.UserService
 import neo.script.gorm.general.util.TokenHolder
@@ -22,6 +23,8 @@ class MenuGraphqlMapping extends GraphQLMapping {
     TokenService tokenService
     @Autowired
     UserService userService
+    @Autowired
+    RoleService roleService
 
     MenuGraphqlMapping() {
         query('menuTree', MenuNode) {
@@ -33,7 +36,15 @@ class MenuGraphqlMapping extends GraphQLMapping {
     class MenuTreeDataFetcher implements DataFetcher {
         @Override
         Object get(DataFetchingEnvironment environment) {
-            return menuService.getUserTree(userService.findByAccount(TokenHolder.getToken().username))
+            def token = TokenHolder.getToken()
+            def account = token.username;
+            def user = userService.findByAccount(account);
+            if (user)
+                return menuService.getUserTree(user)
+            else {
+                def roleList = roleService.findByCodes(token.roles.split(','))
+                return menuService.getRolesTree(roleList)
+            }
         }
     }
 }

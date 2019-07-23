@@ -10,6 +10,7 @@ import net.unicon.cas.client.configuration.CasClientConfigurationProperties
 import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 import org.jasig.cas.client.util.AssertionHolder
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
@@ -21,6 +22,8 @@ class UserGraphqlMapping extends GraphQLMapping {
     TokenService tokenService
     @Autowired(required = false)
     CasClientConfigurationProperties configProps;
+    @Value('${gorm.cas.defaultRoles}')
+    String casDefaultRoles
 
     UserGraphqlMapping() {
         exclude('password')
@@ -33,6 +36,7 @@ class UserGraphqlMapping extends GraphQLMapping {
                 field('success', Boolean)
                 field('token', String)
                 field('user', User)
+                field('roles', String)
                 field('error', String)
             }
         }
@@ -43,6 +47,7 @@ class UserGraphqlMapping extends GraphQLMapping {
                 field('success', Boolean)
                 field('token', String)
                 field('account', String)
+                field('roles', String)
                 field('casServerRoot', String)
                 field('error', String)
             }
@@ -62,12 +67,17 @@ class UserGraphqlMapping extends GraphQLMapping {
     class CasLoginDataFetcher implements DataFetcher {
         @Override
         Object get(DataFetchingEnvironment environment) {
-            if (AssertionHolder.assertion)
+            //通过cas登录的用户，如果存在匹配的User，返回这个User相关角色，否则返回默认角色
+            if (AssertionHolder.assertion) {
+                def account = AssertionHolder.assertion.principal.name;
+                def user = userService.findByAccount(account)
+                def roles = user ? userService.getUserRoleCodes(user.id) : casDefaultRoles
                 [success      : true,
-                 account      : AssertionHolder.assertion.principal.name,
+                 account      : account,
                  casServerRoot: configProps.serverUrlPrefix,
-                 token        : tokenService.createToken(AssertionHolder.assertion.principal.name, 'cas').id]
-            else
+                 roles        : roles,
+                 token        : tokenService.createToken(account, roles).id]
+            } else
                 [success: false,
                  error  : '未登录CAS']
         }
@@ -77,10 +87,12 @@ class UserGraphqlMapping extends GraphQLMapping {
         @Override
         Object get(DataFetchingEnvironment environment) {
             def result = userService.login(environment.getArgument('username'), environment.getArgument('password'));
+            def roles = userService.getUserRoleCodes(result.user.id)
             if (result.success)
                 [success: true,
                  user   : result.user,
-                 token  : tokenService.createToken(result.user.account, 'admin').id]
+                 roles  : roles,
+                 token  : tokenService.createToken(result.user.account, roles).id]
             else
                 result
         }

@@ -50,7 +50,7 @@ class FlexUserService extends GFlexService {
     }
 
     List getUserRoles(def userId) {
-        list([user: [idEq: [userId]]], UserRole)*.role
+        userService.getUserRoles(userId)
     }
 
     def login(String account, String password) {
