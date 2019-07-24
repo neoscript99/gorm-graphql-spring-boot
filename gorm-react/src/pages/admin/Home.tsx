@@ -1,20 +1,20 @@
 import React, { Component } from 'react'
 import { Button, Divider, Icon, Layout } from 'antd'
 import { observer } from 'mobx-react'
-import { Link, Redirect, Route, Switch } from 'react-router-dom';
+import {  Redirect, Route, Switch } from 'react-router-dom';
 import Welcome from './Welcome';
 import Role from './Role';
 import User from './User';
 import Note from './Note';
 import Param from './Param';
 import Profile from './Profile';
-import MenuTree from '../../components/MenuTree';
 import { menuService, userService } from '../../services';
 import { Location } from 'history';
 import PortalManage from './PortalManage';
 import PortalDbManage from './PortalDbManage';
 import PortalDbQueryManage from './PortalDbQueryManage';
 import PortletManage from './PortletManage'
+import { MenuTree } from 'oo-graphql-service';
 
 
 const {

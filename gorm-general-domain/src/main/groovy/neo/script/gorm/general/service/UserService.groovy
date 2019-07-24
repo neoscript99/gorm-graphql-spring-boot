@@ -37,11 +37,11 @@ class UserService extends AbstractService<User> {
         findFirst([eq: [['account', account]]])
     }
 
-    List<Role> getUserRoles(def userId) {
-        list([user: [idEq: [userId]]], UserRole)*.role
+    List<Role> getUserRoles(User user) {
+        UserRole.findAllByUser(user)*.role
     }
 
-    List<Role> getUserRoleCodes(def userId) {
-        (getUserRoles(userId)*.roleCode).join(',')
+    String getUserRoleCodes(User user) {
+        (getUserRoles(user)*.roleCode).join(',')
     }
 }

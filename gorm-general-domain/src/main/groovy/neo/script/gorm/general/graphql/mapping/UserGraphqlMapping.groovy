@@ -71,7 +71,7 @@ class UserGraphqlMapping extends GraphQLMapping {
             if (AssertionHolder.assertion) {
                 def account = AssertionHolder.assertion.principal.name;
                 def user = userService.findByAccount(account)
-                def roles = user ? userService.getUserRoleCodes(user.id) : casDefaultRoles
+                def roles = user ? userService.getUserRoleCodes(user) : casDefaultRoles
                 [success      : true,
                  account      : account,
                  casServerRoot: configProps.serverUrlPrefix,

@@ -17,7 +17,8 @@ class LivebosQuery extends PortletDataSource {
     LivebosServer livebosServer
     String objectName   //对象名,
     /**
-     * 查询对象的参数，键值对如：{ "PUid":0 }*/
+     * 查询对象的参数，键值对如：{ "PUid":0 }
+     * */
     String params
     String condition = ''   //ID>0 查询条件,
     /**queryOption start**/
@@ -25,7 +26,7 @@ class LivebosQuery extends PortletDataSource {
     //如果传入BOTH，每个字段会返回显示值和实际值两个值
     String valueOption = 'DISPLAY'
     Integer batchNo = 1 //1(当前页数),
-    Integer batchSize = 10//(每页记录数),
+    Integer batchSize = 5//(每页记录数),
     Boolean queryCount = true//true(是否需要返回记录总数)}
     /**queryOption end**/
 

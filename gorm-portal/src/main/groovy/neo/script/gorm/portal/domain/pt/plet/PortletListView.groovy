@@ -15,12 +15,13 @@ import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
 @EqualsAndHashCode(includes = 'id')
 @InitializeDomian(profiles = 'dev', depends = LivebosQuery)
 class PortletListView extends Portlet {
-    String titleFields
+    String titleTemplate
     String cateField
     String dateField
     String extraLink
     String titleLink
     String iconField
+    String titleWhiteSpace = 'nowrap'
     String rowKey = 'ID'
     String fromDateFormat = 'YYYY-MM-DD HH:mm:ss'
     String toDateFormat = 'YYYY-MM-DD'
@@ -36,7 +37,7 @@ class PortletListView extends Portlet {
     }
     static graphql = GraphQLMapping.build {
         description('列表组件')
-        property('titleFields') { description('标题字段') }
+        property('titleTemplate') { description('标题模板') }
         property('cateField') { description('分类字段') }
         property('dateField') { description('日期字段') }
         property('extraLink') { description('更多链接地址') }
@@ -45,10 +46,11 @@ class PortletListView extends Portlet {
         property('rowKey') { description('ID字段') }
         property('fromDateFormat') { description('日期原格式') }
         property('toDateFormat') { description('日期转换格式') }
+        property('titleWhiteSpace') { description('标题whiteSpace的CSS属性') }
     }
 
     static USER_LINK_LIST = new PortletListView('通讯录', 'PortletListView', LivebosQuery.USER_LINK,
-            "Name,UserID", 'Grade', 'ChgPwdTime',
+            '{Name}({UserID})', 'Grade', 'ChgPwdTime',
             "$LivebosServer.DEMO_SERVER.serverRoot/UIProcessor?Table=tUserLink",
             "$LivebosServer.DEMO_SERVER.serverRoot/UIProcessor?Table=tUserLink")
     static initList = [USER_LINK_LIST]

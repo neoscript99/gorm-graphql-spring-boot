@@ -4,14 +4,14 @@
   "description": "Typescript, AntDesign, Mobx and Graphql startup project.",
   "dependencies": {
     "antd": "^3.20.3",
-    "mobx": "^5.11.0",
+    "mobx": "^5.13.0",
     "mobx-react": "^6.1.1",
     "oo-graphql-service": "^1.2.5",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
-    "typescript": "3.3.4000"
+    "typescript": "^3.5.3"
   },
   "devDependencies": {
     "@types/graphql": "^14.2.0",

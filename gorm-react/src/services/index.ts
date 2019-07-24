@@ -1,12 +1,12 @@
 import {
   createApolloClient,
   DomainGraphql,
-  MobxDomainStore, PortletDataSourceService, LivebosServerService, UserService,
-  DomainService,
+  MobxDomainStore, PortletDataSourceService,
+  LivebosServerService, UserService,
+  DomainService, MenuService,
   PortalRequiredServices
 } from 'oo-graphql-service'
 import config from '../utils/config'
-import MenuService from '../services/MenuService';
 
 const uri = config.graphqlUri;
 //用户登录后更新token

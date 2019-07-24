@@ -39,5 +39,6 @@ class Token {
             id             : 'gorm-dev-token',
             expireTime     : LocalDateTime.of(2021, 1, 1, 1, 1),
             maxRefreshTimes: 10,
-            username       : 'admin'])]
+            username       : 'admin',
+            roles          : 'Administrators,NormalUsers,Public'])]
 }

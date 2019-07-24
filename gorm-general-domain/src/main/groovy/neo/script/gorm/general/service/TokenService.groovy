@@ -15,16 +15,16 @@ class TokenService extends AbstractService<Token> {
     @Value('${token.expire.maxRefreshTimes}')
     Integer maxRefreshTimes
 
-    Token createToken(String username, String role) {
-        return createToken(UUID.randomUUID().toString(), username, role)
+    Token createToken(String username, String roles) {
+        return createToken(UUID.randomUUID().toString(), username, roles)
     }
 
-    Token createToken(String id, String username, String role) {
+    Token createToken(String id, String username, String roles) {
         return saveEntity(resetExpireTime(new Token([
                 id             : id,
                 maxRefreshTimes: maxRefreshTimes ?: 10,
-                username           : username,
-                role           : role])))
+                username       : username,
+                roles          : roles])))
     }
 
     Map destoryToken(String id) {
