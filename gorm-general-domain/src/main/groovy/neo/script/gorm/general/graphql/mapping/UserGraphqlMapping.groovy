@@ -87,13 +87,14 @@ class UserGraphqlMapping extends GraphQLMapping {
         @Override
         Object get(DataFetchingEnvironment environment) {
             def result = userService.login(environment.getArgument('username'), environment.getArgument('password'));
-            def roles = userService.getUserRoleCodes(result.user.id)
-            if (result.success)
+
+            if (result.success) {
+                def roles = userService.getUserRoleCodes(result.user)
                 [success: true,
                  user   : result.user,
                  roles  : roles,
                  token  : tokenService.createToken(result.user.account, roles).id]
-            else
+            } else
                 result
         }
     }

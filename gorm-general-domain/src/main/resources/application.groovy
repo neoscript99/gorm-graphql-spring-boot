@@ -22,8 +22,10 @@ grails.gorm.default.mapping = {
      *  否则会造成Hibernate错误：object references an unsaved transient instance
      *  如：list([eq: [['status', MeetingStatus.ENROLL]]])中的MeetingStatus.ENROLL
      *  @see neo.script.gorm.general.domain.sys.ParamType
+     *
+     *  先默认为flase，如果需要乐观锁再单独配置
      */
-    version true
+    version false
     fetch 'join'
     lazy false
     '*'(cascade:"none")
