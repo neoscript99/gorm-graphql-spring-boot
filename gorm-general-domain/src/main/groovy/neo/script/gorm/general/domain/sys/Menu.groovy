@@ -3,6 +3,7 @@ package neo.script.gorm.general.domain.sys
 import grails.gorm.annotation.Entity
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
+
 /**
  * Menu
  * toc 2010-12-14
@@ -16,10 +17,12 @@ class Menu implements Comparable<Menu> {
     String app
     String label
     Integer seq = 0
+    String icon
     String parentId
 
     static constraints = {
         app nullable: true
+        icon nullable: true
         parentId nullable: true
     }
 

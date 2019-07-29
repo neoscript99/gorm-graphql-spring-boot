@@ -20,7 +20,7 @@ class MenuInitializer extends AbstractDataInitializer implements DataInitializer
 
     void doInit() {
 
-        def rootMenu = save(new Menu(label: 'Root',))
+        def rootMenu = save(new Menu(label: 'Root', icon: 'folder'))
 
         initAdminMenu(rootMenu.id).each {
             save(it)
@@ -43,25 +43,25 @@ class MenuInitializer extends AbstractDataInitializer implements DataInitializer
         def sys = save(new Menu(label: '系统设置', seq: 90, parentId: rootId))
 
         [
-                new Menu(label: '帐号管理', app: 'User', seq: 2, parentId: sys.id),
-                new Menu(label: '角色管理', app: 'Role', seq: 1, parentId: sys.id),
-                new Menu(label: '发布通知', app: 'Note', seq: 3, parentId: sys.id),
-                new Menu(label: '参数维护', app: 'Param', seq: 4, parentId: sys.id)
+                new Menu(label: '帐号管理', app: 'User', seq: 2, parentId: sys.id, icon: 'user'),
+                new Menu(label: '角色管理', app: 'Role', seq: 1, parentId: sys.id, icon: 'usergroup-add'),
+                new Menu(label: '发布通知', app: 'Note', seq: 3, parentId: sys.id, icon: 'notification'),
+                new Menu(label: '参数维护', app: 'Param', seq: 4, parentId: sys.id, icon: 'setting')
         ]
     }
 
     private List initNormalUsersMenu(def rootId) {
 
         [
-                new Menu(label: '用户设置', app: 'Profile', seq: 99, parentId: rootId)
+                new Menu(label: '用户设置', app: 'Profile', seq: 99, parentId: rootId, icon: 'edit')
         ]
     }
 
     private List initPublicMenu(def rootId) {
         //这个不带通知，默认不显示
-        save(new Menu(label: '欢迎页面', app: 'About', seq: 11, parentId: rootId))
+        save(new Menu(label: '欢迎页面', app: 'About', seq: 11, parentId: rootId, icon: 'home'))
         [
-                new Menu(label: '首页', app: 'Welcome', seq: 10, parentId: rootId)
+                new Menu(label: '首页', app: 'Welcome', seq: 10, parentId: rootId, icon: 'home')
         ]
     }
 }

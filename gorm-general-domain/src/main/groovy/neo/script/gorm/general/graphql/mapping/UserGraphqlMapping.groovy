@@ -46,8 +46,9 @@ class UserGraphqlMapping extends GraphQLMapping {
             returns {
                 field('success', Boolean)
                 field('token', String)
-                field('account', String)
+                field('user', User)
                 field('roles', String)
+                field('casAccount', String)
                 field('casServerRoot', String)
                 field('error', String)
             }
@@ -73,9 +74,10 @@ class UserGraphqlMapping extends GraphQLMapping {
                 def user = userService.findByAccount(account)
                 def roles = user ? userService.getUserRoleCodes(user) : casDefaultRoles
                 [success      : true,
-                 account      : account,
-                 casServerRoot: configProps.serverUrlPrefix,
+                 user         : user,
                  roles        : roles,
+                 casAccount   : account,
+                 casServerRoot: configProps.serverUrlPrefix,
                  token        : tokenService.createToken(account, roles).id]
             } else
                 [success: false,
