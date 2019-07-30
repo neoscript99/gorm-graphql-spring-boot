@@ -21,7 +21,10 @@ class PortletListView extends Portlet {
     String extraLink
     String titleLink
     String iconField
+    //nowrap 单行显示， normal 自动换行
     String titleWhiteSpace = 'nowrap'
+    //标题最大显示字数，titleWhiteSpace配置为nowrap才生效
+    Integer titleMaxSize
     String rowKey = 'ID'
     String fromDateFormat = 'YYYY-MM-DD HH:mm:ss'
     String toDateFormat = 'YYYY-MM-DD'
@@ -34,6 +37,7 @@ class PortletListView extends Portlet {
         titleLink nullable: true, maxSize: 512
         fromDateFormat nullable: true
         toDateFormat nullable: true
+        titleMaxSize nullable: true
     }
     static graphql = GraphQLMapping.build {
         description('列表组件')
