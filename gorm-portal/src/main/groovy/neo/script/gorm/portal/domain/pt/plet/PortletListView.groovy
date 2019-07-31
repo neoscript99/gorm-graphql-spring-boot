@@ -54,7 +54,7 @@ class PortletListView extends Portlet {
     }
 
     static USER_LINK_LIST = new PortletListView('通讯录', 'PortletListView', LivebosQuery.USER_LINK,
-            '{Name}({UserID})', 'Grade', 'ChgPwdTime',
+            null, '{Name}({UserID})', 'Grade', 'ChgPwdTime',
             "$LivebosServer.DEMO_SERVER.serverRoot/UIProcessor?Table=tUserLink",
             "$LivebosServer.DEMO_SERVER.serverRoot/UIProcessor?Table=tUserLink")
     static initList = [USER_LINK_LIST]

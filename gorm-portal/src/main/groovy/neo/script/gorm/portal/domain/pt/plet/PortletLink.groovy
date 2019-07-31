@@ -23,9 +23,9 @@ class PortletLink extends Portlet {
         property('imageUrl') { description('链接图片') }
     }
 
-    static DEMO_LINK1 = new PortletLink('OA系统', 'PortletLink', null, 'http://www.bing.com')
-    static DEMO_LINK2 = new PortletLink('绩效考核系统', 'PortletLink', null, 'http://www.qq.com')
-    static DEMO_LINK3 = new PortletLink('信贷管理系统', 'PortletLink', null, 'http://www.z.cn')
+    static DEMO_LINK1 = new PortletLink('OA系统', 'PortletLink', null, null, 'http://www.bing.com')
+    static DEMO_LINK2 = new PortletLink('绩效考核系统', 'PortletLink', null, null, 'http://www.qq.com')
+    static DEMO_LINK3 = new PortletLink('信贷管理系统', 'PortletLink', null, null, 'http://www.z.cn')
 
     static initList = [DEMO_LINK1, DEMO_LINK2, DEMO_LINK3]
 }

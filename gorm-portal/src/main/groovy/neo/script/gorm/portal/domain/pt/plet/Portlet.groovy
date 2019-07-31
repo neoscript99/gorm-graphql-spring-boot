@@ -16,6 +16,8 @@ class Portlet {
     String portletName
     String type
     PortletDataSource ds
+    //json
+    String style
 
     Date dateCreated
     Date lastUpdated
@@ -26,6 +28,7 @@ class Portlet {
 
     static constraints = {
         ds nullable: true
+        style nullable: true, maxSize: 256
     }
 
     static graphql = GraphQLMapping.build {

@@ -18,7 +18,7 @@ class PortletPie extends Portlet {
         property('category') { description('序列') }
     }
 
-    static DEMO_PIE1 = new PortletPie('各支行存款占比饼图', 'PortletPie', null, 'year')
-    static DEMO_PIE2 = new PortletPie('贷款发放按月分析', 'PortletRise', null, 'year')
+    static DEMO_PIE1 = new PortletPie('各支行存款占比饼图', 'PortletPie', null, null, 'year')
+    static DEMO_PIE2 = new PortletPie('贷款发放按月分析', 'PortletRise', null, null, 'year')
     static initList = [DEMO_PIE1, DEMO_PIE2]
 }
