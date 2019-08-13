@@ -19,12 +19,12 @@ class RoleMenuService extends AbstractService<RoleMenu> {
     RoleService roleService
 
     RoleMenu saveEntity(RoleMenu roleMenu) {
-        if (!count([eq: [['role', roleMenu.role, 'menu', roleMenu.menu]]]))
-            saveEntity(roleMenu)
+        if (!count([eq: [['role', roleMenu.role], ['menu', roleMenu.menu]]]))
+            super.saveEntity(roleMenu)
     }
 
     List<RoleMenu> findByRoleAndMenu(Object roleId, Object menuId) {
-        list([eq: [['role.id', roleId, 'menu.id', menuId]]])
+        list([eq: [['role.id', roleId], ['menu.id', menuId]]])
     }
 
     void addRoleMenus(Object roleId, Object[] menuIds) {

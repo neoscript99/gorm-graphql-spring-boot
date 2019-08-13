@@ -2,15 +2,14 @@ package neo.script.gorm.general.graphql.mapping
 
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
+import neo.script.gorm.general.controller.GormSessionBean
 import neo.script.gorm.general.domain.sys.User
+import neo.script.gorm.general.service.CasClientService
 import neo.script.gorm.general.service.TokenService
 import neo.script.gorm.general.service.UserService
 import neo.script.gorm.graphql.entity.GraphQLMappingFlag
-import net.unicon.cas.client.configuration.CasClientConfigurationProperties
 import org.grails.gorm.graphql.entity.dsl.GraphQLMapping
-import org.jasig.cas.client.util.AssertionHolder
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
@@ -18,12 +17,12 @@ import org.springframework.stereotype.Component
 class UserGraphqlMapping extends GraphQLMapping {
     @Autowired
     UserService userService
+    @Autowired(required = false)
+    CasClientService casClientService
     @Autowired
     TokenService tokenService
     @Autowired(required = false)
-    CasClientConfigurationProperties configProps;
-    @Value('${gorm.cas.defaultRoles}')
-    String casDefaultRoles
+    GormSessionBean gormSessionBean
 
     UserGraphqlMapping() {
         exclude('password')
@@ -69,16 +68,19 @@ class UserGraphqlMapping extends GraphQLMapping {
         @Override
         Object get(DataFetchingEnvironment environment) {
             //通过cas登录的用户，如果存在匹配的User，返回这个User相关角色，否则返回默认角色
-            if (AssertionHolder.assertion) {
-                def account = AssertionHolder.assertion.principal.name;
-                def user = userService.findByAccount(account)
-                def roles = user ? userService.getUserRoleCodes(user) : casDefaultRoles
+            def account = casClientService.casAccount
+            if (account) {
+                def user = casClientService.getUserByCas()
+                def roles = user ? userService.getUserRoleCodes(user) : casClientService.casDefaultRoles
+                def token = casClientService.createTokenByCas()
+                if (gormSessionBean)
+                    gormSessionBean.token = token
                 [success      : true,
                  user         : user,
                  roles        : roles,
                  casAccount   : account,
-                 casServerRoot: configProps.serverUrlPrefix,
-                 token        : tokenService.createToken(account, roles).id]
+                 casServerRoot: casClientService.configProps.serverUrlPrefix,
+                 token        : token.id]
             } else
                 [success: false,
                  error  : '未登录CAS']
@@ -92,10 +94,13 @@ class UserGraphqlMapping extends GraphQLMapping {
 
             if (result.success) {
                 def roles = userService.getUserRoleCodes(result.user)
+                def token = tokenService.createToken(result.user.account, roles)
+                if (gormSessionBean)
+                    gormSessionBean.token = token
                 [success: true,
                  user   : result.user,
                  roles  : roles,
-                 token  : tokenService.createToken(result.user.account, roles).id]
+                 token  : token.id]
             } else
                 result
         }

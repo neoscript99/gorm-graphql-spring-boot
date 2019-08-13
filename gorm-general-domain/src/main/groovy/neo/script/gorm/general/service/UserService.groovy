@@ -37,6 +37,10 @@ class UserService extends AbstractService<User> {
         findFirst([eq: [['account', account]]])
     }
 
+    List<Role> getUserRoles(String userId) {
+        return getUserRoles(get(userId))
+    }
+
     List<Role> getUserRoles(User user) {
         UserRole.findAllByUser(user)*.role
     }

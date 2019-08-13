@@ -20,16 +20,18 @@ class FlexMenuService extends GFlexService {
     MenuService menuService
     @Autowired
     UserService userService
+    @Autowired
+    RoleService roleService
 
     /**
      * @return menu xml
      */
     String getUserTree() {
-        return generateXML(menuService.getUserTree(userService.findByAccount(sessionAccount)))
+        return generateXML(menuService.getUserTree(sessionUser))
     }
 
     String getRoleTree(def roleId) {
-        return generateXML(menuService.getRoleTree(list([role: [idEq: [roleId]]], RoleMenu)))
+        return generateXML(menuService.getRoleTree(roleService.get(roleId)))
     }
 
     String getFullTree() {

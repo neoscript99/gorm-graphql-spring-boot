@@ -49,7 +49,7 @@ class FlexUserService extends GFlexService {
         list(param, UserRole)*.user
     }
 
-    List getUserRoles(def userId) {
+    List getUserRoles(String userId) {
         userService.getUserRoles(userId)
     }
 
