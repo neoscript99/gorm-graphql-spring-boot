@@ -1,6 +1,7 @@
 package neo.script.gorm.general.controller
 
 import neo.script.gorm.general.service.AttachmentService
+import neo.script.gorm.general.service.CasClientService
 import net.unicon.cas.client.configuration.CasClientConfigurationProperties
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.CacheControl
@@ -16,11 +17,13 @@ import javax.servlet.http.HttpSession
 import java.util.concurrent.TimeUnit
 
 @RestController
-class AttachmentController {
+class GormController {
+    @Autowired
+    GormSessionBean gormSessionBean
     @Autowired
     AttachmentService attachmentService
     @Autowired(required = false)
-    CasClientConfigurationProperties casProps;
+    CasClientService casClientService
 
     @GetMapping("attach/{id}")
     public ResponseEntity<byte[]> getAttach(@PathVariable("id") String id) throws IOException {
@@ -36,9 +39,11 @@ class AttachmentController {
             return ResponseEntity.notFound().build()
     }
 
-    @GetMapping("casLogout")
-    public RedirectView casLogout(HttpSession session) {
+    @GetMapping("logout")
+    public RedirectView logout(HttpSession session) {
+        gormSessionBean.token = null;
         session.invalidate()
-        return new RedirectView("$casProps.serverUrlPrefix/logout?service=$casProps.clientHostUrl/index.html");
+        String redirectUrl = casClientService ? casClientService.getLogoutUrl() : '/index.html'
+        return new RedirectView(redirectUrl);
     }
 }

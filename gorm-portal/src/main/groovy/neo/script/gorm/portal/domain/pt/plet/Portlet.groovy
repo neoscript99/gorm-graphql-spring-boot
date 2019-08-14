@@ -16,7 +16,7 @@ class Portlet {
     String portletName
     String type
     PortletDataSource ds
-    //json
+    //json,如有需要可以改造为包含多个style信息，如：{portletStyle:{minHeight:'300px'},tabStyle:{margin:0}}
     String style
 
     Date dateCreated

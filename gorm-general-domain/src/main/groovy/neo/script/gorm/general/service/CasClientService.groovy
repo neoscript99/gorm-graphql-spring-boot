@@ -38,4 +38,8 @@ class CasClientService {
         def account = this.casAccount;
         return userService.findByAccount(account)
     }
+
+    String getLogoutUrl(){
+        return "$configProps.serverUrlPrefix/logout?service=$configProps.clientHostUrl/index.html"
+    }
 }
