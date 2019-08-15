@@ -1,21 +1,5 @@
 @import '~antd/dist/antd.css';
 
-.logo {
-    height: 49px;
-    width: 125px;
-    background: url('asset/logo.png'), no-repeat;
-    margin: 8px;
-}
-
-.portal_layout {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    background: #fff;
-    box-shadow: 0 2px 8px #f0f1f2;
-    font-weight: bolder;
-}
-
 .flex-col {
     display: flex;
     flex-direction: column;
@@ -30,10 +14,28 @@
     flex-wrap: wrap;
 }
 
-.ant-tabs .ant-table-footer {
-    position: relative;
-    padding: 1rem 0 0 0;
-    background: inherit;
-    border-top: 1px solid #e8e8e8;
-    border-radius: 0 0 4px 4px;
+.page-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    background: #fff;
+    box-shadow: 0 2px 8px #f0f1f2;
+    font-weight: bolder;
+}
+
+.page-head-logo {
+    height: 49px;
+    width: 125px;
+    background: url('asset/logo.png'), no-repeat;
+    margin: 8px;
+}
+
+.page-side {
+    border-top: solid thin #f3f3f3;
+    border-bottom: solid thin #f3f3f3;
+}
+
+/*解决PortletListView和PortletTab标题相差两个像素的问题*/
+.ant-tabs .ant-tabs-large-bar .ant-tabs-tab {
+    padding: 17px;
 }

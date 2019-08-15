@@ -3,17 +3,14 @@ import React, { Component, FormEvent, ReactNode } from 'react'
 import { Form, Icon, Input, Button, Checkbox } from 'antd'
 
 import './Login.css'
-import { FormComponentProps } from 'antd/lib/form';
 import { userService } from '../services';
 import { Redirect } from 'react-router';
 import { observer } from 'mobx-react';
+import { FormComponentProps } from 'antd/lib/form';
 
-interface P extends FormComponentProps<any> {
-  history: History
-}
 
 @observer
-class LoginForm extends Component<P> {
+class LoginForm extends Component<FormComponentProps<any>> {
   handleSubmit(e: FormEvent) {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -30,13 +27,9 @@ class LoginForm extends Component<P> {
    */
   render(): ReactNode {
     const { getFieldDecorator } = this.props.form;
-    if (userService.store.currentItem.account) {
-      //空白页面进入后length是1，chrome是这样
-      if (history.length > 2) {
-        history.back()
-        return null;
-      } else
-        return <Redirect to="/" />
+    const { currentItem, lastRoutePath } = userService.store
+    if (currentItem.account) {
+      return <Redirect to={lastRoutePath} />
     }
 
     return (<div className="login-page">
@@ -57,6 +50,7 @@ class LoginForm extends Component<P> {
                   <Input
                     prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                     placeholder="用户名"
+                    autoComplete='username'
                   />,
                 )}
               </Form.Item>
@@ -67,6 +61,7 @@ class LoginForm extends Component<P> {
                   <Input
                     prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                     type="password"
+                    autoComplete='password'
                     placeholder="密码"
                   />,
                 )}
@@ -88,7 +83,7 @@ class LoginForm extends Component<P> {
   }
 }
 
-export default Form.create({ name: 'normal_login' })(LoginForm);
+export const Login = Form.create({ name: 'normal_login' })(LoginForm);
 
 
 export const Logout = () => {

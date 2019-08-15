@@ -4,9 +4,9 @@ import {
   MobxDomainStore, PortletDataSourceService,
   LivebosServerService, UserService,
   DomainService, MenuService,
-  PortalRequiredServices
+  PortalRequiredServices, LoginInfo, AdminRequiredServices
 } from 'oo-graphql-service'
-import config from '../utils/config'
+import { config } from '../utils'
 
 const uri = config.graphqlUri;
 //用户登录后更新token
@@ -35,9 +35,9 @@ export const livebosServerService = new LivebosServerService('livebosServer', Mo
 export const livebosQueryService = new DomainService('livebosQuery', MobxDomainStore, domainGraphql);
 export const menuService = new MenuService(domainGraphql);
 
-function afterLogin(account: string, token: string) {
-  graphqlVars.token = token;
-  menuService!.getMenuTree(token)
+function afterLogin(loginInfo: LoginInfo) {
+  graphqlVars.token = loginInfo.token;
+  menuService!.getMenuTree()
 
   portalService.listAll({ criteria: { eq: [['enabled', true]] }, orders: ['seq'] })
   //todo 嵌套属性排序不成功，可能是DetachedCriteria的问题，原来的AbstractHibernateCriteriaBuilder应该是可以的
@@ -62,4 +62,12 @@ export const portalServices: PortalRequiredServices = {
   portletLinkService,
   portletTableService,
   portletListViewService
+}
+
+export const adminRequiredServices: AdminRequiredServices = {
+  paramService,
+  noteService,
+  roleService,
+  menuService,
+  userService
 }

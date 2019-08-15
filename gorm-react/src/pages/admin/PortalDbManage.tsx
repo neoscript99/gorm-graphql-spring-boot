@@ -2,11 +2,10 @@ import React, { ReactNode } from 'react'
 import { observer } from 'mobx-react';
 import { Table } from 'antd';
 import { rdbServerService } from '../../services'
-import { ColumnProps } from 'antd/lib/table';
-import { Entity, DomainService, MobxDomainStore, EntityPageList, commonColumns } from 'oo-graphql-service';
+import { EntityColumnProps, DomainService, MobxDomainStore, EntityPageList, commonColumns } from 'oo-graphql-service';
 
 const { store } = rdbServerService
-const columns: Array<ColumnProps<Entity>> = [
+const columns: EntityColumnProps[] = [
   { title: '数据库名称', dataIndex: 'dbName' },
   { title: '驱动类', dataIndex: 'driverClassName' },
   { title: '连接url', dataIndex: 'url' },
@@ -17,19 +16,13 @@ const columns: Array<ColumnProps<Entity>> = [
 
 
 @observer
-export default class PortalDbManage extends EntityPageList {
-
-  render(): ReactNode {
-    return (
-      <Table dataSource={store.pageList}
-             columns={columns}
-             bordered
-             {...this.tableProps}
-             rowKey='id'>
-      </Table>)
-  }
+export class PortalDbManage extends EntityPageList {
 
   get domainService(): DomainService<MobxDomainStore> {
     return rdbServerService;
+  }
+
+  get columns(): EntityColumnProps[] {
+    return columns;
   }
 }

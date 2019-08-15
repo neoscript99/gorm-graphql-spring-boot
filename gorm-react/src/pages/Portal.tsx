@@ -1,7 +1,7 @@
 import React from 'react'
 import { Menu, Icon, Layout, BackTop } from 'antd'
 import { observer } from 'mobx-react'
-import { portalService, portalServices, userService } from '../services';
+import { portalRowRelService, portalService, portalServices, portletColRelService, userService } from '../services';
 import { Link, match, Redirect } from 'react-router-dom';
 import { Entity, PortletMap, PortalRows, PortalSider } from 'oo-graphql-service';
 
@@ -15,7 +15,7 @@ interface P {
 }
 
 @observer
-class Portal extends React.Component<P> {
+export class Portal extends React.Component<P> {
   render() {
     const { store: portalStore } = portalService;
     let portal: Entity | undefined;
@@ -30,8 +30,8 @@ class Portal extends React.Component<P> {
       return (<Redirect to="/login/" push={true} />)
     return (
       <Layout style={{ minHeight: '100vh' }}>
-        <Header className="portal_layout">
-          <div className="logo" />
+        <Header className="page-head">
+          <div className="page-head-logo" />
           <Menu theme="light" mode="horizontal">
             {
               portalStore.allList && portalStore.allList.map(portal =>
@@ -50,10 +50,17 @@ class Portal extends React.Component<P> {
             </Menu.Item>
           </Menu>
         </Header>
-        <Layout>
-          {portal && <PortalSider portal={portal} services={portalServices} />}
+        <Layout hasSider>
+          {portal && <PortalSider portal={portal}
+                                  services={portalServices}
+                                  portalRowRelAllList={portalRowRelService.store.allList}
+                                  portletColRelAllList={portletColRelService.store.allList} />}
           <Content style={{ padding: '0.5rem' }}>
-            {portal && <PortalRows portal={portal} customerPortletMap={customerPortletMap} services={portalServices} />}
+            {portal && <PortalRows portal={portal}
+                                   customerPortletMap={customerPortletMap}
+                                   services={portalServices}
+                                   portalRowRelAllList={portalRowRelService.store.allList}
+                                   portletColRelAllList={portletColRelService.store.allList} />}
           </Content>
         </Layout>
         <Footer className="portal_layout"
@@ -69,5 +76,3 @@ class Portal extends React.Component<P> {
     )
   }
 }
-
-export default Portal
