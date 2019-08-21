@@ -40,7 +40,7 @@ class GormRepository implements GeneralRepository {
      */
     @Override
     public <T> T findFirst(Class<T> domain, Map param) {
-        param.maxResult = 1
+        param.maxResults = 1
         List results = list(domain, param)
         if (results)
             results.first()
