@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component
 class UserGraphqlMapping extends GraphQLMapping {
     @Autowired
     UserService userService
-    @Autowired(required = false)
+    @Autowired
     CasClientService casClientService
     @Autowired
     TokenService tokenService
@@ -52,6 +52,14 @@ class UserGraphqlMapping extends GraphQLMapping {
                 field('error', String)
             }
         }
+        query('getCasConfig', 'CasConfigInfo') {
+            description 'Cas client config.'
+            dataFetcher(new CasConfigDataFetcher())
+            returns {
+                field('clientEnabled', Boolean)
+                field('defaultRoles', String)
+            }
+        }
         mutation('logout', 'LoginOutInfo') {
             description 'Logout'
             argument('token', String)
@@ -84,6 +92,14 @@ class UserGraphqlMapping extends GraphQLMapping {
             } else
                 [success: false,
                  error  : '未登录CAS']
+        }
+    }
+
+    class CasConfigDataFetcher implements DataFetcher {
+        @Override
+        Object get(DataFetchingEnvironment environment) {
+            return [clientEnabled: casClientService.clientEnabled,
+                    defaultRoles : casClientService.casDefaultRoles]
         }
     }
 

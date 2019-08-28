@@ -6,14 +6,14 @@ import net.unicon.cas.client.configuration.CasClientConfigurationProperties
 import org.jasig.cas.client.util.AssertionHolder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
 
 @Service
-@ConditionalOnProperty(value = "gorm.cas.client.enabled", havingValue = "true", matchIfMissing = false)
 class CasClientService {
     @Value('${gorm.cas.defaultRoles}')
     String casDefaultRoles
+    @Value('${gorm.cas.client.enabled}')
+    String clientEnabled
     @Autowired(required = false)
     CasClientConfigurationProperties configProps;
     @Autowired
@@ -36,10 +36,11 @@ class CasClientService {
 
     User getUserByCas() {
         def account = this.casAccount;
-        return userService.findByAccount(account)
+        return account ? userService.findByAccount(account) : null
     }
 
-    String getLogoutUrl(){
-        return "$configProps.serverUrlPrefix/logout?service=$configProps.clientHostUrl/index.html"
+    String getLogoutUrl() {
+        if (configProps)
+            return "$configProps.serverUrlPrefix/logout?service=$configProps.clientHostUrl/index.html"
     }
 }

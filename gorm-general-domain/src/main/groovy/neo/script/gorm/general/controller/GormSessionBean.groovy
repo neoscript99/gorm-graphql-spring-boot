@@ -11,13 +11,13 @@ import org.springframework.web.context.WebApplicationContext
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Component
 class GormSessionBean {
-    @Autowired(required = false)
+    @Autowired
     CasClientService casClientService
 
     private Token token
 
     Token getToken() {
-        if (!token && casClientService)
+        if (!token && casClientService.clientEnabled)
             token = casClientService.createTokenByCas()
         return token
     }

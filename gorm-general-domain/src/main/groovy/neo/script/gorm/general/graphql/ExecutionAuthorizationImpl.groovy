@@ -14,8 +14,7 @@ class ExecutionAuthorizationImpl implements ExecutionAuthorization {
     @Override
     boolean isAuthorized(InstrumentationExecutionParameters parameters) {
         (graphiqlEnabled
-                || parameters.operation == 'login'
-                || parameters.operation == 'casLogin'
-                || parameters.variables.token)
+                || parameters.variables.token
+                || DomainAuthorizationImpl.SKIP_TOKEN_OPERATION.contains(parameters.operation))
     }
 }

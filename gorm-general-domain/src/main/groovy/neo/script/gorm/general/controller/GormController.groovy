@@ -22,7 +22,7 @@ class GormController {
     GormSessionBean gormSessionBean
     @Autowired
     AttachmentService attachmentService
-    @Autowired(required = false)
+    @Autowired
     CasClientService casClientService
 
     @GetMapping("attach/{id}")
@@ -43,7 +43,7 @@ class GormController {
     public RedirectView logout(HttpSession session) {
         gormSessionBean.token = null;
         session.invalidate()
-        String redirectUrl = casClientService ? casClientService.getLogoutUrl() : '/index.html'
+        String redirectUrl = casClientService.clientEnabled ? casClientService.getLogoutUrl() : '/index.html'
         return new RedirectView(redirectUrl);
     }
 }
