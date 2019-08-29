@@ -13,7 +13,7 @@ class CasClientService {
     @Value('${gorm.cas.defaultRoles}')
     String casDefaultRoles
     @Value('${gorm.cas.client.enabled}')
-    String clientEnabled
+    Boolean clientEnabled
     @Autowired(required = false)
     CasClientConfigurationProperties configProps;
     @Autowired
