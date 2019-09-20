@@ -36,19 +36,19 @@ class UserGraphqlMapping extends GraphQLMapping {
                 field('token', String)
                 field('user', User)
                 field('roles', String)
+                field('account', String)
                 field('error', String)
             }
         }
-        mutation('casLogin', 'CasLoginInfo') {
-            description 'Login system use cas filter.'
-            dataFetcher(new CasLoginDataFetcher())
+        mutation('sessionLogin', 'SessionLoginInfo') {
+            description '检查Session，确认当前客户端是否已登录.'
+            dataFetcher(new SessionLoginDataFetcher())
             returns {
                 field('success', Boolean)
                 field('token', String)
                 field('user', User)
                 field('roles', String)
-                field('casAccount', String)
-                field('casServerRoot', String)
+                field('account', String)
                 field('error', String)
             }
         }
@@ -57,6 +57,7 @@ class UserGraphqlMapping extends GraphQLMapping {
             dataFetcher(new CasConfigDataFetcher())
             returns {
                 field('clientEnabled', Boolean)
+                field('casServerRoot', String)
                 field('defaultRoles', String)
             }
         }
@@ -72,26 +73,21 @@ class UserGraphqlMapping extends GraphQLMapping {
         }
     }
 
-    class CasLoginDataFetcher implements DataFetcher {
+    class SessionLoginDataFetcher implements DataFetcher {
         @Override
         Object get(DataFetchingEnvironment environment) {
-            //通过cas登录的用户，如果存在匹配的User，返回这个User相关角色，否则返回默认角色
-            def account = casClientService.casAccount
-            if (account) {
-                def user = casClientService.getUserByCas()
-                def roles = user ? userService.getUserRoleCodes(user) : casClientService.casDefaultRoles
-                def token = casClientService.createTokenByCas()
-                if (gormSessionBean)
-                    gormSessionBean.token = token
-                [success      : true,
-                 user         : user,
-                 roles        : roles,
-                 casAccount   : account,
-                 casServerRoot: casClientService.configProps.serverUrlPrefix,
-                 token        : token.id]
+            //检查session中是否包含token
+            def token = gormSessionBean.token
+            if (token) {
+                def user = userService.findByAccount(token.username)
+                [success: true,
+                 user   : user,
+                 roles  : token.roles,
+                 account: token.username,
+                 token  : token.id]
             } else
                 [success: false,
-                 error  : '未登录CAS']
+                 error  : '服务端没有session信息']
         }
     }
 
@@ -99,6 +95,7 @@ class UserGraphqlMapping extends GraphQLMapping {
         @Override
         Object get(DataFetchingEnvironment environment) {
             return [clientEnabled: casClientService.clientEnabled,
+                    casServerRoot: casClientService.configProps.serverUrlPrefix,
                     defaultRoles : casClientService.casDefaultRoles]
         }
     }
@@ -115,6 +112,7 @@ class UserGraphqlMapping extends GraphQLMapping {
                     gormSessionBean.token = token
                 [success: true,
                  user   : result.user,
+                 account: result.user.account,
                  roles  : roles,
                  token  : token.id]
             } else

@@ -15,7 +15,7 @@ class DomainAuthorizationImpl implements DomainAuthorization {
 
     static final MUTATION_TYPE_LIST =
             [GraphQLDataFetcherType.CREATE, GraphQLDataFetcherType.DELETE, GraphQLDataFetcherType.UPDATE]
-    static final SKIP_TOKEN_OPERATION = ['login', 'casLogin', 'getCasConfig']
+    static final SKIP_TOKEN_OPERATION = ['login', 'sessionLogin', 'getCasConfig']
     @Autowired
     TokenService tokenService
 

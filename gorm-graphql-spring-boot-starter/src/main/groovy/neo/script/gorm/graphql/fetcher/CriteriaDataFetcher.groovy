@@ -29,7 +29,7 @@ class CriteriaDataFetcher<T> extends EntityDataFetcher implements PaginatingGorm
         //AbstractDetachedCriteria#max(int)返回新对象，
         //所以max,offset不能放到GormCriteriaUtil.makeCriteria(criteriaMap)的map中，需单独放到queryArgs
         if (!queryArgs.containsKey('max'))
-            queryArgs.put('max', criteriaMap?.max ?: 100)
+            queryArgs.put('max', criteriaMap?.max ?: 1000)
         if (!queryArgs.containsKey('offset'))
             queryArgs.put('offset', criteriaMap?.offset ?: 0)
 
