@@ -40,6 +40,7 @@ class UserGraphqlMapping extends GraphQLMapping {
                 field('error', String)
             }
         }
+        //fetch接口会带上cookie，可以保持session
         mutation('sessionLogin', 'SessionLoginInfo') {
             description '检查Session，确认当前客户端是否已登录.'
             dataFetcher(new SessionLoginDataFetcher())
@@ -49,6 +50,13 @@ class UserGraphqlMapping extends GraphQLMapping {
                 field('user', User)
                 field('roles', String)
                 field('account', String)
+                field('error', String)
+            }
+        }
+        mutation('sessionLogout', 'SessionLogoutInfo') {
+            dataFetcher(new SessionLogoutDataFetcher())
+            returns {
+                field('success', Boolean)
                 field('error', String)
             }
         }
@@ -91,11 +99,22 @@ class UserGraphqlMapping extends GraphQLMapping {
         }
     }
 
+    class SessionLogoutDataFetcher implements DataFetcher {
+        @Override
+        Object get(DataFetchingEnvironment environment) {
+            if (gormSessionBean.token) {
+                tokenService.destoryToken(gormSessionBean.token.id)
+                gormSessionBean.token = null
+            }
+            return [success: true]
+        }
+    }
+
     class CasConfigDataFetcher implements DataFetcher {
         @Override
         Object get(DataFetchingEnvironment environment) {
             return [clientEnabled: casClientService.clientEnabled,
-                    casServerRoot: casClientService.configProps.serverUrlPrefix,
+                    casServerRoot: casClientService.configProps?.serverUrlPrefix,
                     defaultRoles : casClientService.casDefaultRoles]
         }
     }

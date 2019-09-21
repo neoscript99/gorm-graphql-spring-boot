@@ -94,4 +94,14 @@ public class JsonUtil {
                 collectionClass, elementClasses);
     }
 
+    /**
+     * json转换为单层Map，嵌套属性保持json格式
+     * @param json
+     * @return
+     */
+    public static Map<String, Object> jsonToOneLevelMap(String json) {
+        return fromJson(json, Map).collectEntries([:]) { k, v ->
+            [k, (v instanceof Map) ? toJson(v, false) : v]
+        }
+    }
 }
