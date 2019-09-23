@@ -4,7 +4,11 @@ token:
 
 graphiql.enabled: true
 
-server.port: 8080
+server:
+  port: 8080
+  session:
+    cookie.name: GormSessionId
+    tracking-modes: cookie
 
 spring:
   h2.console:
