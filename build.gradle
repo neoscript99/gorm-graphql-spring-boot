@@ -18,6 +18,11 @@ subprojects { Project it ->
 
     apply plugin: 'groovy'
 
+    sourceCompatibility = 1.8
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+
     repositories {
         maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
         jcenter()
