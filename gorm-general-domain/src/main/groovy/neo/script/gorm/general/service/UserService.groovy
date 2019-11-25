@@ -3,6 +3,7 @@ package neo.script.gorm.general.service
 import neo.script.gorm.general.domain.sys.Role
 import neo.script.gorm.general.domain.sys.User
 import neo.script.gorm.general.domain.sys.UserRole
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -13,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional
  */
 @Service
 class UserService extends AbstractService<User> {
+
+    @Value('${gorm.cas.defaultRoles}')
+    String casDefaultRoles
 
     @Transactional(readOnly = true)
     Map login(String account, String password) {
@@ -46,6 +50,8 @@ class UserService extends AbstractService<User> {
     }
 
     String getUserRoleCodes(User user) {
-        (getUserRoles(user)*.roleCode).join(',')
+        //如果当前用户未配置角色，视同CAS登录无帐号的情况
+        def roles = getUserRoles(user)
+        roles ? (roles*.roleCode).join(',') : casDefaultRoles
     }
 }

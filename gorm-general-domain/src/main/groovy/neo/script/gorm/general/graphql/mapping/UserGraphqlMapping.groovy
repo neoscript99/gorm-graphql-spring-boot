@@ -25,7 +25,7 @@ class UserGraphqlMapping extends GraphQLMapping {
     GormSessionBean gormSessionBean
 
     UserGraphqlMapping() {
-        exclude('password')
+        //exclude('password')
         mutation('login', 'LoginInfo') {
             description 'Login query, password is sha256 String'
             argument('username', String)
