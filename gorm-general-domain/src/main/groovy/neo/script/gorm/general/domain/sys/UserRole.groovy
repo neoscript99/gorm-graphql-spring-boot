@@ -23,6 +23,7 @@ class UserRole implements Serializable {
     static constraints = {
         role(unique: 'user')
     }
+    static graphql = true
     static initList = [
             (new UserRole(user: User.ADMIN, role: Role.ADMINISTRATORS)),
             (new UserRole(user: User.ANONYMOUS, role: Role.PUBLIC))]

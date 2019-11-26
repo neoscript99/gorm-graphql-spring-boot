@@ -43,10 +43,12 @@ class MenuInitializer extends AbstractDataInitializer implements DataInitializer
         def sys = save(new Menu(label: '系统设置', seq: 90, parentId: rootId))
 
         [
-                new Menu(label: '帐号管理', app: 'User', seq: 2, parentId: sys.id, icon: 'user'),
-                new Menu(label: '角色管理', app: 'Role', seq: 1, parentId: sys.id, icon: 'usergroup-add'),
-                new Menu(label: '发布通知', app: 'Note', seq: 3, parentId: sys.id, icon: 'notification'),
-                new Menu(label: '参数维护', app: 'Param', seq: 4, parentId: sys.id, icon: 'setting')
+                new Menu(label: '用户管理', app: 'User', seq: 44, parentId: sys.id, icon: 'user'),
+                new Menu(label: '用户角色', app: 'UserRole', seq: 33, parentId: sys.id, icon: 'deployment-unit'),
+                new Menu(label: '角色管理', app: 'Role', seq: 11, parentId: sys.id, icon: 'deployment-unit'),
+                new Menu(label: '机构管理', app: 'Dept', seq: 22, parentId: sys.id, icon: 'apartment'),
+                new Menu(label: '发布通知', app: 'Note', seq: 55, parentId: sys.id, icon: 'notification'),
+                new Menu(label: '参数维护', app: 'Param', seq: 66, parentId: sys.id, icon: 'setting')
         ]
     }
 
