@@ -37,21 +37,34 @@ class UserService extends AbstractService<User> {
             [success: true, user: user]
     }
 
+    @Transactional(readOnly = true)
     User findByAccount(String account) {
         findFirst([eq: [['account', account]]])
     }
 
+    @Transactional(readOnly = true)
     List<Role> getUserRoles(String userId) {
         return getUserRoles(get(userId))
     }
 
+    @Transactional(readOnly = true)
     List<Role> getUserRoles(User user) {
         UserRole.findAllByUser(user)*.role
     }
 
+    @Transactional(readOnly = true)
     String getUserRoleCodes(User user) {
         //如果当前用户未配置角色，视同CAS登录无帐号的情况
         def roles = getUserRoles(user)
         roles ? (roles*.roleCode).join(',') : casDefaultRoles
+    }
+
+    User saveUserWithRoles(Map userMap, List<String> roleIds) {
+        def user = save(userMap)
+        generalRepository.deleteMatch(UserRole, [eq: [['user.id', user.id]]])
+        roleIds.each {
+            new UserRole(user: user, role: Role.get(it)).save()
+        }
+        return user;
     }
 }
