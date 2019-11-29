@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/user")
 class UserController {
     @Autowired
     UserService userService
 
-    @PostMapping("/withRoles")
+    @PostMapping("/saveWithRoles")
     ResponseEntity<User> saveUserWithRoles(@RequestBody Map param) {
         return ResponseEntity.ok(userService.saveUserWithRoles(param.user, param.roleIds))
     }
